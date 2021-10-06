@@ -1,4 +1,5 @@
 const Gym = require("../model/gym.model");
+const User = require("../model/user.model");
 
 //Register a Gym | guest
 const createGym = async (req, res) => {
@@ -70,6 +71,9 @@ const getGymById = (req, res) => {
     Gym.findOne({
         where: {
             id: req.body.id
+        },
+        include: {
+            model: User
         }
     }).then((gym) => {
         res.send({
