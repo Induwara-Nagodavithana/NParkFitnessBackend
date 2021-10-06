@@ -8,6 +8,7 @@ var Gym = db.define(
         name: {
             type: Sequelize.STRING,
             allowNull: false,
+            unique: true
         }
     },
     {
