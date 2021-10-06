@@ -5,12 +5,13 @@ const db = require("../config/database");
 var Branch = db.define(
     "branch",
     {
-        date: {
+        name: {
             type: Sequelize.STRING,
             allowNull: false,
+            unique: true
         },
-        isTrue: {
-            type: Sequelize.BOOLEAN,
+        address: {
+            type: Sequelize.STRING,
             allowNull: false,
         }
     },
