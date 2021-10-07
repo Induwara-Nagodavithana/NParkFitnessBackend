@@ -3,7 +3,7 @@ const Sequelize = require("sequelize");
 const db = require("../config/database");
 
 var AttendItem = db.define(
-    "attendance",
+    "attendItem",
     {
         isDone: {
             type: Sequelize.BOOLEAN,
