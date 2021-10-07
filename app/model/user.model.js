@@ -31,10 +31,9 @@ var User = db.define(
             type: Sequelize.STRING,
             allowNull: false,
         },
-        nic: {
+        birthDay: {
             type: Sequelize.STRING,
             allowNull: false,
-            unique: true,
         },
         email: {
             type: Sequelize.STRING,
@@ -83,10 +82,15 @@ User.hasMany(Subscription)
 Subscription.belongsTo(User)
 Branch.hasMany(ServiceType)
 ServiceType.belongsTo(Branch)
-Client.hasMany(BodyDetails)
-BodyDetails.belongsTo(Client)
-Client.hasMany(Membership)
-Membership.belongsTo(Client)
+/////
+User.hasMany(BodyDetails)
+BodyDetails.belongsTo(User)
+User.hasMany(Membership)
+Membership.belongsTo(User)
+// Client.hasMany(BodyDetails)
+// BodyDetails.belongsTo(Client)
+// Client.hasMany(Membership)
+// Membership.belongsTo(Client)
 Membership.hasMany(Request)
 Request.belongsTo(Membership)
 Membership.hasMany(Payment)
