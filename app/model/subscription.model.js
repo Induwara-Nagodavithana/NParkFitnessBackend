@@ -5,12 +5,8 @@ const db = require("../config/database");
 var Subscription = db.define(
     "subscription",
     {
-        date: {
+        expireDate: {
             type: Sequelize.STRING,
-            allowNull: false,
-        },
-        amount: {
-            type: Sequelize.DECIMAL(10, 2),
             allowNull: false,
         }
     },
