@@ -6,15 +6,15 @@ var ScheduleItem = db.define(
     "scheduleItem",
     {
         noOfSet: {
-            type: Sequelize.STRING,
+            type: Sequelize.INTEGER,
             allowNull: false,
         },
         noOfRepetition: {
-            type: Sequelize.STRING,
+            type: Sequelize.INTEGER,
             allowNull: false,
         },
-        time: {
-            type: Sequelize.STRING,
+        timeByMinutes: {
+            type: Sequelize.DECIMAL(10, 2),
             allowNull: false,
         }
     },
