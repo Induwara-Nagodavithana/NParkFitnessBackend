@@ -10,7 +10,7 @@ var Payment = db.define(
             allowNull: false,
         },
         amount: {
-            type: Sequelize.DECIMAL,
+            type: Sequelize.DECIMAL(10, 2),
             allowNull: false,
         }
     },

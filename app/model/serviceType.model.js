@@ -8,13 +8,14 @@ var ServiceType = db.define(
         name: {
             type: Sequelize.STRING,
             allowNull: false,
+            unique: true,
         },
         status: {
             type: Sequelize.STRING,
             allowNull: false,
         },
-        calorieForSet: {
-            type: Sequelize.DECIMAL,
+        calorieForOne: {
+            type: Sequelize.DECIMAL(10, 2),
             allowNull: false,
         }
     },

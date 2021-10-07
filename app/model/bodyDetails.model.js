@@ -10,11 +10,11 @@ var BodyDetails = db.define(
             allowNull: false,
         },
         weight: {
-            type: Sequelize.DECIMAL,
+            type: Sequelize.DECIMAL(10, 2),
             allowNull: false,
         },
         height: {
-            type: Sequelize.DECIMAL,
+            type: Sequelize.DECIMAL(10, 2),
             allowNull: false,
         }
     },
