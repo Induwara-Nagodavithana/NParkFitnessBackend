@@ -12,6 +12,8 @@ const Payment = require('./payment.api');
 const Request = require('./request.api');
 const Schedule = require('./schedule.api');
 const ScheduleItem = require('./scheduleItem.api');
+const SubscriptionType = require('./subscriptionType.api');
+const Subscription = require('./subscription.api');
 
 
 module.exports = function (){
@@ -27,5 +29,7 @@ module.exports = function (){
     app.use("/request", Request());
     app.use("/schedule", Schedule());
     app.use("/scheduleItem", ScheduleItem());
+    app.use("/subscriptionType", SubscriptionType());
+    app.use("/subscription", Subscription());
     return app;
 }
