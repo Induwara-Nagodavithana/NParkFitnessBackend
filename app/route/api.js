@@ -1,11 +1,11 @@
 const express = require('express');
 var app = express();
-const User = require('./user.route');
-const Gym = require('./gym.route');
-const Branch = require('./branch.route');
-const ServiceType = require('./serviceType.route');
-const BodyDetails = require('./bodyDetails.route');
-const Membership = require('./membership.route');
+const User = require('./user.api');
+const Gym = require('./gym.api');
+const Branch = require('./branch.api');
+const ServiceType = require('./serviceType.api');
+const BodyDetails = require('./bodyDetails.api');
+const Membership = require('./membership.api');
 
 
 module.exports = function (){
