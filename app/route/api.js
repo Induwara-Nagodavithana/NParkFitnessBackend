@@ -6,6 +6,12 @@ const Branch = require('./branch.api');
 const ServiceType = require('./serviceType.api');
 const BodyDetails = require('./bodyDetails.api');
 const Membership = require('./membership.api');
+const AttendItem = require('./attendItem.api');
+const Attendance = require('./attendance.api');
+const Payment = require('./payment.api');
+const Request = require('./request.api');
+const Schedule = require('./schedule.api');
+const ScheduleItem = require('./scheduleItem.api');
 
 
 module.exports = function (){
@@ -15,9 +21,11 @@ module.exports = function (){
     app.use("/serviceType", ServiceType());
     app.use("/bodyDetails", BodyDetails());
     app.use("/membership", Membership());
-    // router.use("/user", User());
-    // router.put('/update', EmployeeController.updateEmployee);
-    // router.post('/validate', EmployeeController.validateEmployee);
-    // router.delete('/delete',EmployeeController.deleteEmployee);
+    app.use("/attendItem", AttendItem());
+    app.use("/attendance", Attendance());
+    app.use("/payment", Payment());
+    app.use("/request", Request());
+    app.use("/schedule", Schedule());
+    app.use("/scheduleItem", ScheduleItem());
     return app;
 }
