@@ -9,8 +9,12 @@ var Request = db.define(
             type: Sequelize.STRING,
             allowNull: false,
         },
-        target: {
-            type: Sequelize.DECIMAL,
+        heightTarget: {
+            type: Sequelize.DECIMAL(10, 2),
+            allowNull: false,
+        },
+        weightTarget: {
+            type: Sequelize.DECIMAL(10, 2),
             allowNull: false,
         }
     },
