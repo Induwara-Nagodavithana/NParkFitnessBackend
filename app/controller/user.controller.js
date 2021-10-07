@@ -1,5 +1,6 @@
 const User = require("../model/user.model");
 const bcrypt = require("bcryptjs");
+const Branch = require("../model/branch.model");
 const saltRounds = 5;
 
 //Register a User | guest
@@ -123,7 +124,11 @@ function updateDetails(id, req, callback) {
 //get All User
 const getAllUser = (req, res) => {
     console.log("get All");
-    User.findAll().then((user) => {
+    User.findAll({
+        include: {
+            model: Branch
+        }
+    }).then((user) => {
         res.send({
             'success': 'true',
             'message': user
