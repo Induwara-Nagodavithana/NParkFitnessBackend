@@ -26,8 +26,8 @@ const createAttendItem = async (req, res) => {
 //update AttendItem Details
 const updateAttendItem = async (req, res) => {
     if (req.body) {
-        if (!req.body.id) return res.status(500).send("Id is missing");
-        let id = req.body.id;
+        if (!req.params.id) return res.status(500).send("Id is missing");
+        let id = req.params.id;
         AttendItem.update(req.body, {
             where: {
                 id: id,
@@ -71,7 +71,7 @@ const getAttendItemById = (req, res) => {
     console.log("get All");
     AttendItem.findOne({
         where: {
-            id: req.body.id
+            id: req.params.id
         },
         include: [{
             model: Attendance

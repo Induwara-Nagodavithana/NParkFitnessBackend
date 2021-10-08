@@ -25,8 +25,8 @@ const createAttendance = async (req, res) => {
 //update Attendance Details
 const updateAttendance = async (req, res) => {
     if (req.body) {
-        if (!req.body.id) return res.status(500).send("Id is missing");
-        let id = req.body.id;
+        if (!req.params.id) return res.status(500).send("Id is missing");
+        let id = req.params.id;
         Attendance.update(req.body, {
             where: {
                 id: id,
@@ -70,7 +70,7 @@ const getAttendanceById = (req, res) => {
     console.log("get All");
     Attendance.findOne({
         where: {
-            id: req.body.id
+            id: req.params.id
         },
         include: {
             model: Membership

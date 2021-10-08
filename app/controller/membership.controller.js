@@ -25,8 +25,8 @@ const createMembership = async (req, res) => {
 //update Membership Details
 const updateMembership = async (req, res) => {
     if (req.body) {
-        if (!req.body.id) return res.status(500).send("Id is missing");
-        let id = req.body.id;
+        if (!req.params.id) return res.status(500).send("Id is missing");
+        let id = req.params.id;
         Membership.update(req.body, {
             where: {
                 id: id,
@@ -70,7 +70,7 @@ const getMembershipById = (req, res) => {
     console.log("get All");
     Membership.findOne({
         where: {
-            id: req.body.id
+            id: req.params.id
         },
         include: {
             model: User

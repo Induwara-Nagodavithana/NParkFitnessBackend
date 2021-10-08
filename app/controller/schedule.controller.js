@@ -26,8 +26,8 @@ const createSchedule = async (req, res) => {
 //update Schedule Details
 const updateSchedule = async (req, res) => {
     if (req.body) {
-        if (!req.body.id) return res.status(500).send("Id is missing");
-        let id = req.body.id;
+        if (!req.params.id) return res.status(500).send("Id is missing");
+        let id = req.params.id;
         Schedule.update(req.body, {
             where: {
                 id: id,
@@ -71,7 +71,7 @@ const getScheduleById = (req, res) => {
     console.log("get All");
     Schedule.findOne({
         where: {
-            id: req.body.id
+            id: req.params.id
         },
         include: [{
             model: User,

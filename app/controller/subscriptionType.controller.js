@@ -24,8 +24,8 @@ const createSubscriptionType = async (req, res) => {
 //update SubscriptionType Details
 const updateSubscriptionType = async (req, res) => {
     if (req.body) {
-        if (!req.body.id) return res.status(500).send("Id is missing");
-        let id = req.body.id;
+        if (!req.params.id) return res.status(500).send("Id is missing");
+        let id = req.params.id;
         SubscriptionType.update(req.body, {
             where: {
                 id: id,
@@ -69,7 +69,7 @@ const getSubscriptionTypeById = (req, res) => {
     console.log("get All");
     SubscriptionType.findOne({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     }).then((subscriptionType) => {
         res.send({

@@ -5,8 +5,8 @@ const AttendItemController = require('../controller/attendItem.controller');
 module.exports = function (){
     router.get('/', AttendItemController.getAllAttendItem);
     router.post('/', AttendItemController.createAttendItem);
-    router.post('/getAttendItemById', AttendItemController.getAttendItemById);
-    router.put('/', AttendItemController.updateAttendItem);
+    router.get('/:id', AttendItemController.getAttendItemById);
+    router.put('/:id', AttendItemController.updateAttendItem);
     router.delete('/',AttendItemController.deleteAttendItem);
     return router;
 }

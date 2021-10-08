@@ -25,8 +25,8 @@ const createGym = async (req, res) => {
 //update Gym Details
 const updateGym = async (req, res) => {
     if (req.body) {
-        if (!req.body.id) return res.status(500).send("Id is missing");
-        let id = req.body.id;
+        if (!req.params.id) return res.status(500).send("Id is missing");
+        let id = req.params.id;
         Gym.update(req.body, {
             where: {
                 id: id,
@@ -70,7 +70,7 @@ const getGymById = (req, res) => {
     console.log("get All");
     Gym.findOne({
         where: {
-            id: req.body.id
+            id: req.params.id
         },
         include: {
             model: User

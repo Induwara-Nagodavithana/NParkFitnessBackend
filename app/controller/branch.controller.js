@@ -25,8 +25,8 @@ const createBranch = async (req, res) => {
 //update Branch Details
 const updateBranch = async (req, res) => {
     if (req.body) {
-        if (!req.body.id) return res.status(500).send("Id is missing");
-        let id = req.body.id;
+        if (!req.params.id) return res.status(500).send("Id is missing");
+        let id = req.params.id;
         Branch.update(req.body, {
             where: {
                 id: id,
@@ -70,7 +70,7 @@ const getBranchById = (req, res) => {
     console.log("get All");
     Branch.findOne({
         where: {
-            id: req.body.id
+            id: req.params.id
         },
         include: {
             model: Gym

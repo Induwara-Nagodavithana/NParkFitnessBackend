@@ -25,8 +25,8 @@ const createServiceType = async (req, res) => {
 //update ServiceType Details
 const updateServiceType = async (req, res) => {
     if (req.body) {
-        if (!req.body.id) return res.status(500).send("Id is missing");
-        let id = req.body.id;
+        if (!req.params.id) return res.status(500).send("Id is missing");
+        let id = req.params.id;
         ServiceType.update(req.body, {
             where: {
                 id: id,
@@ -70,7 +70,7 @@ const getServiceTypeById = (req, res) => {
     console.log("get All");
     ServiceType.findOne({
         where: {
-            id: req.body.id
+            id: req.params.id
         },
         include: {
             model: Branch

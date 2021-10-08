@@ -5,8 +5,8 @@ const RequestController = require('../controller/request.controller');
 module.exports = function (){
     router.get('/', RequestController.getAllRequest);
     router.post('/', RequestController.createRequest);
-    router.post('/getRequestById', RequestController.getRequestById);
-    router.put('/', RequestController.updateRequest);
+    router.get('/:id', RequestController.getRequestById);
+    router.put('/:id', RequestController.updateRequest);
     router.delete('/',RequestController.deleteRequest);
     return router;
 }

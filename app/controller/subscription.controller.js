@@ -26,8 +26,8 @@ const createSubscription = async (req, res) => {
 //update Subscription Details
 const updateSubscription = async (req, res) => {
     if (req.body) {
-        if (!req.body.id) return res.status(500).send("Id is missing");
-        let id = req.body.id;
+        if (!req.params.id) return res.status(500).send("Id is missing");
+        let id = req.params.id;
         Subscription.update(req.body, {
             where: {
                 id: id,
@@ -71,7 +71,7 @@ const getSubscriptionById = (req, res) => {
     console.log("get All");
     Subscription.findOne({
         where: {
-            id: req.body.id
+            id: req.params.id
         },
         include: [{
             model: User

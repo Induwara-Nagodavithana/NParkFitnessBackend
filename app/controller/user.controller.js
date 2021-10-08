@@ -66,8 +66,8 @@ const validateUser = async (req, res) => {
 //update User Details
 const updateUser = async (req, res) => {
     if (req.body) {
-        if (!req.body.id) return res.status(500).send("Id is missing");
-        let id = req.body.id;
+        if (!req.params.id) return res.status(500).send("Id is missing");
+        let id = req.params.id;
         if (req.body.password != null) {
             bcrypt.genSalt(saltRounds, function (err, salt) {
                 bcrypt.hash(req.body.password, salt, async function (err, hash) {

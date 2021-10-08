@@ -5,8 +5,8 @@ const ServiceTypeController = require('../controller/serviceType.controller');
 module.exports = function (){
     router.get('/', ServiceTypeController.getAllServiceType);
     router.post('/', ServiceTypeController.createServiceType);
-    router.post('/getServiceTypeById', ServiceTypeController.getServiceTypeById);
-    router.put('/', ServiceTypeController.updateServiceType);
+    router.get('/:id', ServiceTypeController.getServiceTypeById);
+    router.put('/:id', ServiceTypeController.updateServiceType);
     router.delete('/',ServiceTypeController.deleteServiceType);
     return router;
 }

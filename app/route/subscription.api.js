@@ -5,8 +5,8 @@ const SubscriptionController = require('../controller/subscription.controller');
 module.exports = function (){
     router.get('/', SubscriptionController.getAllSubscription);
     router.post('/', SubscriptionController.createSubscription);
-    router.post('/getSubscriptionById', SubscriptionController.getSubscriptionById);
-    router.put('/', SubscriptionController.updateSubscription);
+    router.get('/:id', SubscriptionController.getSubscriptionById);
+    router.put('/:id', SubscriptionController.updateSubscription);
     router.delete('/',SubscriptionController.deleteSubscription);
     return router;
 }

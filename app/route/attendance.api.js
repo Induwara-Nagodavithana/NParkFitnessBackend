@@ -5,8 +5,8 @@ const AttendanceController = require('../controller/attendance.controller');
 module.exports = function (){
     router.get('/', AttendanceController.getAllAttendance);
     router.post('/', AttendanceController.createAttendance);
-    router.post('/getAttendanceById', AttendanceController.getAttendanceById);
-    router.put('/', AttendanceController.updateAttendance);
+    router.get('/:id', AttendanceController.getAttendanceById);
+    router.put('/:id', AttendanceController.updateAttendance);
     router.delete('/',AttendanceController.deleteAttendance);
     return router;
 }
