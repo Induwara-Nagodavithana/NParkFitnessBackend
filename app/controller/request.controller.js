@@ -9,13 +9,14 @@ const createRequest = async (req, res) => {
             .then((request) => {
                 res.send({
                     'success': 'true',
-                    'message': request
+                    'data': request
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Create Request',
+                    'description': err
                 });
             });
     }
@@ -35,13 +36,14 @@ const updateRequest = async (req, res) => {
             .then((request) => {
                 res.status(200).send({
                     'success': request[0] == 1 ? 'true' : 'false',
-                    'message': request[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                    'data': request[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Update Request',
+                    'description': err
                 });
             });
     }
@@ -54,13 +56,14 @@ const getAllRequest = (req, res) => {
     Request.findAll().then((request) => {
         res.send({
             'success': 'true',
-            'message': request
+            'data': request
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting All Request',
+                'description': err
             });
         });
 }
@@ -78,13 +81,14 @@ const getRequestById = (req, res) => {
     }).then((request) => {
         res.send({
             'success': 'true',
-            'message': request
+            'data': request
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting Request By ID',
+                'description': err
             });
         });
 }
@@ -101,13 +105,14 @@ const deleteRequest = async (req, res) => {
             console.log(request)
             res.status(200).send({
                 'success': request == 1 ? 'true' : 'false',
-                'message': request == 1 ? "Deleted Successfully" : "Delete Not Successful"
+                'data': request == 1 ? "Deleted Successfully" : "Delete Not Successful"
             });
         })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Delete Request',
+                'description': err
             });
         });
 }

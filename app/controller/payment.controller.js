@@ -9,13 +9,14 @@ const createPayment = async (req, res) => {
             .then((payment) => {
                 res.send({
                     'success': 'true',
-                    'message': payment
+                    'data': payment
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Create Payment',
+                    'description': err
                 });
             });
     }
@@ -35,13 +36,14 @@ const updatePayment = async (req, res) => {
             .then((payment) => {
                 res.status(200).send({
                     'success': payment[0] == 1 ? 'true' : 'false',
-                    'message': payment[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                    'data': payment[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Update Payment',
+                    'description': err
                 });
             });
     }
@@ -54,13 +56,14 @@ const getAllPayment = (req, res) => {
     Payment.findAll().then((payment) => {
         res.send({
             'success': 'true',
-            'message': payment
+            'data': payment
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting All Payment',
+                'description': err
             });
         });
 }
@@ -78,13 +81,14 @@ const getPaymentById = (req, res) => {
     }).then((payment) => {
         res.send({
             'success': 'true',
-            'message': payment
+            'data': payment
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting Payment By ID',
+                'description': err
             });
         });
 }
@@ -101,13 +105,14 @@ const deletePayment = async (req, res) => {
             console.log(payment)
             res.status(200).send({
                 'success': payment == 1 ? 'true' : 'false',
-                'message': payment == 1 ? "Deleted Successfully" : "Delete Not Successful"
+                'data': payment == 1 ? "Deleted Successfully" : "Delete Not Successful"
             });
         })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Delete Payment',
+                'description': err
             });
         });
 }

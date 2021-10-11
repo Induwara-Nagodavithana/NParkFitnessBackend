@@ -10,13 +10,14 @@ const createSubscription = async (req, res) => {
             .then((subscription) => {
                 res.send({
                     'success': 'true',
-                    'message': subscription
+                    'data': subscription
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Create Subscription',
+                    'description': err
                 });
             });
     }
@@ -36,13 +37,14 @@ const updateSubscription = async (req, res) => {
             .then((subscription) => {
                 res.status(200).send({
                     'success': subscription[0] == 1 ? 'true' : 'false',
-                    'message': subscription[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                    'data': subscription[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Update Subscription',
+                    'description': err
                 });
             });
     }
@@ -55,13 +57,14 @@ const getAllSubscription = (req, res) => {
     Subscription.findAll().then((subscription) => {
         res.send({
             'success': 'true',
-            'message': subscription
+            'data': subscription
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting All Subscription',
+                'description': err
             });
         });
 }
@@ -82,13 +85,14 @@ const getSubscriptionById = (req, res) => {
     }).then((subscription) => {
         res.send({
             'success': 'true',
-            'message': subscription
+            'data': subscription
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting Subscription By ID',
+                'description': err
             });
         });
 }
@@ -105,13 +109,14 @@ const deleteSubscription = async (req, res) => {
             console.log(subscription)
             res.status(200).send({
                 'success': subscription == 1 ? 'true' : 'false',
-                'message': subscription == 1 ? "Deleted Successfully" : "Delete Not Successful"
+                'data': subscription == 1 ? "Deleted Successfully" : "Delete Not Successful"
             });
         })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Delete Subscription',
+                'description': err
             });
         });
 }

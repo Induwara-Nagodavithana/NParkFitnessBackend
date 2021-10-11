@@ -14,13 +14,14 @@ exports.createUser = async (req, res) => {
                     .then((user) => {
                         res.send({
                             'success': 'true',
-                            'message': user
+                            'data': user
                         });
                     })
                     .catch((err) => {
                         res.status(400).send({
                             'success': 'false',
-                            'message': err
+                            'message': 'Error in Create User',
+                            'description': err
                         });
                     });
             });
@@ -48,7 +49,7 @@ exports.validateUser = async (req, res) => {
                 console.log(user);
                 res.send({
                     'success': 'true',
-                    'message': user
+                    'data': user
                 });
             } else {
                 console.log("Credentials Does Not Matched");
@@ -75,13 +76,13 @@ exports.updateUser = async (req, res) => {
                     updateDetails(id, req, (err, user) => {
                         if (err) return res.status(400).send({
                             'success': 'false',
-                            'message': err
+                            'data': err
                         });
                         console.log("user");
                         console.log(user);
                         res.status(200).send({
                             'success': user[0] == 1 ? 'true' : 'false',
-                            'message': user[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                            'data': user[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                         });
                     })
 
@@ -91,13 +92,13 @@ exports.updateUser = async (req, res) => {
             updateDetails(id, req, (err, user) => {
                 if (err) return res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'data': err
                 });
                 console.log("user");
                 console.log(user);
                 res.status(200).send({
                     'success': user[0] == 1 ? 'true' : 'false',
-                    'message': user[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                    'data': user[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                 });
             })
         }
@@ -131,13 +132,14 @@ exports.getAllUser = (req, res) => {
     }).then((user) => {
         res.send({
             'success': 'true',
-            'message': user
+            'data': user
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting All User',
+                'description': err
             });
         });
 }
@@ -154,13 +156,14 @@ exports.deleteUser = async (req, res) => {
             console.log(user)
             res.status(200).send({
                 'success': user == 1 ? 'true' : 'false',
-                'message': user == 1 ? "Deleted Successfully" : "Delete Not Successful"
+                'data': user == 1 ? "Deleted Successfully" : "Delete Not Successful"
             });
         })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Delete User',
+                'description': err
             });
         });
 }

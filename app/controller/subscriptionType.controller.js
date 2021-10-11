@@ -8,13 +8,14 @@ const createSubscriptionType = async (req, res) => {
             .then((subscriptionType) => {
                 res.send({
                     'success': 'true',
-                    'message': subscriptionType
+                    'data': subscriptionType
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Create SubscriptionType',
+                    'description': err
                 });
             });
     }
@@ -34,13 +35,14 @@ const updateSubscriptionType = async (req, res) => {
             .then((subscriptionType) => {
                 res.status(200).send({
                     'success': subscriptionType[0] == 1 ? 'true' : 'false',
-                    'message': subscriptionType[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                    'data': subscriptionType[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Update SubscriptionType',
+                    'description': err
                 });
             });
     }
@@ -53,13 +55,14 @@ const getAllSubscriptionType = (req, res) => {
     SubscriptionType.findAll().then((subscriptionType) => {
         res.send({
             'success': 'true',
-            'message': subscriptionType
+            'data': subscriptionType
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting All SubscriptionType',
+                'description': err
             });
         });
 }
@@ -74,13 +77,14 @@ const getSubscriptionTypeById = (req, res) => {
     }).then((subscriptionType) => {
         res.send({
             'success': 'true',
-            'message': subscriptionType
+            'data': subscriptionType
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting SubscriptionType By ID',
+                'description': err
             });
         });
 }
@@ -97,13 +101,14 @@ const deleteSubscriptionType = async (req, res) => {
             console.log(subscriptionType)
             res.status(200).send({
                 'success': subscriptionType == 1 ? 'true' : 'false',
-                'message': subscriptionType == 1 ? "Deleted Successfully" : "Delete Not Successful"
+                'data': subscriptionType == 1 ? "Deleted Successfully" : "Delete Not Successful"
             });
         })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Delete SubscriptionType',
+                'description': err
             });
         });
 }

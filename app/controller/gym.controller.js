@@ -9,13 +9,14 @@ const createGym = async (req, res) => {
             .then((gym) => {
                 res.send({
                     'success': 'true',
-                    'message': gym
+                    'data': gym
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Create Gym',
+                    'description': err
                 });
             });
     }
@@ -35,13 +36,14 @@ const updateGym = async (req, res) => {
             .then((gym) => {
                 res.status(200).send({
                     'success': gym[0] == 1 ? 'true' : 'false',
-                    'message': gym[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                    'data': gym[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Update Gym',
+                    'description': err
                 });
             });
     }
@@ -54,13 +56,14 @@ const getAllGym = (req, res) => {
     Gym.findAll().then((gym) => {
         res.send({
             'success': 'true',
-            'message': gym
+            'data': gym
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting All Gym',
+                'description': err
             });
         });
 }
@@ -78,13 +81,14 @@ const getGymById = (req, res) => {
     }).then((gym) => {
         res.send({
             'success': 'true',
-            'message': gym
+            'data': gym
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting Gym By ID',
+                'description': err
             });
         });
 }
@@ -101,13 +105,14 @@ const deleteGym = async (req, res) => {
             console.log(gym)
             res.status(200).send({
                 'success': gym == 1 ? 'true' : 'false',
-                'message': gym == 1 ? "Deleted Successfully" : "Delete Not Successful"
+                'data': gym == 1 ? "Deleted Successfully" : "Delete Not Successful"
             });
         })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Delete Gym',
+                'description': err
             });
         });
 }

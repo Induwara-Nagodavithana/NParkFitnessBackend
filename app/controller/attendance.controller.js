@@ -2,20 +2,21 @@ const Attendance = require("../model/attendance.model");
 const Membership = require("../model/membership.model");
 
 //Register a Attendance | guest
-const createAttendance = async (req, res) => {
+exports.createAttendance = async (req, res) => {
     if (req.body) {
         console.log("Create attendance");
         Attendance.create(req.body)
             .then((attendance) => {
                 res.send({
                     'success': 'true',
-                    'message': attendance
+                    'data': attendance
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Create Attendance',
+                    'description': err
                 });
             });
     }
@@ -23,7 +24,7 @@ const createAttendance = async (req, res) => {
 
 
 //update Attendance Details
-const updateAttendance = async (req, res) => {
+exports.updateAttendance = async (req, res) => {
     if (req.body) {
         if (!req.params.id) return res.status(500).send("Id is missing");
         let id = req.params.id;
@@ -35,13 +36,14 @@ const updateAttendance = async (req, res) => {
             .then((attendance) => {
                 res.status(200).send({
                     'success': attendance[0] == 1 ? 'true' : 'false',
-                    'message': attendance[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                    'data': attendance[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Update Attendance',
+                    'description': err
                 });
             });
     }
@@ -49,24 +51,25 @@ const updateAttendance = async (req, res) => {
 
 
 //get All Attendance
-const getAllAttendance = (req, res) => {
+exports.getAllAttendance = (req, res) => {
     console.log("get All");
     Attendance.findAll().then((attendance) => {
         res.send({
             'success': 'true',
-            'message': attendance
+            'data': attendance
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting All Attendance',
+                'description': err
             });
         });
 }
 
 //get Attendance By Id
-const getAttendanceById = (req, res) => {
+exports.getAttendanceById = (req, res) => {
     console.log("get All");
     Attendance.findOne({
         where: {
@@ -78,19 +81,20 @@ const getAttendanceById = (req, res) => {
     }).then((attendance) => {
         res.send({
             'success': 'true',
-            'message': attendance
+            'data': attendance
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting Attendance By ID',
+                'description': err
             });
         });
 }
 
 //delete Attendance
-const deleteAttendance = async (req, res) => {
+exports.deleteAttendance = async (req, res) => {
     console.log("Delete attendance");
     Attendance.destroy({
         where: {
@@ -101,21 +105,14 @@ const deleteAttendance = async (req, res) => {
             console.log(attendance)
             res.status(200).send({
                 'success': attendance == 1 ? 'true' : 'false',
-                'message': attendance == 1 ? "Deleted Successfully" : "Delete Not Successful"
+                'data': attendance == 1 ? "Deleted Successfully" : "Delete Not Successful"
             });
         })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Delete Attendance',
+                'description': err
             });
         });
-}
-
-module.exports = {
-    createAttendance,
-    updateAttendance,
-    deleteAttendance,
-    getAllAttendance,
-    getAttendanceById
 }

@@ -9,13 +9,14 @@ const createServiceType = async (req, res) => {
             .then((serviceType) => {
                 res.send({
                     'success': 'true',
-                    'message': serviceType
+                    'data': serviceType
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Create ServiceType',
+                    'description': err
                 });
             });
     }
@@ -35,13 +36,14 @@ const updateServiceType = async (req, res) => {
             .then((serviceType) => {
                 res.status(200).send({
                     'success': serviceType[0] == 1 ? 'true' : 'false',
-                    'message': serviceType[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                    'data': serviceType[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Update ServiceType',
+                    'description': err
                 });
             });
     }
@@ -54,13 +56,14 @@ const getAllServiceType = (req, res) => {
     ServiceType.findAll().then((serviceType) => {
         res.send({
             'success': 'true',
-            'message': serviceType
+            'data': serviceType
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting All ServiceType',
+                'description': err
             });
         });
 }
@@ -78,13 +81,14 @@ const getServiceTypeById = (req, res) => {
     }).then((serviceType) => {
         res.send({
             'success': 'true',
-            'message': serviceType
+            'data': serviceType
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting ServiceType By ID',
+                'description': err
             });
         });
 }
@@ -101,13 +105,14 @@ const deleteServiceType = async (req, res) => {
             console.log(serviceType)
             res.status(200).send({
                 'success': serviceType == 1 ? 'true' : 'false',
-                'message': serviceType == 1 ? "Deleted Successfully" : "Delete Not Successful"
+                'data': serviceType == 1 ? "Deleted Successfully" : "Delete Not Successful"
             });
         })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Delete ServiceType',
+                'description': err
             });
         });
 }

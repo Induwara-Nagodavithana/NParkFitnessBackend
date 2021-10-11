@@ -10,13 +10,14 @@ const createAttendItem = async (req, res) => {
             .then((attendItem) => {
                 res.send({
                     'success': 'true',
-                    'message': attendItem
+                    'data': attendItem
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Create AttendItem',
+                'description': err
                 });
             });
     }
@@ -36,13 +37,14 @@ const updateAttendItem = async (req, res) => {
             .then((attendItem) => {
                 res.status(200).send({
                     'success': attendItem[0] == 1 ? 'true' : 'false',
-                    'message': attendItem[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                    'data': attendItem[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Update AttendItem',
+                'description': err
                 });
             });
     }
@@ -55,13 +57,14 @@ const getAllAttendItem = (req, res) => {
     AttendItem.findAll().then((attendItem) => {
         res.send({
             'success': 'true',
-            'message': attendItem
+            'data': attendItem
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting All AttendItem',
+                'description': err
             });
         });
 }
@@ -81,13 +84,14 @@ const getAttendItemById = (req, res) => {
     }).then((attendItem) => {
         res.send({
             'success': 'true',
-            'message': attendItem
+            'data': attendItem
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting AttendItem By ID',
+                'description': err
             });
         });
 }
@@ -104,13 +108,14 @@ const deleteAttendItem = async (req, res) => {
             console.log(attendItem)
             res.status(200).send({
                 'success': attendItem == 1 ? 'true' : 'false',
-                'message': attendItem == 1 ? "Deleted Successfully" : "Delete Not Successful"
+                'data': attendItem == 1 ? "Deleted Successfully" : "Delete Not Successful"
             });
         })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Delete AttendItem',
+                'description': err
             });
         });
 }

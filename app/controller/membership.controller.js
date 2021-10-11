@@ -9,13 +9,14 @@ const createMembership = async (req, res) => {
             .then((membership) => {
                 res.send({
                     'success': 'true',
-                    'message': membership
+                    'data': membership
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Create Membership',
+                    'description': err
                 });
             });
     }
@@ -35,13 +36,14 @@ const updateMembership = async (req, res) => {
             .then((membership) => {
                 res.status(200).send({
                     'success': membership[0] == 1 ? 'true' : 'false',
-                    'message': membership[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                    'data': membership[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Update Membership',
+                    'description': err
                 });
             });
     }
@@ -54,13 +56,14 @@ const getAllMembership = (req, res) => {
     Membership.findAll().then((membership) => {
         res.send({
             'success': 'true',
-            'message': membership
+            'data': membership
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting All Membership',
+                'description': err
             });
         });
 }
@@ -78,13 +81,14 @@ const getMembershipById = (req, res) => {
     }).then((membership) => {
         res.send({
             'success': 'true',
-            'message': membership
+            'data': membership
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting Membership By ID',
+                'description': err
             });
         });
 }
@@ -101,13 +105,14 @@ const deleteMembership = async (req, res) => {
             console.log(membership)
             res.status(200).send({
                 'success': membership == 1 ? 'true' : 'false',
-                'message': membership == 1 ? "Deleted Successfully" : "Delete Not Successful"
+                'data': membership == 1 ? "Deleted Successfully" : "Delete Not Successful"
             });
         })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Delete Membership',
+                'description': err
             });
         });
 }

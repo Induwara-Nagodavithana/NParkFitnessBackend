@@ -10,13 +10,14 @@ const createSchedule = async (req, res) => {
             .then((schedule) => {
                 res.send({
                     'success': 'true',
-                    'message': schedule
+                    'data': schedule
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Create Schedule',
+                    'description': err
                 });
             });
     }
@@ -36,13 +37,14 @@ const updateSchedule = async (req, res) => {
             .then((schedule) => {
                 res.status(200).send({
                     'success': schedule[0] == 1 ? 'true' : 'false',
-                    'message': schedule[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                    'data': schedule[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Update Schedule',
+                    'description': err
                 });
             });
     }
@@ -55,13 +57,14 @@ const getAllSchedule = (req, res) => {
     Schedule.findAll().then((schedule) => {
         res.send({
             'success': 'true',
-            'message': schedule
+            'data': schedule
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting All Schedule',
+                'description': err
             });
         });
 }
@@ -82,13 +85,14 @@ const getScheduleById = (req, res) => {
     }).then((schedule) => {
         res.send({
             'success': 'true',
-            'message': schedule
+            'data': schedule
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting Schedule By ID',
+                'description': err
             });
         });
 }
@@ -105,13 +109,14 @@ const deleteSchedule = async (req, res) => {
             console.log(schedule)
             res.status(200).send({
                 'success': schedule == 1 ? 'true' : 'false',
-                'message': schedule == 1 ? "Deleted Successfully" : "Delete Not Successful"
+                'data': schedule == 1 ? "Deleted Successfully" : "Delete Not Successful"
             });
         })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Delete Schedule',
+                'description': err
             });
         });
 }

@@ -9,13 +9,14 @@ const createBranch = async (req, res) => {
             .then((branch) => {
                 res.send({
                     'success': 'true',
-                    'message': branch
+                    'data': branch
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Create Branch',
+                    'description': err
                 });
             });
     }
@@ -35,13 +36,14 @@ const updateBranch = async (req, res) => {
             .then((branch) => {
                 res.status(200).send({
                     'success': branch[0] == 1 ? 'true' : 'false',
-                    'message': branch[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                    'data': branch[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': err
+                    'message': 'Error in Update Branch',
+                    'description': err
                 });
             });
     }
@@ -54,13 +56,14 @@ const getAllBranch = (req, res) => {
     Branch.findAll().then((branch) => {
         res.send({
             'success': 'true',
-            'message': branch
+            'data': branch
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting All Branch',
+                'description': err
             });
         });
 }
@@ -78,13 +81,14 @@ const getBranchById = (req, res) => {
     }).then((branch) => {
         res.send({
             'success': 'true',
-            'message': branch
+            'data': branch
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Getting Branch By ID',
+                'description': err
             });
         });
 }
@@ -101,13 +105,14 @@ const deleteBranch = async (req, res) => {
             console.log(branch)
             res.status(200).send({
                 'success': branch == 1 ? 'true' : 'false',
-                'message': branch == 1 ? "Deleted Successfully" : "Delete Not Successful"
+                'data': branch == 1 ? "Deleted Successfully" : "Delete Not Successful"
             });
         })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': err
+                'message': 'Error in Delete Branch',
+                'description': err
             });
         });
 }
