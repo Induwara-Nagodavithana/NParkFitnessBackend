@@ -98,7 +98,7 @@ exports.deleteBranch = async (req, res) => {
     console.log("Delete branch");
     Branch.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         .then((branch) => {

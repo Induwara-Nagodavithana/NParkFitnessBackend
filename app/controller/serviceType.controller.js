@@ -98,7 +98,7 @@ exports.deleteServiceType = async (req, res) => {
     console.log("Delete serviceType");
     ServiceType.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         .then((serviceType) => {

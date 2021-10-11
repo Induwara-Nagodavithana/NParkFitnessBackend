@@ -149,7 +149,7 @@ exports.deleteUser = async (req, res) => {
     console.log("Delete user");
     User.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         .then((user) => {

@@ -102,7 +102,7 @@ exports.deleteSchedule = async (req, res) => {
     console.log("Delete schedule");
     Schedule.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         .then((schedule) => {

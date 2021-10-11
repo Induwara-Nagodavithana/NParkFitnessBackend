@@ -98,7 +98,7 @@ exports.deleteMembership = async (req, res) => {
     console.log("Delete membership");
     Membership.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         .then((membership) => {

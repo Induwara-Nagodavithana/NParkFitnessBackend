@@ -98,7 +98,7 @@ exports.deletePayment = async (req, res) => {
     console.log("Delete payment");
     Payment.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         .then((payment) => {

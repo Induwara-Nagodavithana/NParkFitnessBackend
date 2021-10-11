@@ -102,7 +102,7 @@ exports.deleteSubscription = async (req, res) => {
     console.log("Delete subscription");
     Subscription.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         .then((subscription) => {

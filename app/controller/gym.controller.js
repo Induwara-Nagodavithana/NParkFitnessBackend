@@ -98,7 +98,7 @@ exports.deleteGym = async (req, res) => {
     console.log("Delete gym");
     Gym.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         .then((gym) => {

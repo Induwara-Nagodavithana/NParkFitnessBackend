@@ -101,7 +101,7 @@ exports.deleteAttendItem = async (req, res) => {
     console.log("Delete attendItem");
     AttendItem.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         .then((attendItem) => {

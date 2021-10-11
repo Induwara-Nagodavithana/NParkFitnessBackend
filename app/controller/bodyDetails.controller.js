@@ -98,7 +98,7 @@ exports.deleteBodyDetails = async (req, res) => {
     console.log("Delete bodyDetails");
     BodyDetails.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         .then((bodyDetails) => {

@@ -94,7 +94,7 @@ exports.deleteSubscriptionType = async (req, res) => {
     console.log("Delete subscriptionType");
     SubscriptionType.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         .then((subscriptionType) => {

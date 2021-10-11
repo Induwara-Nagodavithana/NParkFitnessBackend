@@ -98,7 +98,7 @@ exports.deleteAttendance = async (req, res) => {
     console.log("Delete attendance");
     Attendance.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         .then((attendance) => {

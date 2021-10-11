@@ -98,7 +98,7 @@ exports.deleteRequest = async (req, res) => {
     console.log("Delete request");
     Request.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         .then((request) => {
