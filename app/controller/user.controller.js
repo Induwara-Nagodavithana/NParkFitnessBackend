@@ -4,7 +4,7 @@ const Branch = require("../model/branch.model");
 const saltRounds = 5;
 
 //Register a User | guest
-const createUser = async (req, res) => {
+exports.createUser = async (req, res) => {
     if (req.body) {
         console.log("Create user");
         bcrypt.genSalt(saltRounds, function (err, salt) {
@@ -30,7 +30,7 @@ const createUser = async (req, res) => {
 }
 
 //login Validate
-const validateUser = async (req, res) => {
+exports.validateUser = async (req, res) => {
     User.findOne({
         where: { email: req.body.email },
     }).then((user) => {
@@ -64,7 +64,7 @@ const validateUser = async (req, res) => {
 }
 
 //update User Details
-const updateUser = async (req, res) => {
+exports.updateUser = async (req, res) => {
     if (req.body) {
         if (!req.params.id) return res.status(500).send("Id is missing");
         let id = req.params.id;
@@ -122,7 +122,7 @@ function updateDetails(id, req, callback) {
 }
 
 //get All User
-const getAllUser = (req, res) => {
+exports.getAllUser = (req, res) => {
     console.log("get All");
     User.findAll({
         include: {
@@ -143,7 +143,7 @@ const getAllUser = (req, res) => {
 }
 
 //delete User
-const deleteUser = async (req, res) => {
+exports.deleteUser = async (req, res) => {
     console.log("Delete user");
     User.destroy({
         where: {
@@ -163,12 +163,4 @@ const deleteUser = async (req, res) => {
                 'message': err
             });
         });
-}
-
-module.exports = {
-    createUser,
-    updateUser,
-    deleteUser,
-    getAllUser,
-    validateUser
 }
