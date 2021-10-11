@@ -7,5 +7,5 @@ ServiceTypeRouter.get('/', ServiceTypeController.getAllServiceType);
 ServiceTypeRouter.post('/', ServiceTypeController.createServiceType);
 ServiceTypeRouter.get('/:id', ServiceTypeController.getServiceTypeById);
 ServiceTypeRouter.put('/:id', ServiceTypeController.updateServiceType);
-ServiceTypeRouter.delete('/', ServiceTypeController.deleteServiceType);
+ServiceTypeRouter.delete('/:id', ServiceTypeController.deleteServiceType);
 module.exports = ServiceTypeRouter;

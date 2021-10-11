@@ -7,5 +7,5 @@ AttendItemRouter.get('/', AttendItemController.getAllAttendItem);
 AttendItemRouter.post('/', AttendItemController.createAttendItem);
 AttendItemRouter.get('/:id', AttendItemController.getAttendItemById);
 AttendItemRouter.put('/:id', AttendItemController.updateAttendItem);
-AttendItemRouter.delete('/', AttendItemController.deleteAttendItem);
+AttendItemRouter.delete('/:id', AttendItemController.deleteAttendItem);
 module.exports = AttendItemRouter;

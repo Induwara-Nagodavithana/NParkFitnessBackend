@@ -7,5 +7,5 @@ BodyDetailsRouter.get('/', BodyDetailsController.getAllBodyDetails);
 BodyDetailsRouter.post('/', BodyDetailsController.createBodyDetails);
 BodyDetailsRouter.get('/:id', BodyDetailsController.getBodyDetailsById);
 BodyDetailsRouter.put('/:id', BodyDetailsController.updateBodyDetails);
-BodyDetailsRouter.delete('/', BodyDetailsController.deleteBodyDetails);
+BodyDetailsRouter.delete('/:id', BodyDetailsController.deleteBodyDetails);
 module.exports = BodyDetailsRouter;

@@ -6,5 +6,5 @@ SubscriptionRouter.get('/', SubscriptionController.getAllSubscription);
 SubscriptionRouter.post('/', SubscriptionController.createSubscription);
 SubscriptionRouter.get('/:id', SubscriptionController.getSubscriptionById);
 SubscriptionRouter.put('/:id', SubscriptionController.updateSubscription);
-SubscriptionRouter.delete('/', SubscriptionController.deleteSubscription);
+SubscriptionRouter.delete('/:id', SubscriptionController.deleteSubscription);
 module.exports = SubscriptionRouter;

@@ -7,5 +7,5 @@ SubscriptionType.get('/', SubscriptionTypeController.getAllSubscriptionType);
 SubscriptionType.post('/', SubscriptionTypeController.createSubscriptionType);
 SubscriptionType.get('/:id', SubscriptionTypeController.getSubscriptionTypeById);
 SubscriptionType.put('/:id', SubscriptionTypeController.updateSubscriptionType);
-SubscriptionType.delete('/', SubscriptionTypeController.deleteSubscriptionType);
+SubscriptionType.delete('/:id', SubscriptionTypeController.deleteSubscriptionType);
 module.exports = SubscriptionType;

@@ -7,5 +7,5 @@ PaymentRouter.get('/', PaymentController.getAllPayment);
 PaymentRouter.post('/', PaymentController.createPayment);
 PaymentRouter.get('/:id', PaymentController.getPaymentById);
 PaymentRouter.put('/:id', PaymentController.updatePayment);
-PaymentRouter.delete('/', PaymentController.deletePayment);
+PaymentRouter.delete('/:id', PaymentController.deletePayment);
 module.exports = PaymentRouter;

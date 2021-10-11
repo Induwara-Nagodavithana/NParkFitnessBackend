@@ -7,5 +7,5 @@ ScheduleItemRouter.get('/', ScheduleItemController.getAllScheduleItem);
 ScheduleItemRouter.post('/', ScheduleItemController.createScheduleItem);
 ScheduleItemRouter.get('/:id', ScheduleItemController.getScheduleItemById);
 ScheduleItemRouter.put('/:id', ScheduleItemController.updateScheduleItem);
-ScheduleItemRouter.delete('/', ScheduleItemController.deleteScheduleItem);
+ScheduleItemRouter.delete('/:id', ScheduleItemController.deleteScheduleItem);
 module.exports = ScheduleItemRouter;

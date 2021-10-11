@@ -7,5 +7,5 @@ RequestRouter.get('/', RequestController.getAllRequest);
 RequestRouter.post('/', RequestController.createRequest);
 RequestRouter.get('/:id', RequestController.getRequestById);
 RequestRouter.put('/:id', RequestController.updateRequest);
-RequestRouter.delete('/', RequestController.deleteRequest);
+RequestRouter.delete('/:id', RequestController.deleteRequest);
 module.exports = RequestRouter;

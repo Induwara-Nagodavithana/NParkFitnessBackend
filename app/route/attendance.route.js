@@ -7,5 +7,5 @@ AttendanceRouter.get('/', AttendanceController.getAllAttendance);
 AttendanceRouter.post('/', AttendanceController.createAttendance);
 AttendanceRouter.get('/:id', AttendanceController.getAttendanceById);
 AttendanceRouter.put('/:id', AttendanceController.updateAttendance);
-AttendanceRouter.delete('/', AttendanceController.deleteAttendance);
+AttendanceRouter.delete('/:id', AttendanceController.deleteAttendance);
 module.exports = AttendanceRouter;
