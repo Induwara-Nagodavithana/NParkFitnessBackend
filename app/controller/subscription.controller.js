@@ -3,7 +3,7 @@ const SubscriptionType = require("../model/subscriptionType.model");
 const User = require("../model/user.model");
 
 //Register a Subscription | guest
-const createSubscription = async (req, res) => {
+exports.createSubscription = async (req, res) => {
     if (req.body) {
         console.log("Create subscription");
         Subscription.create(req.body)
@@ -25,7 +25,7 @@ const createSubscription = async (req, res) => {
 
 
 //update Subscription Details
-const updateSubscription = async (req, res) => {
+exports.updateSubscription = async (req, res) => {
     if (req.body) {
         if (!req.params.id) return res.status(500).send("Id is missing");
         let id = req.params.id;
@@ -52,7 +52,7 @@ const updateSubscription = async (req, res) => {
 
 
 //get All Subscription
-const getAllSubscription = (req, res) => {
+exports.getAllSubscription = (req, res) => {
     console.log("get All");
     Subscription.findAll().then((subscription) => {
         res.send({
@@ -70,7 +70,7 @@ const getAllSubscription = (req, res) => {
 }
 
 //get Subscription By Id
-const getSubscriptionById = (req, res) => {
+exports.getSubscriptionById = (req, res) => {
     console.log("get All");
     Subscription.findOne({
         where: {
@@ -98,7 +98,7 @@ const getSubscriptionById = (req, res) => {
 }
 
 //delete Subscription
-const deleteSubscription = async (req, res) => {
+exports.deleteSubscription = async (req, res) => {
     console.log("Delete subscription");
     Subscription.destroy({
         where: {
@@ -119,12 +119,4 @@ const deleteSubscription = async (req, res) => {
                 'description': err
             });
         });
-}
-
-module.exports = {
-    createSubscription,
-    updateSubscription,
-    deleteSubscription,
-    getAllSubscription,
-    getSubscriptionById
 }

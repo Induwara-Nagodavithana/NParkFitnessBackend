@@ -2,7 +2,7 @@ const Gym = require("../model/gym.model");
 const User = require("../model/user.model");
 
 //Register a Gym | guest
-const createGym = async (req, res) => {
+exports.createGym = async (req, res) => {
     if (req.body) {
         console.log("Create gym");
         Gym.create(req.body)
@@ -24,7 +24,7 @@ const createGym = async (req, res) => {
 
 
 //update Gym Details
-const updateGym = async (req, res) => {
+exports.updateGym = async (req, res) => {
     if (req.body) {
         if (!req.params.id) return res.status(500).send("Id is missing");
         let id = req.params.id;
@@ -51,7 +51,7 @@ const updateGym = async (req, res) => {
 
 
 //get All Gym
-const getAllGym = (req, res) => {
+exports.getAllGym = (req, res) => {
     console.log("get All");
     Gym.findAll().then((gym) => {
         res.send({
@@ -69,7 +69,7 @@ const getAllGym = (req, res) => {
 }
 
 //get Gym By Id
-const getGymById = (req, res) => {
+exports.getGymById = (req, res) => {
     console.log("get All");
     Gym.findOne({
         where: {
@@ -94,7 +94,7 @@ const getGymById = (req, res) => {
 }
 
 //delete Gym
-const deleteGym = async (req, res) => {
+exports.deleteGym = async (req, res) => {
     console.log("Delete gym");
     Gym.destroy({
         where: {
@@ -115,12 +115,4 @@ const deleteGym = async (req, res) => {
                 'description': err
             });
         });
-}
-
-module.exports = {
-    createGym,
-    updateGym,
-    deleteGym,
-    getAllGym,
-    getGymById
 }

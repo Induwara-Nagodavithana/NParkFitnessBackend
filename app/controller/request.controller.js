@@ -2,7 +2,7 @@ const Request = require("../model/request.model");
 const Membership = require("../model/membership.model");
 
 //Register a Request | guest
-const createRequest = async (req, res) => {
+exports.createRequest = async (req, res) => {
     if (req.body) {
         console.log("Create request");
         Request.create(req.body)
@@ -24,7 +24,7 @@ const createRequest = async (req, res) => {
 
 
 //update Request Details
-const updateRequest = async (req, res) => {
+exports.updateRequest = async (req, res) => {
     if (req.body) {
         if (!req.params.id) return res.status(500).send("Id is missing");
         let id = req.params.id;
@@ -51,7 +51,7 @@ const updateRequest = async (req, res) => {
 
 
 //get All Request
-const getAllRequest = (req, res) => {
+exports.getAllRequest = (req, res) => {
     console.log("get All");
     Request.findAll().then((request) => {
         res.send({
@@ -69,7 +69,7 @@ const getAllRequest = (req, res) => {
 }
 
 //get Request By Id
-const getRequestById = (req, res) => {
+exports.getRequestById = (req, res) => {
     console.log("get All");
     Request.findOne({
         where: {
@@ -94,7 +94,7 @@ const getRequestById = (req, res) => {
 }
 
 //delete Request
-const deleteRequest = async (req, res) => {
+exports.deleteRequest = async (req, res) => {
     console.log("Delete request");
     Request.destroy({
         where: {
@@ -115,12 +115,4 @@ const deleteRequest = async (req, res) => {
                 'description': err
             });
         });
-}
-
-module.exports = {
-    createRequest,
-    updateRequest,
-    deleteRequest,
-    getAllRequest,
-    getRequestById
 }

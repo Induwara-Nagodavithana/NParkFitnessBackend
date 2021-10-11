@@ -3,7 +3,7 @@ const User = require("../model/user.model");
 const Membership = require("../model/membership.model");
 
 //Register a Schedule | guest
-const createSchedule = async (req, res) => {
+exports.createSchedule = async (req, res) => {
     if (req.body) {
         console.log("Create schedule");
         Schedule.create(req.body)
@@ -25,7 +25,7 @@ const createSchedule = async (req, res) => {
 
 
 //update Schedule Details
-const updateSchedule = async (req, res) => {
+exports.updateSchedule = async (req, res) => {
     if (req.body) {
         if (!req.params.id) return res.status(500).send("Id is missing");
         let id = req.params.id;
@@ -52,7 +52,7 @@ const updateSchedule = async (req, res) => {
 
 
 //get All Schedule
-const getAllSchedule = (req, res) => {
+exports.getAllSchedule = (req, res) => {
     console.log("get All");
     Schedule.findAll().then((schedule) => {
         res.send({
@@ -70,7 +70,7 @@ const getAllSchedule = (req, res) => {
 }
 
 //get Schedule By Id
-const getScheduleById = (req, res) => {
+exports.getScheduleById = (req, res) => {
     console.log("get All");
     Schedule.findOne({
         where: {
@@ -98,7 +98,7 @@ const getScheduleById = (req, res) => {
 }
 
 //delete Schedule
-const deleteSchedule = async (req, res) => {
+exports.deleteSchedule = async (req, res) => {
     console.log("Delete schedule");
     Schedule.destroy({
         where: {
@@ -119,12 +119,4 @@ const deleteSchedule = async (req, res) => {
                 'description': err
             });
         });
-}
-
-module.exports = {
-    createSchedule,
-    updateSchedule,
-    deleteSchedule,
-    getAllSchedule,
-    getScheduleById
 }

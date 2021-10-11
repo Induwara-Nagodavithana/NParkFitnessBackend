@@ -2,7 +2,7 @@ const ServiceType = require("../model/serviceType.model");
 const Branch = require("../model/branch.model");
 
 //Register a ServiceType | guest
-const createServiceType = async (req, res) => {
+exports.createServiceType = async (req, res) => {
     if (req.body) {
         console.log("Create serviceType");
         ServiceType.create(req.body)
@@ -24,7 +24,7 @@ const createServiceType = async (req, res) => {
 
 
 //update ServiceType Details
-const updateServiceType = async (req, res) => {
+exports.updateServiceType = async (req, res) => {
     if (req.body) {
         if (!req.params.id) return res.status(500).send("Id is missing");
         let id = req.params.id;
@@ -51,7 +51,7 @@ const updateServiceType = async (req, res) => {
 
 
 //get All ServiceType
-const getAllServiceType = (req, res) => {
+exports.getAllServiceType = (req, res) => {
     console.log("get All");
     ServiceType.findAll().then((serviceType) => {
         res.send({
@@ -69,7 +69,7 @@ const getAllServiceType = (req, res) => {
 }
 
 //get ServiceType By Id
-const getServiceTypeById = (req, res) => {
+exports.getServiceTypeById = (req, res) => {
     console.log("get All");
     ServiceType.findOne({
         where: {
@@ -94,7 +94,7 @@ const getServiceTypeById = (req, res) => {
 }
 
 //delete ServiceType
-const deleteServiceType = async (req, res) => {
+exports.deleteServiceType = async (req, res) => {
     console.log("Delete serviceType");
     ServiceType.destroy({
         where: {
@@ -115,12 +115,4 @@ const deleteServiceType = async (req, res) => {
                 'description': err
             });
         });
-}
-
-module.exports = {
-    createServiceType,
-    updateServiceType,
-    deleteServiceType,
-    getAllServiceType,
-    getServiceTypeById
 }

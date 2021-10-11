@@ -3,7 +3,7 @@ const Attendance = require("../model/attendance.model");
 const ScheduleItem = require("../model/scheduleItem.model");
 
 //Register a AttendItem | guest
-const createAttendItem = async (req, res) => {
+exports.createAttendItem = async (req, res) => {
     if (req.body) {
         console.log("Create attendItem");
         AttendItem.create(req.body)
@@ -25,7 +25,7 @@ const createAttendItem = async (req, res) => {
 
 
 //update AttendItem Details
-const updateAttendItem = async (req, res) => {
+exports.updateAttendItem = async (req, res) => {
     if (req.body) {
         if (!req.params.id) return res.status(500).send("Id is missing");
         let id = req.params.id;
@@ -52,7 +52,7 @@ const updateAttendItem = async (req, res) => {
 
 
 //get All AttendItem
-const getAllAttendItem = (req, res) => {
+exports.getAllAttendItem = (req, res) => {
     console.log("get All");
     AttendItem.findAll().then((attendItem) => {
         res.send({
@@ -70,7 +70,7 @@ const getAllAttendItem = (req, res) => {
 }
 
 //get AttendItem By Id
-const getAttendItemById = (req, res) => {
+exports.getAttendItemById = (req, res) => {
     console.log("get All");
     AttendItem.findOne({
         where: {
@@ -97,7 +97,7 @@ const getAttendItemById = (req, res) => {
 }
 
 //delete AttendItem
-const deleteAttendItem = async (req, res) => {
+exports.deleteAttendItem = async (req, res) => {
     console.log("Delete attendItem");
     AttendItem.destroy({
         where: {
@@ -118,12 +118,4 @@ const deleteAttendItem = async (req, res) => {
                 'description': err
             });
         });
-}
-
-module.exports = {
-    createAttendItem,
-    updateAttendItem,
-    deleteAttendItem,
-    getAllAttendItem,
-    getAttendItemById
 }

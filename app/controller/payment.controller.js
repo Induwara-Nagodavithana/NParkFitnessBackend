@@ -2,7 +2,7 @@ const Payment = require("../model/payment.model");
 const Membership = require("../model/membership.model");
 
 //Register a Payment | guest
-const createPayment = async (req, res) => {
+exports.createPayment = async (req, res) => {
     if (req.body) {
         console.log("Create payment");
         Payment.create(req.body)
@@ -24,7 +24,7 @@ const createPayment = async (req, res) => {
 
 
 //update Payment Details
-const updatePayment = async (req, res) => {
+exports.updatePayment = async (req, res) => {
     if (req.body) {
         if (!req.params.id) return res.status(500).send("Id is missing");
         let id = req.params.id;
@@ -51,7 +51,7 @@ const updatePayment = async (req, res) => {
 
 
 //get All Payment
-const getAllPayment = (req, res) => {
+exports.getAllPayment = (req, res) => {
     console.log("get All");
     Payment.findAll().then((payment) => {
         res.send({
@@ -69,7 +69,7 @@ const getAllPayment = (req, res) => {
 }
 
 //get Payment By Id
-const getPaymentById = (req, res) => {
+exports.getPaymentById = (req, res) => {
     console.log("get All");
     Payment.findOne({
         where: {
@@ -94,7 +94,7 @@ const getPaymentById = (req, res) => {
 }
 
 //delete Payment
-const deletePayment = async (req, res) => {
+exports.deletePayment = async (req, res) => {
     console.log("Delete payment");
     Payment.destroy({
         where: {
@@ -115,12 +115,4 @@ const deletePayment = async (req, res) => {
                 'description': err
             });
         });
-}
-
-module.exports = {
-    createPayment,
-    updatePayment,
-    deletePayment,
-    getAllPayment,
-    getPaymentById
 }

@@ -2,7 +2,7 @@ const Membership = require("../model/membership.model");
 const User = require("../model/user.model");
 
 //Register a Membership | guest
-const createMembership = async (req, res) => {
+exports.createMembership = async (req, res) => {
     if (req.body) {
         console.log("Create membership");
         Membership.create(req.body)
@@ -24,7 +24,7 @@ const createMembership = async (req, res) => {
 
 
 //update Membership Details
-const updateMembership = async (req, res) => {
+exports.updateMembership = async (req, res) => {
     if (req.body) {
         if (!req.params.id) return res.status(500).send("Id is missing");
         let id = req.params.id;
@@ -51,7 +51,7 @@ const updateMembership = async (req, res) => {
 
 
 //get All Membership
-const getAllMembership = (req, res) => {
+exports.getAllMembership = (req, res) => {
     console.log("get All");
     Membership.findAll().then((membership) => {
         res.send({
@@ -69,7 +69,7 @@ const getAllMembership = (req, res) => {
 }
 
 //get Membership By Id
-const getMembershipById = (req, res) => {
+exports.getMembershipById = (req, res) => {
     console.log("get All");
     Membership.findOne({
         where: {
@@ -94,7 +94,7 @@ const getMembershipById = (req, res) => {
 }
 
 //delete Membership
-const deleteMembership = async (req, res) => {
+exports.deleteMembership = async (req, res) => {
     console.log("Delete membership");
     Membership.destroy({
         where: {
@@ -115,12 +115,4 @@ const deleteMembership = async (req, res) => {
                 'description': err
             });
         });
-}
-
-module.exports = {
-    createMembership,
-    updateMembership,
-    deleteMembership,
-    getAllMembership,
-    getMembershipById
 }

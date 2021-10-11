@@ -2,7 +2,7 @@ const BodyDetails = require("../model/bodyDetails.model");
 const User = require("../model/user.model");
 
 //Register a BodyDetails | guest
-const createBodyDetails = async (req, res) => {
+exports.createBodyDetails = async (req, res) => {
     if (req.body) {
         console.log("Create bodyDetails");
         BodyDetails.create(req.body)
@@ -24,7 +24,7 @@ const createBodyDetails = async (req, res) => {
 
 
 //update BodyDetails Details
-const updateBodyDetails = async (req, res) => {
+exports.updateBodyDetails = async (req, res) => {
     if (req.body) {
         if (!req.params.id) return res.status(500).send("Id is missing");
         let id = req.params.id;
@@ -51,7 +51,7 @@ const updateBodyDetails = async (req, res) => {
 
 
 //get All BodyDetails
-const getAllBodyDetails = (req, res) => {
+exports.getAllBodyDetails = (req, res) => {
     console.log("get All");
     BodyDetails.findAll().then((bodyDetails) => {
         res.send({
@@ -69,7 +69,7 @@ const getAllBodyDetails = (req, res) => {
 }
 
 //get BodyDetails By Id
-const getBodyDetailsById = (req, res) => {
+exports.getBodyDetailsById = (req, res) => {
     console.log("get All");
     BodyDetails.findOne({
         where: {
@@ -94,7 +94,7 @@ const getBodyDetailsById = (req, res) => {
 }
 
 //delete BodyDetails
-const deleteBodyDetails = async (req, res) => {
+exports.deleteBodyDetails = async (req, res) => {
     console.log("Delete bodyDetails");
     BodyDetails.destroy({
         where: {
@@ -115,12 +115,4 @@ const deleteBodyDetails = async (req, res) => {
                 'description': err
             });
         });
-}
-
-module.exports = {
-    createBodyDetails,
-    updateBodyDetails,
-    deleteBodyDetails,
-    getAllBodyDetails,
-    getBodyDetailsById
 }

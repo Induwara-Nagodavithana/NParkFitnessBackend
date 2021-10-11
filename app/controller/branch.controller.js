@@ -2,7 +2,7 @@ const Branch = require("../model/branch.model");
 const Gym = require("../model/gym.model");
 
 //Register a Branch | guest
-const createBranch = async (req, res) => {
+exports.createBranch = async (req, res) => {
     if (req.body) {
         console.log("Create branch");
         Branch.create(req.body)
@@ -24,7 +24,7 @@ const createBranch = async (req, res) => {
 
 
 //update Branch Details
-const updateBranch = async (req, res) => {
+exports.updateBranch = async (req, res) => {
     if (req.body) {
         if (!req.params.id) return res.status(500).send("Id is missing");
         let id = req.params.id;
@@ -51,7 +51,7 @@ const updateBranch = async (req, res) => {
 
 
 //get All Branch
-const getAllBranch = (req, res) => {
+exports.getAllBranch = (req, res) => {
     console.log("get All");
     Branch.findAll().then((branch) => {
         res.send({
@@ -69,7 +69,7 @@ const getAllBranch = (req, res) => {
 }
 
 //get Branch By Id
-const getBranchById = (req, res) => {
+exports.getBranchById = (req, res) => {
     console.log("get All");
     Branch.findOne({
         where: {
@@ -94,7 +94,7 @@ const getBranchById = (req, res) => {
 }
 
 //delete Branch
-const deleteBranch = async (req, res) => {
+exports.deleteBranch = async (req, res) => {
     console.log("Delete branch");
     Branch.destroy({
         where: {
@@ -115,12 +115,4 @@ const deleteBranch = async (req, res) => {
                 'description': err
             });
         });
-}
-
-module.exports = {
-    createBranch,
-    updateBranch,
-    deleteBranch,
-    getAllBranch,
-    getBranchById
 }
