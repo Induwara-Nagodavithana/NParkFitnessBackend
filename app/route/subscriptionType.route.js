@@ -1,12 +1,11 @@
 const express = require('express');
-const router = express.Router();
+const SubscriptionType = express.Router();
 const SubscriptionTypeController = require('../controller/subscriptionType.controller');
 
-module.exports = function (){
-    router.get('/', SubscriptionTypeController.getAllSubscriptionType);
-    router.post('/', SubscriptionTypeController.createSubscriptionType);
-    router.get('/:id', SubscriptionTypeController.getSubscriptionTypeById);
-    router.put('/:id', SubscriptionTypeController.updateSubscriptionType);
-    router.delete('/',SubscriptionTypeController.deleteSubscriptionType);
-    return router;
-}
+
+SubscriptionType.get('/', SubscriptionTypeController.getAllSubscriptionType);
+SubscriptionType.post('/', SubscriptionTypeController.createSubscriptionType);
+SubscriptionType.get('/:id', SubscriptionTypeController.getSubscriptionTypeById);
+SubscriptionType.put('/:id', SubscriptionTypeController.updateSubscriptionType);
+SubscriptionType.delete('/', SubscriptionTypeController.deleteSubscriptionType);
+module.exports = SubscriptionType;

@@ -1,12 +1,11 @@
 const express = require('express');
-const router = express.Router();
+const ScheduleItemRouter = express.Router();
 const ScheduleItemController = require('../controller/scheduleItem.controller');
 
-module.exports = function (){
-    router.get('/', ScheduleItemController.getAllScheduleItem);
-    router.post('/', ScheduleItemController.createScheduleItem);
-    router.get('/:id', ScheduleItemController.getScheduleItemById);
-    router.put('/:id', ScheduleItemController.updateScheduleItem);
-    router.delete('/',ScheduleItemController.deleteScheduleItem);
-    return router;
-}
+
+ScheduleItemRouter.get('/', ScheduleItemController.getAllScheduleItem);
+ScheduleItemRouter.post('/', ScheduleItemController.createScheduleItem);
+ScheduleItemRouter.get('/:id', ScheduleItemController.getScheduleItemById);
+ScheduleItemRouter.put('/:id', ScheduleItemController.updateScheduleItem);
+ScheduleItemRouter.delete('/', ScheduleItemController.deleteScheduleItem);
+module.exports = ScheduleItemRouter;

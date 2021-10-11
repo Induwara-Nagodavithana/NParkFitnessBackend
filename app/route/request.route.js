@@ -1,12 +1,11 @@
 const express = require('express');
-const router = express.Router();
+const RequestRouter = express.Router();
 const RequestController = require('../controller/request.controller');
 
-module.exports = function (){
-    router.get('/', RequestController.getAllRequest);
-    router.post('/', RequestController.createRequest);
-    router.get('/:id', RequestController.getRequestById);
-    router.put('/:id', RequestController.updateRequest);
-    router.delete('/',RequestController.deleteRequest);
-    return router;
-}
+
+RequestRouter.get('/', RequestController.getAllRequest);
+RequestRouter.post('/', RequestController.createRequest);
+RequestRouter.get('/:id', RequestController.getRequestById);
+RequestRouter.put('/:id', RequestController.updateRequest);
+RequestRouter.delete('/', RequestController.deleteRequest);
+module.exports = RequestRouter;

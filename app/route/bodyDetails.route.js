@@ -1,12 +1,11 @@
 const express = require('express');
-const router = express.Router();
+const BodyDetailsRouter = express.Router();
 const BodyDetailsController = require('../controller/bodyDetails.controller');
 
-module.exports = function (){
-    router.get('/', BodyDetailsController.getAllBodyDetails);
-    router.post('/', BodyDetailsController.createBodyDetails);
-    router.get('/:id', BodyDetailsController.getBodyDetailsById);
-    router.put('/:id', BodyDetailsController.updateBodyDetails);
-    router.delete('/',BodyDetailsController.deleteBodyDetails);
-    return router;
-}
+
+BodyDetailsRouter.get('/', BodyDetailsController.getAllBodyDetails);
+BodyDetailsRouter.post('/', BodyDetailsController.createBodyDetails);
+BodyDetailsRouter.get('/:id', BodyDetailsController.getBodyDetailsById);
+BodyDetailsRouter.put('/:id', BodyDetailsController.updateBodyDetails);
+BodyDetailsRouter.delete('/', BodyDetailsController.deleteBodyDetails);
+module.exports = BodyDetailsRouter;

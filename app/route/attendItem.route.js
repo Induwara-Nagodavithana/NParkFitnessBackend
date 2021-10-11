@@ -1,12 +1,11 @@
 const express = require('express');
-const router = express.Router();
+const AttendItemRouter = express.Router();
 const AttendItemController = require('../controller/attendItem.controller');
 
-module.exports = function (){
-    router.get('/', AttendItemController.getAllAttendItem);
-    router.post('/', AttendItemController.createAttendItem);
-    router.get('/:id', AttendItemController.getAttendItemById);
-    router.put('/:id', AttendItemController.updateAttendItem);
-    router.delete('/',AttendItemController.deleteAttendItem);
-    return router;
-}
+
+AttendItemRouter.get('/', AttendItemController.getAllAttendItem);
+AttendItemRouter.post('/', AttendItemController.createAttendItem);
+AttendItemRouter.get('/:id', AttendItemController.getAttendItemById);
+AttendItemRouter.put('/:id', AttendItemController.updateAttendItem);
+AttendItemRouter.delete('/', AttendItemController.deleteAttendItem);
+module.exports = AttendItemRouter;

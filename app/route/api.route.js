@@ -1,7 +1,7 @@
 const express = require('express');
 var app = express();
 const ApiRouter = express.Router();
-const User = require('./user.api');
+const User = require('./user.route');
 const Gym = require('./gym.route');
 const Branch = require('./branch.route');
 const ServiceType = require('./serviceType.route');
@@ -36,5 +36,19 @@ const Subscription = require('./subscription.route');
 // }
 
 ApiRouter.use("/user", User);
+ApiRouter.use("/gym", Gym);
+ApiRouter.use("/branch", Branch);
+ApiRouter.use("/serviceType", ServiceType);
+ApiRouter.use("/bodyDetails", BodyDetails);
+ApiRouter.use("/membership", Membership);
+ApiRouter.use("/attendItem", AttendItem);
+ApiRouter.use("/attendance", Attendance);
+ApiRouter.use("/payment", Payment);
+ApiRouter.use("/request", Request);
+ApiRouter.use("/schedule", Schedule);
+ApiRouter.use("/scheduleItem", ScheduleItem);
+ApiRouter.use("/subscriptionType", SubscriptionType);
+ApiRouter.use("/subscription", Subscription);
+
 
 module.exports = ApiRouter;
