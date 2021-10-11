@@ -4,7 +4,8 @@ var cors = require('cors')
 var fireAuth = require('./app/auth/firebaseAuth')
 const db = require('./app/config/database');
 const PORT = process.env.PORT || 3005;
-const api = require('./app/route/api.route')
+const ApiRouter = require('./app/route/api.route')
+const AuthRouter = require('./app/route/auth.route')
 
 
 
@@ -38,7 +39,8 @@ app.get("/", (req, res) => {
 });
 // app.use("/", fireAuth.decodeToken , open);
 
-app.use("/api",api);
+app.use("/api",ApiRouter);
+app.use("/auth",AuthRouter);
 
 //Set Port
 app.set("port", PORT);
