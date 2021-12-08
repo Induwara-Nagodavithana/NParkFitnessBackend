@@ -144,6 +144,9 @@ exports.getAllUser = (req, res) => {
         });
 }
 
+
+
+
 //delete User
 exports.deleteUser = async (req, res) => {
     console.log("Delete user");

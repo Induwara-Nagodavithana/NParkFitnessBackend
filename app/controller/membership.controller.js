@@ -1,4 +1,7 @@
+const Branch = require("../model/branch.model");
+const Gym = require("../model/gym.model");
 const Membership = require("../model/membership.model");
+const MembershipType = require("../model/membershipType.model");
 const User = require("../model/user.model");
 
 //Register a Membership | guest
@@ -75,9 +78,12 @@ exports.getMembershipById = (req, res) => {
         where: {
             id: req.params.id
         },
-        include: {
+        include: [{
             model: User
-        }
+        },
+        {
+            model: MembershipType
+        }]
     }).then((membership) => {
         res.send({
             'success': 'true',
@@ -88,6 +94,63 @@ exports.getMembershipById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting Membership By ID',
+                'description': err
+            });
+        });
+}
+
+//getAll Membership By neededTrainer false
+exports.getMembershipByNeededTrainer = (req, res) => {
+    console.log("get All");
+    Membership.findAll({
+        where: {
+            neededTrainer: req.params.neededTrainer
+        },
+        include: [{
+            model: User
+        },
+        {
+            model: MembershipType
+        }]
+    }).then((membership) => {
+        res.send({
+            'success': 'true',
+            'data': membership
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting Membership By NeededTrainer',
+                'description': err
+            });
+        });
+}
+
+//getAll Membership with Details
+exports.getMembershipWithDetails = (req, res) => {
+    console.log("get All");
+    Membership.findAll({
+        include: [{
+            model: User
+        }, {
+            model: MembershipType
+        }, {
+            model: Branch,
+            include: {
+                model:Gym
+            }
+        }]
+    }).then((membership) => {
+        res.send({
+            'success': 'true',
+            'data': membership
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting Membership With Details',
                 'description': err
             });
         });

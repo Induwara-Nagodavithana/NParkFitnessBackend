@@ -1,3 +1,4 @@
+const Gym = require("../model/gym.model");
 const Subscription = require("../model/subscription.model");
 const SubscriptionType = require("../model/subscriptionType.model");
 const User = require("../model/user.model");
@@ -92,6 +93,36 @@ exports.getSubscriptionById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting Subscription By ID',
+                'description': err
+            });
+        });
+}
+
+//get All Gym Owners with Subscription
+exports.getAllGymOwnersWithSubscription = (req, res) => {
+    console.log("get All 2354");
+    User.findAll({
+        where: {
+            type: 'Owner'
+        },
+        include: [{
+            model: Gym
+        }, {
+            model: Subscription,
+            include: {
+                model:SubscriptionType
+            }
+        }]
+    }).then((user) => {
+        res.send({
+            'success': 'true',
+            'data': user
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting All User',
                 'description': err
             });
         });

@@ -14,7 +14,8 @@ const ScheduleItem = require("./scheduleItem.model")
 const ServiceType = require("./serviceType.model")
 const Subscription = require("./subscription.model")
 const SubscriptionType = require("./subscriptionType.model")
-const AttendItem = require("./attendItem.model")
+const AttendItem = require("./attendItem.model");
+const MembershipType = require("./membershipType.model");
 
 var User = db.define(
     "user",
@@ -75,9 +76,15 @@ Gym.hasMany(Branch)
 Branch.belongsTo(Gym)
 // Branch.hasMany(User, { as: 'branchId', allowNull: true, defaultValue: null })
 // User.hasOne(Branch,{as: 'branchId', allowNull: true, defaultValue: null })
-Branch.hasMany(User,{constraints: false , allowNull: true, defaultValue: null })
-// User.hasOne(Branch)
-User.belongsTo(Branch,{constraints: false})
+
+
+// Branch.hasMany(User,{constraints: false , allowNull: true, defaultValue: null })
+// User.belongsTo(Branch,{constraints: false})
+
+Branch.hasMany(Membership)
+Membership.belongsTo(Branch)
+
+
 User.hasOne(Subscription)
 Subscription.belongsTo(User)
 SubscriptionType.hasMany(Subscription)
@@ -115,6 +122,7 @@ AttendItem.belongsTo(ScheduleItem)
 //////////
 ServiceType.hasMany(ScheduleItem)
 ScheduleItem.belongsTo(ServiceType)
-
+MembershipType.hasMany(Membership)
+Membership.belongsTo(MembershipType)
 
 module.exports = User;

@@ -2,15 +2,19 @@ const Sequelize = require("sequelize");
 
 const db = require("../config/database");
 
-var Membership = db.define(
-    "membership",
+var MembershipType = db.define(
+    "membershipType",
     {
-        expireDate: {
+        description: {
             type: Sequelize.STRING,
             allowNull: false,
         },
-        neededTrainer: {
-            type: Sequelize.BOOLEAN,
+        amount: {
+            type: Sequelize.DECIMAL(10, 2),
+            allowNull: false,
+        },
+        periodInMonths: {
+            type: Sequelize.INTEGER,
             allowNull: false,
         }
     },
@@ -23,4 +27,4 @@ var Membership = db.define(
 );
 
 
-module.exports = Membership ;
+module.exports = MembershipType ;
