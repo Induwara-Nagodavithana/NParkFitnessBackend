@@ -2,19 +2,15 @@ const Sequelize = require("sequelize");
 
 const db = require("../config/database");
 
-var SubscriptionType = db.define(
-    "subscriptionType",
+var MealItem = db.define(
+    "mealItem",
     {
-        type: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        },
-        description: {
+        foodName: {
             type: Sequelize.STRING,
             allowNull: false,
         },
         amount: {
-            type: Sequelize.DECIMAL(10, 2),
+            type: Sequelize.INTEGER,
             allowNull: false,
         }
     },
@@ -27,4 +23,4 @@ var SubscriptionType = db.define(
 );
 
 
-module.exports = SubscriptionType;
+module.exports = MealItem ;

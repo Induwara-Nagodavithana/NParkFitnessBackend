@@ -1,21 +1,21 @@
-const Request = require("../model/request.model");
+const Goal = require("../model/goal.model");
 const Membership = require("../model/membership.model");
 
-//Register a Request | guest
-exports.createRequest = async (req, res) => {
+//Register a Goal | guest
+exports.createGoal = async (req, res) => {
     if (req.body) {
-        console.log("Create request");
-        Request.create(req.body)
-            .then((request) => {
+        console.log("Create goal");
+        Goal.create(req.body)
+            .then((goal) => {
                 res.send({
                     'success': 'true',
-                    'data': request
+                    'data': goal
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': 'Error in Create Request',
+                    'message': 'Error in Create Goal',
                     'description': err
                 });
             });
@@ -23,26 +23,26 @@ exports.createRequest = async (req, res) => {
 }
 
 
-//update Request Details
-exports.updateRequest = async (req, res) => {
+//update Goal Details
+exports.updateGoal = async (req, res) => {
     if (req.body) {
         if (!req.params.id) return res.status(500).send("Id is missing");
         let id = req.params.id;
-        Request.update(req.body, {
+        Goal.update(req.body, {
             where: {
                 id: id,
             },
         })
-            .then((request) => {
+            .then((goal) => {
                 res.status(200).send({
-                    'success': request[0] == 1 ? 'true' : 'false',
-                    'data': request[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                    'success': goal[0] == 1 ? 'true' : 'false',
+                    'data': goal[0] == 1 ? "Updated Successfully" : "Update Not Successful"
                 });
             })
             .catch((err) => {
                 res.status(400).send({
                     'success': 'false',
-                    'message': 'Error in Update Request',
+                    'message': 'Error in Update Goal',
                     'description': err
                 });
             });
@@ -50,68 +50,68 @@ exports.updateRequest = async (req, res) => {
 }
 
 
-//get All Request
-exports.getAllRequest = (req, res) => {
+//get All Goal
+exports.getAllGoal = (req, res) => {
     console.log("get All");
-    Request.findAll().then((request) => {
+    Goal.findAll().then((goal) => {
         res.send({
             'success': 'true',
-            'data': request
+            'data': goal
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': 'Error in Getting All Request',
+                'message': 'Error in Getting All Goal',
                 'description': err
             });
         });
 }
 
-//get Request By Id
-exports.getRequestById = (req, res) => {
+//get Goal By Id
+exports.getGoalById = (req, res) => {
     console.log("get All");
-    Request.findOne({
+    Goal.findOne({
         where: {
             id: req.params.id
         },
         include: {
             model: Membership
         }
-    }).then((request) => {
+    }).then((goal) => {
         res.send({
             'success': 'true',
-            'data': request
+            'data': goal
         });
     })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': 'Error in Getting Request By ID',
+                'message': 'Error in Getting Goal By ID',
                 'description': err
             });
         });
 }
 
-//delete Request
-exports.deleteRequest = async (req, res) => {
-    console.log("Delete request");
-    Request.destroy({
+//delete Goal
+exports.deleteGoal = async (req, res) => {
+    console.log("Delete goal");
+    Goal.destroy({
         where: {
             id: req.params.id
         }
     })
-        .then((request) => {
-            console.log(request)
+        .then((goal) => {
+            console.log(goal)
             res.status(200).send({
-                'success': request == 1 ? 'true' : 'false',
-                'data': request == 1 ? "Deleted Successfully" : "Delete Not Successful"
+                'success': goal == 1 ? 'true' : 'false',
+                'data': goal == 1 ? "Deleted Successfully" : "Delete Not Successful"
             });
         })
         .catch((err) => {
             res.status(400).send({
                 'success': 'false',
-                'message': 'Error in Delete Request',
+                'message': 'Error in Delete Goal',
                 'description': err
             });
         });

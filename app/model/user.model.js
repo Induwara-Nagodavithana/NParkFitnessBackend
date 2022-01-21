@@ -8,7 +8,7 @@ const Branch = require("./branch.model")
 const Gym = require("./gym.model")
 const Membership = require("./membership.model")
 const Payment = require("./payment.model")
-const Request = require("./request.model")
+const Goal = require("./goal.model")
 const Schedule = require("./schedule.model")
 const ScheduleItem = require("./scheduleItem.model")
 const ServiceType = require("./serviceType.model")
@@ -16,6 +16,8 @@ const Subscription = require("./subscription.model")
 const SubscriptionType = require("./subscriptionType.model")
 const AttendItem = require("./attendItem.model");
 const MembershipType = require("./membershipType.model");
+const DietPlan = require("./dietPlan.model");
+const MealItem = require("./mealItem.model");
 
 var User = db.define(
     "user",
@@ -53,14 +55,39 @@ var User = db.define(
             type: Sequelize.STRING,
             allowNull: false,
         },
-        address: {
+        // address: {
+        //     type: Sequelize.STRING,
+        //     allowNull: false,
+        // },
+        street: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        lane: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
+        city: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        province: {
             type: Sequelize.STRING,
             allowNull: false,
         },
         image: {
             type: Sequelize.STRING,
             // allowNull: false,
+        },
+        branchID: {
+            type: Sequelize.STRING,
+            // allowNull: false,
+        },
+        trainerID: {
+            type: Sequelize.STRING,
+            // allowNull: false,
         }
+
     },
     {
         timestamps: true,
@@ -100,8 +127,8 @@ Membership.belongsTo(User)
 // BodyDetails.belongsTo(Client)
 // Client.hasMany(Membership)
 // Membership.belongsTo(Client)
-Membership.hasMany(Request)
-Request.belongsTo(Membership)
+Membership.hasMany(Goal)
+Goal.belongsTo(Membership)
 Membership.hasMany(Payment)
 Payment.belongsTo(Membership)
 Membership.hasMany(Attendance)
@@ -124,5 +151,10 @@ ServiceType.hasMany(ScheduleItem)
 ScheduleItem.belongsTo(ServiceType)
 MembershipType.hasMany(Membership)
 Membership.belongsTo(MembershipType)
+
+DietPlan.hasMany(MealItem)
+MealItem.belongsTo(DietPlan)
+User.hasMany(DietPlan)
+DietPlan.belongsTo(User)
 
 module.exports = User;

@@ -2,18 +2,18 @@ const Sequelize = require("sequelize");
 
 const db = require("../config/database");
 
-var SubscriptionType = db.define(
-    "subscriptionType",
+var Goal = db.define(
+    "goal",
     {
-        type: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        },
         description: {
             type: Sequelize.STRING,
             allowNull: false,
         },
-        amount: {
+        heightTarget: {
+            type: Sequelize.DECIMAL(10, 2),
+            allowNull: false,
+        },
+        weightTarget: {
             type: Sequelize.DECIMAL(10, 2),
             allowNull: false,
         }
@@ -27,4 +27,4 @@ var SubscriptionType = db.define(
 );
 
 
-module.exports = SubscriptionType;
+module.exports = Goal ;

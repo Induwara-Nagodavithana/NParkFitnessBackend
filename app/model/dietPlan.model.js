@@ -2,19 +2,11 @@ const Sequelize = require("sequelize");
 
 const db = require("../config/database");
 
-var Request = db.define(
-    "request",
+var DietPlan = db.define(
+    "dietPlan",
     {
-        description: {
+        mealType: {
             type: Sequelize.STRING,
-            allowNull: false,
-        },
-        heightTarget: {
-            type: Sequelize.DECIMAL(10, 2),
-            allowNull: false,
-        },
-        weightTarget: {
-            type: Sequelize.DECIMAL(10, 2),
             allowNull: false,
         }
     },
@@ -27,4 +19,4 @@ var Request = db.define(
 );
 
 
-module.exports = Request ;
+module.exports = DietPlan ;

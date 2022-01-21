@@ -9,7 +9,11 @@ var Membership = db.define(
             type: Sequelize.STRING,
             allowNull: false,
         },
-        neededTrainer: {
+        trainerNeeded: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+        },
+        isActive: {
             type: Sequelize.BOOLEAN,
             allowNull: false,
         }

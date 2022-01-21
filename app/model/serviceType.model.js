@@ -3,12 +3,11 @@ const Sequelize = require("sequelize");
 const db = require("../config/database");
 
 var ServiceType = db.define(
-    "serviceType",
+    "service",
     {
         name: {
             type: Sequelize.STRING,
             allowNull: false,
-            unique: true,
         },
         status: {
             type: Sequelize.STRING,
@@ -16,7 +15,7 @@ var ServiceType = db.define(
         },
         calorieForOne: {
             type: Sequelize.DECIMAL(10, 2),
-            allowNull: false,
+            allowNull: true,
         }
     },
     {

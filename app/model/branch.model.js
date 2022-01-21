@@ -10,10 +10,26 @@ var Branch = db.define(
             allowNull: false,
             unique: true
         },
-        address: {
+        // address: {
+        //     type: Sequelize.STRING,
+        //     allowNull: false,
+        // }
+        street: {
             type: Sequelize.STRING,
             allowNull: false,
-        }
+        },
+        lane: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
+        city: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        province: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
     },
     {
         timestamps: true,
