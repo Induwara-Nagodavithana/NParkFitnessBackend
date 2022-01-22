@@ -9,6 +9,10 @@ var MealItem = db.define(
             type: Sequelize.STRING,
             allowNull: false,
         },
+        foodType: {                         // Food or Drink
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
         amount: {
             type: Sequelize.INTEGER,
             allowNull: false,
