@@ -126,9 +126,6 @@ function updateDetails(id, req, callback) {
 exports.getAllUser = (req, res) => {
     console.log("get All");
     User.findAll({
-        include: {
-            model: Branch
-        }
     }).then((user) => {
         res.send({
             'success': 'true',
@@ -136,6 +133,7 @@ exports.getAllUser = (req, res) => {
         });
     })
         .catch((err) => {
+            console.log(err.toString())
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All User',

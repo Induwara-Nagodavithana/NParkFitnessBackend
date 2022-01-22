@@ -79,11 +79,11 @@ var User = db.define(
             type: Sequelize.STRING,
             // allowNull: false,
         },
-        branchID: {
+        branchId: {
             type: Sequelize.STRING,
             // allowNull: false,
         },
-        trainerID: {
+        trainerId: {
             type: Sequelize.STRING,
             // allowNull: false,
         }
@@ -156,5 +156,6 @@ DietPlan.hasMany(MealItem)
 MealItem.belongsTo(DietPlan)
 User.hasMany(DietPlan)
 DietPlan.belongsTo(User)
+
 
 module.exports = User;
