@@ -1,4 +1,5 @@
 const DietPlan = require("../model/dietPlan.model");
+const MealItem = require("../model/mealItem.model");
 const User = require("../model/user.model");
 
 //Register a DietPlan | guest
@@ -85,6 +86,60 @@ exports.getDietPlanById = (req, res) => {
         });
     })
         .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting DietPlan By ID',
+                'description': err
+            });
+        });
+}
+
+//get DietPlans and MealItems By userId
+exports.getDietPlanAndMealByUserId = (req, res) => {
+    console.log("get DietPlans and MealItems By userId");
+    DietPlan.findAll({
+        where: {
+            userId: req.params.id
+        }
+    }).then(async (dietPlan) => {
+        var dietData = [];
+        const promises = dietPlan.map(async element => {
+            await MealItem.findAll({
+                where: {
+                    dietPlanId: element.id
+                },
+                include: {
+                    model: DietPlan
+                }
+            }).then((mealItem) => {
+
+                var data = {
+                    'dietPlanData': element,
+                    'mealItemData': mealItem,
+                }
+                console.log(data)
+
+                dietData.push(data);
+            })
+                .catch((err) => {
+                    res.status(400).send({
+                        'success': 'false',
+                        'message': 'Error in Getting MealItem By ID',
+                        'description': err
+                    });
+                });
+        });
+        await Promise.all(promises);
+        console.log('Done')
+
+        res.send({
+            'success': 'true',
+            'data': dietData
+        });
+
+    })
+        .catch((err) => {
+            console.log(err)
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting DietPlan By ID',

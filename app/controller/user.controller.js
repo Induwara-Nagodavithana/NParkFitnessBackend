@@ -142,6 +142,27 @@ exports.getAllUser = (req, res) => {
         });
 }
 
+exports.getUserById = (req, res) => {
+    console.log("get One User");
+    User.findOne({
+        where: {
+            id: req.params.id
+        }
+    }).then((user) => {
+        res.send({
+            'success': 'true',
+            'data': user
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting SubscriptionType By ID',
+                'description': err
+            });
+        });
+}
+
 
 
 

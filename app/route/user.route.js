@@ -13,6 +13,7 @@ const UserRouter = express.Router();
 // }
 
 UserRouter.get('/', UserController.getAllUser);
+UserRouter.get('/:id', UserController.getUserById);
 UserRouter.post('/', UserController.createUser);
 UserRouter.put('/:id', UserController.updateUser);
 UserRouter.post('/validate', UserController.validateUser);

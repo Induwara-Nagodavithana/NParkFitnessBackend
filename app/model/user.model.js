@@ -157,5 +157,8 @@ MealItem.belongsTo(DietPlan)
 User.hasMany(DietPlan)
 DietPlan.belongsTo(User)
 
+User.hasMany(Membership,{as: 'trainId' ,foreignKey: 'trainerId', allowNull: true, defaultValue: null})
+Membership.belongsTo(User,{as: 'trainId' ,foreignKey: 'trainerId', allowNull: true, defaultValue: null})
+
 
 module.exports = User;
