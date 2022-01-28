@@ -1,5 +1,8 @@
 const Payment = require("../model/payment.model");
 const Membership = require("../model/membership.model");
+const Branch = require("../model/branch.model");
+const Gym = require("../model/gym.model");
+const { Op } = require("sequelize")
 
 //Register a Payment | guest
 exports.createPayment = async (req, res) => {
@@ -57,6 +60,96 @@ exports.getAllPayment = (req, res) => {
         res.send({
             'success': 'true',
             'data': payment
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting All Payment',
+                'description': err
+            });
+        });
+}
+
+//get All Payment By userId
+exports.getAllPaymentByUserId = (req, res) => {
+    console.log("get All Payment By userId");
+    var memberId = [];
+
+    Membership.findAll({
+        where: {
+            userId: req.params.id
+        },
+    }).then(async (membership) => {
+
+        await membership.map(element => {
+            memberId.push({ membershipId: element.id })
+        })
+        console.log(memberId);
+
+        Payment.findAll(
+            {
+                where: {
+                    [Op.or]: memberId
+                },
+                include: {
+                    model: Membership,
+                    include: {
+                        model: Branch,
+                        include: {
+                            model: Gym
+                        }
+                    }
+                }
+            }
+        ).then((payment) => {
+            res.send({
+                'success': 'true',
+                'data': { 'payment': payment }
+            });
+        })
+            .catch((err) => {
+                res.status(400).send({
+                    'success': 'false',
+                    'message': 'Error in Getting All Payment',
+                    'description': err
+                });
+            });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting Membership By userId',
+                'description': err
+            });
+        });
+
+
+
+}
+
+//get All Payment By membershipId
+exports.getAllPaymentByMembershipId = (req, res) => {
+    console.log("get All Payment By membershipId");
+    Payment.findAll(
+        {
+            where: {
+                membershipId: req.params.id
+            },
+            include: {
+                model: Membership,
+                include: {
+                    model: Branch,
+                    include: {
+                        model: Gym
+                    }
+                }
+            }
+        }
+    ).then((payment) => {
+        res.send({
+            'success': 'true',
+            'data': { 'payment': payment }
         });
     })
         .catch((err) => {

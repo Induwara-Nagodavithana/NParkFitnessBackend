@@ -111,9 +111,13 @@ exports.getDietPlanAndMealByUserId = (req, res) => {
                 include: {
                     model: DietPlan
                 }
-            }).then((mealItem) => {
-
+            }).then(async (mealItem) => {
+                var totCalAmount = 0;
+                await mealItem.map(element => {
+                    totCalAmount += element.calAmount
+                });
                 var data = {
+                    'totalCalorie': totCalAmount,
                     'dietPlanData': element,
                     'mealItemData': mealItem,
                 }
@@ -130,6 +134,9 @@ exports.getDietPlanAndMealByUserId = (req, res) => {
                 });
         });
         await Promise.all(promises);
+        // var allData = {
+        //     'data': dietData
+        // }
         console.log('Done')
 
         res.send({

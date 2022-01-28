@@ -16,6 +16,10 @@ var MealItem = db.define(
         amount: {
             type: Sequelize.INTEGER,
             allowNull: false,
+        },
+        calAmount: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
         }
     },
     {

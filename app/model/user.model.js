@@ -111,6 +111,9 @@ Branch.belongsTo(Gym)
 Branch.hasMany(Membership)
 Membership.belongsTo(Branch)
 
+Branch.hasMany(MembershipType)
+MembershipType.belongsTo(Branch)
+
 
 User.hasOne(Subscription)
 Subscription.belongsTo(User)
@@ -159,6 +162,9 @@ DietPlan.belongsTo(User)
 
 User.hasMany(Membership,{as: 'trainId' ,foreignKey: 'trainerId', allowNull: true, defaultValue: null})
 Membership.belongsTo(User,{as: 'trainId' ,foreignKey: 'trainerId', allowNull: true, defaultValue: null})
+
+Branch.hasMany(Attendance)
+Attendance.belongsTo(Branch)
 
 
 module.exports = User;
