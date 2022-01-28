@@ -71,6 +71,47 @@ exports.getAllMembership = (req, res) => {
         });
 }
 
+//get All Membership By UserId
+exports.getAllMembershipByUserId = (req, res) => {
+    console.log("get All By UserId");
+    Membership.findAll(
+        {
+            where: {
+                userId: req.params.id
+            },
+            include: [{
+                model: User
+            },
+            {
+                model: User,
+                as: 'trainId'
+            },
+            {
+                model: MembershipType
+            },
+            {
+                model: Branch,
+                include: {
+                    model: Gym
+                }
+            }]
+        }
+    ).then((membership) => {
+        res.send({
+            'success': 'true',
+            'data': { 'memberData': membership }
+        });
+    })
+        .catch((err) => {
+            console.log(err);
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting All Membership',
+                'description': err
+            });
+        });
+}
+
 //get Membership By Id
 exports.getMembershipById = (req, res) => {
     console.log("get All");
@@ -138,7 +179,7 @@ exports.getMembershipWithDetails = (req, res) => {
         }, {
             model: Branch,
             include: {
-                model:Gym
+                model: Gym
             }
         }]
     }).then((membership) => {
