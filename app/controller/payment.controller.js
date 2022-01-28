@@ -19,7 +19,7 @@ exports.createPayment = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create Payment',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -100,7 +100,8 @@ exports.getAllPaymentByUserId = (req, res) => {
                             model: Gym
                         }
                     }
-                }
+                },
+                order: [['date', 'DESC']],
             }
         ).then((payment) => {
             res.send({
