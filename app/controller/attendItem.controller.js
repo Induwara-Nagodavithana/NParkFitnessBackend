@@ -2,6 +2,7 @@ const AttendItem = require("../model/attendItem.model");
 const Attendance = require("../model/attendance.model");
 const ScheduleItem = require("../model/scheduleItem.model");
 const { Sequelize, Op } = require("sequelize");
+const ServiceType = require("../model/serviceType.model");
 // const sequelize = Sequelize();
 
 //Register a AttendItem | guest
@@ -147,7 +148,10 @@ exports.getAllAttendItemByMemberIdAndDate = (req, res) => {
                 ],
                 group: ['scheduleItemId'],
                 include: {
-                    model: ScheduleItem
+                    model: ScheduleItem,
+                    include: {
+                        model: ServiceType,
+                    }
                 }
             }
         ).then((attendItem) => {

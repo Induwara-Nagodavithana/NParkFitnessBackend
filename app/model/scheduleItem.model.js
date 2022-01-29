@@ -13,8 +13,8 @@ var ScheduleItem = db.define(
             type: Sequelize.INTEGER,
             allowNull: false,
         },
-        timeByMinutes: {
-            type: Sequelize.DECIMAL(10, 2),
+        timeBySeconds: {
+            type: Sequelize.INTEGER,
             allowNull: false,
         }
     },
