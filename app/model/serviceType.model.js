@@ -13,9 +13,9 @@ var ServiceType = db.define(
             type: Sequelize.STRING,
             allowNull: false,
         },
-        calorieForOne: {
-            type: Sequelize.DECIMAL(10, 2),
-            allowNull: true,
+        bodyPart: {
+            type: Sequelize.STRING,
+            allowNull: false,
         }
     },
     {

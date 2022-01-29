@@ -5,8 +5,8 @@ const db = require("../config/database");
 var AttendItem = db.define(
     "attendItem",
     {
-        isDone: {
-            type: Sequelize.BOOLEAN,
+        donePercentage: {
+            type: Sequelize.STRING,
             allowNull: false,
         }
     },

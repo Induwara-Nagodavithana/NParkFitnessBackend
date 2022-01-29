@@ -1,16 +1,83 @@
 const Attendance = require("../model/attendance.model");
+const AttendItem = require("../model/attendItem.model");
 const Membership = require("../model/membership.model");
+const Schedule = require("../model/schedule.model");
+const ScheduleItem = require("../model/scheduleItem.model");
 
 //Register a Attendance | guest
 exports.createAttendance = async (req, res) => {
+    var attendItemArr = [];
     if (req.body) {
         console.log("Create attendance");
         Attendance.create(req.body)
             .then((attendance) => {
-                res.send({
-                    'success': 'true',
-                    'data': attendance
-                });
+                Schedule.findOne({
+                    where: {
+                        membershipId: attendance.membershipId
+                    }
+                }).then((schedule) => {
+                    if (schedule != null) {
+                        ScheduleItem.findAll(
+                            {
+                                where: {
+                                    scheduleId: schedule.id
+                                }
+                            }
+                        ).then(async (scheduleItem) => {
+                            const promises = scheduleItem.map(async element => {
+                                attendItemArr.push({ donePercentage: 0, attendanceId: attendance.id, scheduleItemId: element.id })
+                            });
+                            console.log(attendItemArr);
+                            await Promise.all(promises);
+                            AttendItem.bulkCreate(attendItemArr)
+                                .then((attendItem) => {
+
+                                    //////////////////////
+                                    res.send({
+                                        'success': 'true',
+                                        'data': attendance,
+                                        'message': 'Create AttendItem Successful',
+                                    });
+                                    //////////////////////////
+                                    // res.send({
+                                    //     'success': 'true',
+                                    //     'data': attendItem
+                                    // });
+                                })
+                                .catch((err) => {
+                                    res.status(400).send({
+                                        'success': 'false',
+                                        'message': 'Error in Create AttendItem',
+                                        'description': err
+                                    });
+                                });
+
+                        })
+                            .catch((err) => {
+                                res.status(400).send({
+                                    'success': 'false',
+                                    'message': 'Error in Getting All ScheduleItem',
+                                    'description': err
+                                });
+                            });
+                    } else {
+                        res.send({
+                            'success': 'true',
+                            'data': attendance,
+                            'message': 'Create AttendItem Failed',
+                        });
+
+                    }
+
+
+                })
+                    .catch((err) => {
+                        res.status(400).send({
+                            'success': 'false',
+                            'message': 'Error in Getting Schedule By ID',
+                            'description': err
+                        });
+                    });
             })
             .catch((err) => {
                 res.status(400).send({

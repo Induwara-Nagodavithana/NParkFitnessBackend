@@ -1,6 +1,8 @@
 const AttendItem = require("../model/attendItem.model");
 const Attendance = require("../model/attendance.model");
 const ScheduleItem = require("../model/scheduleItem.model");
+const { Sequelize, Op } = require("sequelize");
+// const sequelize = Sequelize();
 
 //Register a AttendItem | guest
 exports.createAttendItem = async (req, res) => {
@@ -17,7 +19,7 @@ exports.createAttendItem = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create AttendItem',
-                'description': err
+                    'description': err
                 });
             });
     }
@@ -44,7 +46,7 @@ exports.updateAttendItem = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update AttendItem',
-                'description': err
+                    'description': err
                 });
             });
     }
@@ -61,6 +63,112 @@ exports.getAllAttendItem = (req, res) => {
         });
     })
         .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting All AttendItem',
+                'description': err
+            });
+        });
+}
+
+//get All AttendItem By AttendanceId
+exports.getAllAttendItemByAttendanceId = (req, res) => {
+    console.log("get All AttendItem By AttendanceId");
+    AttendItem.findAll(
+        {
+            where: {
+                attendanceId: req.params.id
+            },
+            include: [{
+                model: Attendance
+            }, {
+                model: ScheduleItem
+            }]
+        }
+    ).then((attendItem) => {
+        res.send({
+            'success': 'true',
+            'data': attendItem
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting All AttendItem',
+                'description': err
+            });
+        });
+}
+
+function getMonday(d) {
+    d = new Date(d);
+    var day = d.getDay(),
+        diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+    return new Date(d.setDate(diff)).toISOString();
+}
+
+//get Total Percentage In Week AttendItem By MemberId And Date
+exports.getAllAttendItemByMemberIdAndDate = (req, res) => {
+    console.log("get Total Percentage In Week AttendItem By MemberId And Date");
+    var attendIdArr = [];
+    var startDate = getMonday(req.body.date);
+    console.log(startDate);
+
+    var startDate = startDate.slice(0, 10);
+    Attendance.findAll(
+        {
+            where: {
+                [Op.and]: [
+                    { membershipId: req.body.membershipId },
+                    {
+                        date: {
+                            [Op.between]: [startDate, req.body.date],
+                        }
+                    },
+                ]
+
+            }
+        }
+    ).then(async (attendance) => {
+
+        await attendance.map(element => {
+            attendIdArr.push({ attendanceId: element.id })
+        })
+        console.log(attendIdArr);
+
+        AttendItem.findAll(
+            {
+                where: {
+                    [Op.or]: attendIdArr
+                },
+                attributes: [
+                    'scheduleItemId',
+                    [Sequelize.fn('sum', Sequelize.col('donePercentage')), 'totalDonePercentage'],
+                ],
+                group: ['scheduleItemId'],
+                include: {
+                    model: ScheduleItem
+                }
+            }
+        ).then((attendItem) => {
+            res.send({
+                'success': 'true',
+                'data': { 'attendItem': attendItem }
+            });
+        })
+            .catch((err) => {
+                console.log(err);
+
+                res.status(400).send({
+                    'success': 'false',
+                    'message': 'Error in Getting All AttendItem',
+                    'description': err
+                });
+            });
+    })
+        .catch((err) => {
+            console.log(err);
+
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All AttendItem',
