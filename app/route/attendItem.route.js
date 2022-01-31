@@ -9,5 +9,6 @@ AttendItemRouter.post('/getAllAttendItemByMemberIdAndDate/', AttendItemControlle
 AttendItemRouter.get('/:id', AttendItemController.getAttendItemById);
 AttendItemRouter.get('/getAllAttendItemByAttendanceId/:id', AttendItemController.getAllAttendItemByAttendanceId);
 AttendItemRouter.put('/:id', AttendItemController.updateAttendItem);
+AttendItemRouter.post('/updateAttendItemByScheduleItemIdAndAttendanceId/', AttendItemController.updateAttendItemByScheduleItemIdAndAttendanceId);
 AttendItemRouter.delete('/:id', AttendItemController.deleteAttendItem);
 module.exports = AttendItemRouter;

@@ -44,9 +44,39 @@ exports.updateAttendItem = async (req, res) => {
                 });
             })
             .catch((err) => {
+                console.log(err);
+
                 res.status(400).send({
                     'success': 'false',
-                    'message': 'Error in Update AttendItem',
+                    'message': 'Error in Update AttendIte',
+                    'description': err
+                });
+            });
+    }
+}
+
+//update AttendItem Details By Id and AttendanceId
+exports.updateAttendItemByScheduleItemIdAndAttendanceId = async (req, res) => {
+    if (req.body) {
+        if (!req.body.attendanceId) return res.status(500).send("AttendanceId is missing");
+        // let id = req.body.attendanceId;
+        AttendItem.update(req.body, {
+            where: {
+                attendanceId: req.body.attendanceId,
+                scheduleItemId: req.body.scheduleItemId
+            },
+        })
+            .then((attendItem) => {
+                res.status(200).send({
+                    'success': attendItem[0] == 1 ? 'true' : 'false',
+                    'data': attendItem[0] == 1 ? "Updated Successfully" : "Update Not Successful"
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+                res.status(400).send({
+                    'success': 'false',
+                    'message': 'Error in Update AttendItem By ScheduleItemId And AttendanceId',
                     'description': err
                 });
             });
