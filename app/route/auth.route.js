@@ -7,5 +7,6 @@ const AuthRouter = express.Router();
 // AuthRouter.post('/', UserController.createUser);
 // AuthRouter.put('/:id', UserController.updateUser);
 AuthRouter.post('/validate', UserController.validateUser);
+AuthRouter.post('/validateUserByFireUIDAndEmail', UserController.validateUserByFireUIDAndEmail);
 
 module.exports = AuthRouter;

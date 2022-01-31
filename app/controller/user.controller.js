@@ -21,7 +21,7 @@ exports.createUser = async (req, res) => {
                         res.status(400).send({
                             'success': 'false',
                             'message': 'Error in Create User',
-                            'description': err
+                            'description': err.name
                         });
                     });
             });
@@ -59,6 +59,30 @@ exports.validateUser = async (req, res) => {
                 });
             }
         });
+
+
+    });
+}
+
+//login Validate by email and fireUID
+exports.validateUserByFireUIDAndEmail = async (req, res) => {
+    User.findOne({
+        where: { email: req.body.email, fireUID: req.body.fireUID },
+    }).then((user) => {
+        if (!user) {
+            console.log("User Not Found");
+            return res.status(400).send({
+                'success': 'false',
+                'message': "User Not Found"
+            });
+        }
+        console.log(user);
+        res.send({
+            'success': 'true',
+            'data': user
+        });
+
+
 
 
     });
@@ -137,7 +161,7 @@ exports.getAllUser = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All User',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -158,7 +182,7 @@ exports.getUserById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting SubscriptionType By ID',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -185,7 +209,7 @@ exports.deleteUser = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete User',
-                'description': err
+                'description': err.name
             });
         });
 }

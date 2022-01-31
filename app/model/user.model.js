@@ -79,6 +79,11 @@ var User = db.define(
             type: Sequelize.STRING,
             // allowNull: false,
         },
+        fireUID: {
+            type: Sequelize.STRING,
+            unique: true,
+            allowNull: false,
+        },
         branchId: {
             type: Sequelize.STRING,
             // allowNull: false,
