@@ -17,7 +17,7 @@ exports.createDietPlan = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create DietPlan',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -44,7 +44,7 @@ exports.updateDietPlan = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update DietPlan',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -64,7 +64,7 @@ exports.getAllDietPlan = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All DietPlan',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -89,7 +89,7 @@ exports.getDietPlanById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting DietPlan By ID',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -129,7 +129,7 @@ exports.getDietPlanAndMealByUserId = (req, res) => {
                     res.status(400).send({
                         'success': 'false',
                         'message': 'Error in Getting MealItem By ID',
-                        'description': err
+                        'description': err.name
                     });
                 });
         });
@@ -150,7 +150,7 @@ exports.getDietPlanAndMealByUserId = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting DietPlan By ID',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -174,7 +174,7 @@ exports.deleteDietPlan = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete DietPlan',
-                'description': err
+                'description': err.name
             });
         });
 }

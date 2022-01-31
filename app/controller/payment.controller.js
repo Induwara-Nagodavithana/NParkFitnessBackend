@@ -19,7 +19,7 @@ exports.createPayment = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create Payment',
-                    'description': err.name
+                    'description': err.name.name
                 });
             });
     }
@@ -46,7 +46,7 @@ exports.updatePayment = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update Payment',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -66,7 +66,7 @@ exports.getAllPayment = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All Payment',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -113,7 +113,7 @@ exports.getAllPaymentByUserId = (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Getting All Payment',
-                    'description': err
+                    'description': err.name
                 });
             });
     })
@@ -121,7 +121,7 @@ exports.getAllPaymentByUserId = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting Membership By userId',
-                'description': err
+                'description': err.name
             });
         });
 
@@ -157,7 +157,7 @@ exports.getAllPaymentByMembershipId = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All Payment',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -182,7 +182,7 @@ exports.getPaymentById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting Payment By ID',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -206,7 +206,7 @@ exports.deletePayment = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete Payment',
-                'description': err
+                'description': err.name
             });
         });
 }

@@ -15,7 +15,7 @@ exports.createSubscriptionType = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create SubscriptionType',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -42,7 +42,7 @@ exports.updateSubscriptionType = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update SubscriptionType',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -62,7 +62,7 @@ exports.getAllSubscriptionType = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All SubscriptionType',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -84,7 +84,7 @@ exports.getSubscriptionTypeById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting SubscriptionType By ID',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -108,7 +108,7 @@ exports.deleteSubscriptionType = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete SubscriptionType',
-                'description': err
+                'description': err.name
             });
         });
 }

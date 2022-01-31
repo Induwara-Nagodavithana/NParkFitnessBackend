@@ -16,7 +16,7 @@ exports.createBranch = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create Branch',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -43,7 +43,7 @@ exports.updateBranch = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update Branch',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -63,7 +63,7 @@ exports.getAllBranch = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All Branch',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -88,7 +88,7 @@ exports.getBranchById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting Branch By ID',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -112,7 +112,7 @@ exports.deleteBranch = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete Branch',
-                'description': err
+                'description': err.name
             });
         });
 }

@@ -16,7 +16,7 @@ exports.createMealItem = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create MealItem',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -43,7 +43,7 @@ exports.updateMealItem = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update MealItem',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -63,7 +63,7 @@ exports.getAllMealItem = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All MealItem',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -88,7 +88,7 @@ exports.getMealItemById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting MealItem By ID',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -112,7 +112,7 @@ exports.deleteMealItem = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete MealItem',
-                'description': err
+                'description': err.name
             });
         });
 }

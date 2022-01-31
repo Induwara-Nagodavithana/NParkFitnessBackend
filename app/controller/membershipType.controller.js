@@ -18,7 +18,7 @@ exports.createMembershipType = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create MembershipType',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -45,7 +45,7 @@ exports.updateMembershipType = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update MembershipType',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -65,7 +65,7 @@ exports.getAllMembershipType = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All MembershipType',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -90,7 +90,7 @@ exports.getMembershipTypeById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting MembershipType By ID',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -115,7 +115,7 @@ exports.deleteMembershipType = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete MembershipType',
-                'description': err
+                'description': err.name
             });
         });
 }

@@ -16,7 +16,7 @@ exports.createGoal = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create Goal',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -43,7 +43,7 @@ exports.updateGoal = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update Goal',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -63,7 +63,7 @@ exports.getAllGoal = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All Goal',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -88,7 +88,7 @@ exports.getGoalById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting Goal By ID',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -112,7 +112,7 @@ exports.deleteGoal = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete Goal',
-                'description': err
+                'description': err.name
             });
         });
 }

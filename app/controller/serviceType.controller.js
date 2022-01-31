@@ -16,7 +16,7 @@ exports.createServiceType = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create ServiceType',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -43,7 +43,7 @@ exports.updateServiceType = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update ServiceType',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -63,7 +63,7 @@ exports.getAllServiceType = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All ServiceType',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -88,7 +88,7 @@ exports.getServiceTypeById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting ServiceType By ID',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -112,7 +112,7 @@ exports.deleteServiceType = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete ServiceType',
-                'description': err
+                'description': err.name
             });
         });
 }

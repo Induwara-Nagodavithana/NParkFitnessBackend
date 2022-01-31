@@ -48,7 +48,7 @@ exports.createAttendance = async (req, res) => {
                                     res.status(400).send({
                                         'success': 'false',
                                         'message': 'Error in Create AttendItem',
-                                        'description': err
+                                        'description': err.name
                                     });
                                 });
 
@@ -57,7 +57,7 @@ exports.createAttendance = async (req, res) => {
                                 res.status(400).send({
                                     'success': 'false',
                                     'message': 'Error in Getting All ScheduleItem',
-                                    'description': err
+                                    'description': err.name
                                 });
                             });
                     } else {
@@ -75,7 +75,7 @@ exports.createAttendance = async (req, res) => {
                         res.status(400).send({
                             'success': 'false',
                             'message': 'Error in Getting Schedule By ID',
-                            'description': err
+                            'description': err.name
                         });
                     });
             })
@@ -83,7 +83,7 @@ exports.createAttendance = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create Attendance',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -110,7 +110,7 @@ exports.updateAttendance = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update Attendance',
-                    'description': err
+                    'description': err.name
                 });
             });
     }
@@ -130,7 +130,7 @@ exports.getAllAttendance = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All Attendance',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -155,7 +155,7 @@ exports.getAttendanceById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting Attendance By ID',
-                'description': err
+                'description': err.name
             });
         });
 }
@@ -179,7 +179,7 @@ exports.deleteAttendance = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete Attendance',
-                'description': err
+                'description': err.name
             });
         });
 }
