@@ -4,6 +4,7 @@ const BodyDetailsController = require('../controller/bodyDetails.controller');
 
 
 BodyDetailsRouter.get('/', BodyDetailsController.getAllBodyDetails);
+BodyDetailsRouter.get('/getBodyDetailsByUserId/:id', BodyDetailsController.getBodyDetailsByUserId);
 BodyDetailsRouter.post('/', BodyDetailsController.createBodyDetails);
 BodyDetailsRouter.get('/:id', BodyDetailsController.getBodyDetailsById);
 BodyDetailsRouter.put('/:id', BodyDetailsController.updateBodyDetails);

@@ -84,6 +84,9 @@ var User = db.define(
             unique: true,
             allowNull: false,
         },
+        height: {
+            type: Sequelize.DECIMAL(10, 2),
+        },
         branchId: {
             type: Sequelize.STRING,
             // allowNull: false,

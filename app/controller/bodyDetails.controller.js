@@ -16,7 +16,7 @@ exports.createBodyDetails = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create Attendance',
-                'description': err.name
+                    'description': err.name
                 });
             });
     }
@@ -43,7 +43,7 @@ exports.updateBodyDetails = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update Attendance',
-                'description': err.name
+                    'description': err.name
                 });
             });
     }
@@ -88,6 +88,28 @@ exports.getBodyDetailsById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting BodyDetails By ID',
+                'description': err.name
+            });
+        });
+}
+
+//get BodyDetails By UserId
+exports.getBodyDetailsByUserId = (req, res) => {
+    console.log("get BodyDetails By UserId");
+    BodyDetails.findAll({
+        where: {
+            userId: req.params.id
+        }
+    }).then((bodyDetails) => {
+        res.send({
+            'success': 'true',
+            'data': { 'bodyDetails': bodyDetails }
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting BodyDetails By User ID',
                 'description': err.name
             });
         });
