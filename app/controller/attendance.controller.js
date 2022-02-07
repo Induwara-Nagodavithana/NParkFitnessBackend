@@ -3,6 +3,8 @@ const AttendItem = require("../model/attendItem.model");
 const Membership = require("../model/membership.model");
 const Schedule = require("../model/schedule.model");
 const ScheduleItem = require("../model/scheduleItem.model");
+const { Op } = require("sequelize");
+const Branch = require("../model/branch.model");
 
 //Register a Attendance | guest
 exports.createAttendance = async (req, res) => {
@@ -158,6 +160,83 @@ exports.getAttendanceById = (req, res) => {
                 'description': err.name
             });
         });
+}
+
+//get Attendance By MemberId And Date
+exports.getAttendanceByMemberIdAndDate = (req, res) => {
+    console.log("get Attendance By MemberId And Date");
+    Attendance.findOne({
+        where: {
+            membershipId: req.body.membershipId,
+            date: req.body.date
+        },
+        include: {
+            model: Branch
+        }
+    }).then((attendance) => {
+        res.send({
+            'success': 'true',
+            'data': attendance
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting Attendance By ID',
+                'description': err.name
+            });
+        });
+}
+
+//get Attendance By UserId
+exports.getAllAttendanceByUserId = (req, res) => {
+    console.log("get All By UserId");
+    var memberId = [];
+
+    Membership.findAll({
+        where: {
+            userId: req.params.id
+        },
+    }).then(async (membership) => {
+
+        await membership.map(element => {
+            memberId.push({ membershipId: element.id })
+        })
+        console.log(memberId);
+
+        Attendance.findAll({
+            where: {
+                [Op.or]: memberId
+            },
+            include: {
+                model: Branch
+            },
+            order: [['date', 'DESC']],
+        }).then((attendance) => {
+            res.send({
+                'success': 'true',
+                'data': { 'attendance': attendance }
+            });
+        })
+            .catch((err) => {
+                res.status(400).send({
+                    'success': 'false',
+                    'message': 'Error in Getting Attendance By ID',
+                    'description': err.name
+                });
+            });
+
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting Membership By userId',
+                'description': err.name
+            });
+        });
+
+
+    
 }
 
 //delete Attendance
