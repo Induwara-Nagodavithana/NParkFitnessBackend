@@ -39,7 +39,8 @@ exports.validateUser = async (req, res) => {
             console.log("User Not Found");
             return res.status(400).send({
                 'success': 'false',
-                'message': "User Not Found"
+                'message': "User Not Found",
+                'description': 'Entered details does not found in database'
             });
         }
         bcrypt.compare(req.body.password, user.password, function (err, result) {
@@ -55,7 +56,8 @@ exports.validateUser = async (req, res) => {
                 console.log("Credentials Does Not Matched");
                 res.status(400).send({
                     'success': 'false',
-                    'message': "Credentials Does Not Matched"
+                    'message': "Credentials Does Not Matched",
+                    'description': "Entered credentials does not matched"
                 });
             }
         });
@@ -73,13 +75,41 @@ exports.validateUserByFireUIDAndEmail = async (req, res) => {
             console.log("User Not Found");
             return res.status(400).send({
                 'success': 'false',
-                'message': "User Not Found"
+                'message': "User Not Found",
+                'description': 'Entered details does not found in database'
+
             });
         }
         console.log(user);
         res.send({
             'success': 'true',
             'data': user
+        });
+
+
+
+
+    });
+}
+
+//login Find by email
+exports.findUserByEmail = async (req, res) => {
+    User.findOne({
+        where: { email: req.params.email },
+    }).then((user) => {
+        if (!user) {
+            console.log("User Not Found");
+            return res.status(400).send({
+                'success': 'false',
+                'message': "User Not Found",
+                'description': 'Entered details does not found in database'
+
+            });
+        }
+        console.log(user);
+        res.send({
+            'success': 'true',
+            'data': 'User Found'
         });
 
 
