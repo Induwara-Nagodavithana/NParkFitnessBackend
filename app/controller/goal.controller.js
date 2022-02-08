@@ -93,6 +93,28 @@ exports.getGoalById = (req, res) => {
         });
 }
 
+//get Goal By MemberId
+exports.getGoalByMemberId = (req, res) => {
+    console.log("get Goal By MemberId");
+    Goal.findOne({
+        where: {
+            membershipId: req.params.id
+        }
+    }).then((goal) => {
+        res.send({
+            'success': 'true',
+            'data': goal
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting Goal By ID',
+                'description': err.name
+            });
+        });
+}
+
 //delete Goal
 exports.deleteGoal = async (req, res) => {
     console.log("Delete goal");
