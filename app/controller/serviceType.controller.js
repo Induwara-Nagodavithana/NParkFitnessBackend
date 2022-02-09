@@ -1,5 +1,11 @@
 const ServiceType = require("../model/serviceType.model");
 const Branch = require("../model/branch.model");
+const Membership = require("../model/membership.model");
+const User = require("../model/user.model");
+const MembershipType = require("../model/membershipType.model");
+const Gym = require("../model/gym.model");
+const { Sequelize, Op } = require("sequelize");
+
 
 //Register a ServiceType | guest
 exports.createServiceType = async (req, res) => {
@@ -92,6 +98,90 @@ exports.getServiceTypeById = (req, res) => {
             });
         });
 }
+
+
+//get ServiceType By Branch Id
+exports.getServiceTypeByBranchId = (req, res) => {
+    console.log("get ServiceType By Branch Id");
+    ServiceType.findAll({
+        where: {
+            branchId: req.params.id
+        },
+        include: {
+            model: Branch
+        }
+    }).then((serviceType) => {
+        res.send({
+            'success': 'true',
+            'data': { 'serviceType': serviceType }
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting ServiceType By Branch ID',
+                'description': err.name
+            });
+        });
+}
+
+
+//get ServiceTypes with UserId
+exports.getServiceTypeByUserId = (req, res) => {
+    console.log("get ServiceType By User Id");
+    var serviceTypeArr = [];
+    Membership.findAll(
+        {
+            where: {
+                userId: req.params.id
+            },
+            attributes: ['branchId']
+        }
+    ).then(async (membership) => {
+        console.log(membership);
+        const promises = membership.map(async element =>  {
+            // memberArray.push({ branchId: element.branchId })
+            await ServiceType.findAll({
+                where: {
+                    branchId: element.branchId
+                },
+                include: {
+                    model: Branch
+                }
+            }).then((serviceType) => {
+            serviceTypeArr.push({serviceType})
+            })
+                .catch((err) => {
+                    console.log(err);
+                    res.status(400).send({
+                        'success': 'false',
+                        'message': 'Error in Getting ServiceType By Branch ID',
+                        'description': err.name
+                    });
+                });
+        })
+        await Promise.all(promises);
+        console.log(serviceTypeArr);
+        res.send({
+            'success': 'true',
+            'data': { 'service': serviceTypeArr }
+        });
+        
+    })
+        .catch((err) => {
+            console.log(err);
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting All Membership',
+                'description': err.name
+            });
+        });
+
+    //////
+
+}
+
+
 
 //delete ServiceType
 exports.deleteServiceType = async (req, res) => {
