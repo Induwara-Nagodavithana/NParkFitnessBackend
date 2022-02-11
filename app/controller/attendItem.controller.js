@@ -20,7 +20,7 @@ exports.createAttendItem = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create AttendItem',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -49,7 +49,7 @@ exports.updateAttendItem = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update AttendIte',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -77,7 +77,7 @@ exports.updateAttendItemByScheduleItemIdAndAttendanceId = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update AttendItem By ScheduleItemId And AttendanceId',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -97,7 +97,7 @@ exports.getAllAttendItem = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All AttendItem',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -126,7 +126,7 @@ exports.getAllAttendItemByAttendanceId = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All AttendItem',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -196,7 +196,7 @@ exports.getAllAttendItemByMemberIdAndDate = (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Getting All AttendItem',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     })
@@ -206,7 +206,7 @@ exports.getAllAttendItemByMemberIdAndDate = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All AttendItem',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -233,7 +233,7 @@ exports.getAttendItemById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting AttendItem By ID',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -257,7 +257,7 @@ exports.deleteAttendItem = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete AttendItem',
-                'description': err.name
+                'description': err.message
             });
         });
 }

@@ -21,7 +21,7 @@ exports.createUser = async (req, res) => {
                         res.status(400).send({
                             'success': 'false',
                             'message': 'Error in Create User',
-                            'description': err.name
+                            'description': err.message
                         });
                     });
             });
@@ -191,7 +191,7 @@ exports.getAllUser = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All User',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -212,7 +212,7 @@ exports.getUserById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting SubscriptionType By ID',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -239,7 +239,7 @@ exports.deleteUser = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete User',
-                'description': err.name
+                'description': err.message
             });
         });
 }

@@ -22,7 +22,7 @@ exports.createServiceType = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create ServiceType',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -49,7 +49,7 @@ exports.updateServiceType = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update ServiceType',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -69,7 +69,7 @@ exports.getAllServiceType = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All ServiceType',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -94,7 +94,7 @@ exports.getServiceTypeById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting ServiceType By ID',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -120,7 +120,7 @@ exports.getServiceTypeByBranchId = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting ServiceType By Branch ID',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -156,7 +156,7 @@ exports.getServiceTypeByUserId = (req, res) => {
                     res.status(400).send({
                         'success': 'false',
                         'message': 'Error in Getting ServiceType By Branch ID',
-                        'description': err.name
+                        'description': err.message
                     });
                 });
         })
@@ -173,7 +173,7 @@ exports.getServiceTypeByUserId = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All Membership',
-                'description': err.name
+                'description': err.message
             });
         });
 
@@ -202,7 +202,7 @@ exports.deleteServiceType = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete ServiceType',
-                'description': err.name
+                'description': err.message
             });
         });
 }

@@ -18,7 +18,7 @@ exports.createMembershipType = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create MembershipType',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -45,7 +45,7 @@ exports.updateMembershipType = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update MembershipType',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -65,7 +65,7 @@ exports.getAllMembershipType = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All MembershipType',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -90,7 +90,30 @@ exports.getMembershipTypeById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting MembershipType By ID',
-                'description': err.name
+                'description': err.message
+            });
+        });
+}
+
+
+//get MembershipType By BranchId
+exports.getMembershipTypeByBranchId = (req, res) => {
+    console.log("get All MembershipType By BranchId");
+    MembershipType.findAll({
+        where: {
+            id: req.params.id
+        }
+    }).then((membershipType) => {
+        res.send({
+            'success': 'true',
+            'data': { 'membershipType': membershipType }
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting MembershipType By ID',
+                'description': err.message
             });
         });
 }
@@ -115,7 +138,7 @@ exports.deleteMembershipType = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete MembershipType',
-                'description': err.name
+                'description': err.message
             });
         });
 }

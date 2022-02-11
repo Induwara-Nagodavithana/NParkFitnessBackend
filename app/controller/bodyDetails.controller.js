@@ -16,7 +16,7 @@ exports.createBodyDetails = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create Attendance',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -43,7 +43,7 @@ exports.updateBodyDetails = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update Attendance',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -63,7 +63,7 @@ exports.getAllBodyDetails = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All BodyDetails',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -88,7 +88,7 @@ exports.getBodyDetailsById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting BodyDetails By ID',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -110,7 +110,7 @@ exports.getBodyDetailsByUserId = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting BodyDetails By User ID',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -134,7 +134,7 @@ exports.deleteBodyDetails = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete BodyDetails',
-                'description': err.name
+                'description': err.message
             });
         });
 }

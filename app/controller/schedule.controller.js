@@ -17,7 +17,7 @@ exports.createSchedule = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create Schedule',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -44,7 +44,7 @@ exports.updateSchedule = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update Schedule',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -64,7 +64,7 @@ exports.getAllSchedule = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All Schedule',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -92,7 +92,7 @@ exports.getScheduleById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting Schedule By ID',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -116,7 +116,7 @@ exports.deleteSchedule = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete Schedule',
-                'description': err.name
+                'description': err.message
             });
         });
 }

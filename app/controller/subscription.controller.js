@@ -18,7 +18,7 @@ exports.createSubscription = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create Subscription',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -45,7 +45,7 @@ exports.updateSubscription = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update Subscription',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -65,7 +65,7 @@ exports.getAllSubscription = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All Subscription',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -93,7 +93,7 @@ exports.getSubscriptionById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting Subscription By ID',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -123,7 +123,7 @@ exports.getAllGymOwnersWithSubscription = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All User',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -147,7 +147,7 @@ exports.deleteSubscription = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete Subscription',
-                'description': err.name
+                'description': err.message
             });
         });
 }

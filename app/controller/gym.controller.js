@@ -16,7 +16,7 @@ exports.createGym = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create Gym',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -43,7 +43,7 @@ exports.updateGym = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update Gym',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -63,7 +63,7 @@ exports.getAllGym = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All Gym',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -88,7 +88,7 @@ exports.getGymById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting Gym By ID',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -112,7 +112,7 @@ exports.deleteGym = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete Gym',
-                'description': err.name
+                'description': err.message
             });
         });
 }

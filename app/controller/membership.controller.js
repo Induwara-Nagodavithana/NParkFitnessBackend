@@ -16,10 +16,11 @@ exports.createMembership = async (req, res) => {
                 });
             })
             .catch((err) => {
+                console.log(err);
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Create Membership',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -46,7 +47,7 @@ exports.updateMembership = async (req, res) => {
                 res.status(400).send({
                     'success': 'false',
                     'message': 'Error in Update Membership',
-                    'description': err.name
+                    'description': err.message
                 });
             });
     }
@@ -66,7 +67,7 @@ exports.getAllMembership = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All Membership',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -107,7 +108,7 @@ exports.getAllMembershipByUserId = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting All Membership',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -135,7 +136,7 @@ exports.getMembershipById = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting Membership By ID',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -163,7 +164,7 @@ exports.getMembershipByNeededTrainer = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting Membership By NeededTrainer',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -192,7 +193,7 @@ exports.getMembershipWithDetails = (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Getting Membership With Details',
-                'description': err.name
+                'description': err.message
             });
         });
 }
@@ -216,7 +217,7 @@ exports.deleteMembership = async (req, res) => {
             res.status(400).send({
                 'success': 'false',
                 'message': 'Error in Delete Membership',
-                'description': err.name
+                'description': err.message
             });
         });
 }
