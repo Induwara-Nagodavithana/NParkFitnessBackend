@@ -90,10 +90,6 @@ var User = db.define(
         branchId: {
             type: Sequelize.STRING,
             // allowNull: false,
-        },
-        trainerId: {
-            type: Sequelize.STRING,
-            // allowNull: false,
         }
 
     },

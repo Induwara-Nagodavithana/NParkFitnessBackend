@@ -1,6 +1,7 @@
 const express = require('express');
 const { upload, getFileStream } = require('../config/aws-s3');
 const UserController = require('../controller/user.controller');
+const User = require('../model/user.model');
 const UserRouter = express.Router();
 
 // module.exports = function (){
@@ -20,9 +21,39 @@ UserRouter.put('/:id', UserController.updateUser);
 UserRouter.post('/validate', UserController.validateUser);
 UserRouter.delete('/:id', UserController.deleteUser);
 UserRouter.post('/upload', upload.single('image'), function (req, res, next) {
+    // console.log(req)
     console.log(req.file)
+    if (req.file == null) {
+        res.status(400).send({
+            'success': 'false',
+            'message': 'Error in Upload User Image',
+            'description': 'Error during upload image'
+        });
+    } else {
+        var data = {
+            image: req.file.location
+        }
+        User.update(data, {
+            where: {
+                id: req.body.userId,
+            },
+        })
+            .then((user) => {
+                res.send({
+                    'success': 'true',
+                    'data': user
+                });
+            })
+            .catch((err) => {
+                res.status(400).send({
+                    'success': 'false',
+                    'message': 'Error in Update User Image',
+                    'description': err.message
+                });
+            });
+    }
 
-    res.send('Successfully uploaded ' + req.file.key + ' files!')
+
 })
 UserRouter.get('/images/:key', (req, res) => {
     console.log(req.params)

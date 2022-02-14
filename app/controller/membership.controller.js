@@ -130,7 +130,7 @@ exports.createMembership = async (req, res) => {
             console.log(req.body.trainerNeeded);
             console.log(req.body.trainerNeeded=='true');
 
-                if (req.body.trainerNeeded=='true') {
+                if (req.body.trainerNeeded=='true' || req.body.trainerNeeded ) {
                     getFreeTrainerFromBranch(req.body.branchId, (err, user) => {
                         if (err) return res.status(400).send({
                             'success': 'false',
