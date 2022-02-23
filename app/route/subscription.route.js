@@ -4,6 +4,7 @@ const SubscriptionController = require('../controller/subscription.controller');
 
 SubscriptionRouter.get('/', SubscriptionController.getAllSubscription);
 SubscriptionRouter.post('/', SubscriptionController.createSubscription);
+SubscriptionRouter.get('/getSubscriptionByUserId/:id', SubscriptionController.getSubscriptionByUserId);
 SubscriptionRouter.get('/:id', SubscriptionController.getSubscriptionById);
 SubscriptionRouter.get('/getAllGymOwnersWithSubscription/:id', SubscriptionController.getAllGymOwnersWithSubscription);
 SubscriptionRouter.put('/:id', SubscriptionController.updateSubscription);

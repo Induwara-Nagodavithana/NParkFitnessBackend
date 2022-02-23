@@ -93,6 +93,31 @@ exports.getBranchById = (req, res) => {
         });
 }
 
+//get Branch By GymId
+exports.getBranchByGymId = (req, res) => {
+    console.log("get All");
+    Branch.findAll({
+        where: {
+            gymId: req.params.id
+        },
+        include: {
+            model: Gym
+        }
+    }).then((branch) => {
+        res.send({
+            'success': 'true',
+            'data': branch
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting Branch By GymID',
+                'description': err.message
+            });
+        });
+}
+
 //delete Branch
 exports.deleteBranch = async (req, res) => {
     console.log("Delete branch");
