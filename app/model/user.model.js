@@ -18,6 +18,7 @@ const AttendItem = require("./attendItem.model");
 const MembershipType = require("./membershipType.model");
 const DietPlan = require("./dietPlan.model");
 const MealItem = require("./mealItem.model");
+const SubPayment = require("./subscriptionPayment.model");
 
 var User = db.define(
     "user",
@@ -170,5 +171,7 @@ Membership.belongsTo(User,{as: 'trainId' ,foreignKey: 'trainerId', allowNull: tr
 Branch.hasMany(Attendance)
 Attendance.belongsTo(Branch)
 
+Subscription.hasMany(SubPayment)
+SubPayment.belongsTo(Subscription)
 
 module.exports = User;

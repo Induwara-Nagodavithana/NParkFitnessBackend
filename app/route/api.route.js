@@ -16,6 +16,7 @@ const Schedule = require('./schedule.route');
 const ScheduleItem = require('./scheduleItem.route');
 const SubscriptionType = require('./subscriptionType.route');
 const Subscription = require('./subscription.route');
+const SubscriptionPayment = require('./subscriptionPayment.route');
 const DietPlan = require('./dietPlan.route');
 const MealItem = require('./mealItem.route');
 
@@ -55,6 +56,8 @@ ApiRouter.use("/subscriptionType", SubscriptionType);
 ApiRouter.use("/subscription", Subscription);
 ApiRouter.use("/dietPlan", DietPlan);
 ApiRouter.use("/mealItem", MealItem);
+ApiRouter.use("/subscriptionPayment", SubscriptionPayment);
+
 
 
 module.exports = ApiRouter;
