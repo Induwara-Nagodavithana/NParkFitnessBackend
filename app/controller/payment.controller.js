@@ -194,6 +194,7 @@ exports.notifyPayment = (req, res) => {
   console.log(req.body);
   res.send({
     success: "true",
+    data: "sdfsdfsdfsdfsdf,sdfsdf,sdfsdf,sdfsdfsdf",
   });
 };
 

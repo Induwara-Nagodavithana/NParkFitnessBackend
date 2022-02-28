@@ -6,6 +6,7 @@ const db = require('./app/config/database');
 const PORT = process.env.PORT || 3005;
 const ApiRouter = require('./app/route/api.route')
 const AuthRouter = require('./app/route/auth.route')
+const PayHereRouter = require('./app/route/payhere.route')
 
 
 
@@ -41,6 +42,7 @@ app.get("/", (req, res) => {
 
 app.use("/api",ApiRouter);
 app.use("/auth",AuthRouter);
+app.use("/payhere",PayHereRouter);
 
 //Set Port
 app.set("port", PORT);
