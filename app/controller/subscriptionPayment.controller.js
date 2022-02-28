@@ -171,9 +171,32 @@ exports.notifyPayment = (req, res) => {
         SubscriptionPayment.create(body)
           .then((subscriptionPayment) => {
             console.log(subscriptionPayment);
-            res.status(200).send({
-              success: "true",
-            });
+            var dt = new Date();
+            dt.setMonth(dt.getMonth() + 1);
+            var updateBody = {
+              expireDate: dt.toISOString().slice(0, 10),
+            };
+            Subscription.update(updateBody, {
+              where: {
+                id: subscription.id,
+              },
+            })
+              .then((subscription) => {
+                res.status(200).send({
+                  success: subscription[0] == 1 ? "true" : "false",
+                  data:
+                    subscription[0] == 1
+                      ? "Updated Successfully"
+                      : "Update Not Successful",
+                });
+              })
+              .catch((err) => {
+                res.status(400).send({
+                  success: "false",
+                  message: "Error in Update Subscription",
+                  description: err.message,
+                });
+              });
           })
           .catch((err) => {
             console.log("payment failed2");
