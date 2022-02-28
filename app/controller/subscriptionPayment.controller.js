@@ -3,6 +3,8 @@ const SubscriptionPayment = require("../model/subscriptionPayment.model");
 const Subscription = require("../model/subscription.model");
 const SubscriptionType = require("../model/subscriptionType.model");
 const User = require("../model/user.model");
+var md5 = require("md5");
+
 
 //Register a SubscriptionPayment | guest
 exports.createSubscriptionPayment = async (req, res) => {
@@ -102,6 +104,95 @@ exports.getSubscriptionPaymentById = (req, res) => {
         description: err.message,
       });
     });
+};
+
+//listen to payHere notification
+exports.notifyPayment = (req, res) => {
+  console.log("notify Payhere Payment");
+  console.log(req.body);
+  console.log(`Payhere Notify ${JSON.stringify(req.body)}`);
+
+  var merchant_id = req.body.merchant_id;
+  var order_id = req.body.order_id;
+  var payhere_amount = req.body.payhere_amount;
+  var payhere_currency = req.body.payhere_currency;
+  var status_code = req.body.status_code;
+  var md5sig = req.body.md5sig;
+  if (req.body.custom_1 == null || req.body.custom_1 == "") {
+    return res.sendStatus(404);
+  }
+  var custom_1 = JSON.parse(req.body.custom_1);
+  var merchant_secret = "49WUiSiKwSJ49Y1t6KwI414q7ylFFVse28RmB4FEIIvn"; // Replace with your Merchant Secret (Can be found on your PayHere account's Settings page)
+  var local_md5sig = md5(
+    merchant_id +
+      order_id +
+      payhere_amount +
+      payhere_currency +
+      status_code +
+      md5(merchant_secret).toUpperCase()
+  ).toUpperCase();
+  switch (status_code) {
+    case 2:
+      console.log("payment success");
+      break;
+    case 0:
+      console.log("payment pending");
+      break;
+    case -1:
+      console.log("payment cancel");
+      break;
+    case -2:
+      console.log("payment failed");
+      break;
+    case -3:
+      console.log("payment charged back");
+      break;
+
+    default:
+      console.log("payment known");
+      break;
+  }
+  if (local_md5sig === md5sig || status_code == 2) {
+    console.log(`Payment Details ${JSON.stringify(custom_1)}`);
+    Subscription.findOne({
+      where: {
+        userId: req.params.id,
+      },
+      order: [["createdAt", "DESC"]],
+    })
+      .then((subscription) => {
+        console.log("Create subscriptionPayment");
+        console.log(subscription);
+        var body = {
+          date: Date.now().toString().substring(0, 10),
+          amount: payhere_amount,
+          subscriptionId: subscription.id,
+        };
+        SubscriptionPayment.create(body)
+          .then((subscriptionPayment) => {
+            console.log(subscriptionPayment);
+            res.status(200).send({
+              success: "true"
+            });
+          })
+          .catch((err) => {
+            res.status(400).send({
+              success: "false",
+              message: "Error in Create SubscriptionPayment",
+              description: err.message,
+            });
+          });
+      })
+      .catch((err) => {
+        res.status(400).send({
+          success: "false",
+          message: "Error in Getting Subscription By UserID",
+          description: err.message,
+        });
+      });
+  } else {
+    res.sendStatus(403);
+  }
 };
 
 //get All Gym Owners with SubscriptionPayment

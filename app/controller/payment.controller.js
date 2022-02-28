@@ -6,6 +6,7 @@ const User = require("../model/user.model");
 const { Op } = require("sequelize");
 const MembershipType = require("../model/membershipType.model");
 
+
 //Register a Payment | guest
 exports.createPayment = async (req, res) => {
   if (req.body) {
@@ -188,15 +189,6 @@ exports.getAllPaymentByMemberId = (req, res) => {
     });
 };
 
-//listen to payHere notification
-exports.notifyPayment = (req, res) => {
-  console.log("notify Payhere Payment");
-  console.log(req.body);
-  res.send({
-    success: "true",
-    data: "sdfsdfsdfsdfsdf,sdfsdf,sdfsdf,sdfsdfsdf",
-  });
-};
 
 //get All Payment By membershipId
 exports.getAllPaymentByMembershipId = (req, res) => {
