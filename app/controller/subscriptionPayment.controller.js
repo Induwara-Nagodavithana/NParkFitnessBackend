@@ -5,7 +5,6 @@ const SubscriptionType = require("../model/subscriptionType.model");
 const User = require("../model/user.model");
 var md5 = require("md5");
 
-
 //Register a SubscriptionPayment | guest
 exports.createSubscriptionPayment = async (req, res) => {
   if (req.body) {
@@ -119,6 +118,7 @@ exports.notifyPayment = (req, res) => {
   var status_code = req.body.status_code;
   var md5sig = req.body.md5sig;
   if (req.body.custom_1 == null || req.body.custom_1 == "") {
+    console.log("payment failed1");
     return res.sendStatus(404);
   }
   var custom_1 = JSON.parse(req.body.custom_1);
@@ -156,7 +156,7 @@ exports.notifyPayment = (req, res) => {
     console.log(`Payment Details ${JSON.stringify(custom_1)}`);
     Subscription.findOne({
       where: {
-        userId: req.params.id,
+        userId: req.body.custom_1,
       },
       order: [["createdAt", "DESC"]],
     })
@@ -164,7 +164,7 @@ exports.notifyPayment = (req, res) => {
         console.log("Create subscriptionPayment");
         console.log(subscription);
         var body = {
-          date: Date.now().toString().substring(0, 10),
+          date: new Date().toISOString().slice(0, 10),
           amount: payhere_amount,
           subscriptionId: subscription.id,
         };
@@ -172,10 +172,12 @@ exports.notifyPayment = (req, res) => {
           .then((subscriptionPayment) => {
             console.log(subscriptionPayment);
             res.status(200).send({
-              success: "true"
+              success: "true",
             });
           })
           .catch((err) => {
+            console.log("payment failed2");
+
             res.status(400).send({
               success: "false",
               message: "Error in Create SubscriptionPayment",
@@ -184,6 +186,8 @@ exports.notifyPayment = (req, res) => {
           });
       })
       .catch((err) => {
+        console.log("payment failed3");
+
         res.status(400).send({
           success: "false",
           message: "Error in Getting Subscription By UserID",
@@ -191,6 +195,7 @@ exports.notifyPayment = (req, res) => {
         });
       });
   } else {
+    console.log("payment failed4");
     res.sendStatus(403);
   }
 };
