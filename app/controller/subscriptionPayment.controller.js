@@ -3,6 +3,7 @@ const SubscriptionPayment = require("../model/subscriptionPayment.model");
 const Subscription = require("../model/subscription.model");
 const SubscriptionType = require("../model/subscriptionType.model");
 const User = require("../model/user.model");
+const { Op } = require("sequelize");
 var md5 = require("md5");
 
 //Register a SubscriptionPayment | guest
@@ -100,6 +101,60 @@ exports.getSubscriptionPaymentById = (req, res) => {
       res.status(400).send({
         success: "false",
         message: "Error in Getting SubscriptionPayment By ID",
+        description: err.message,
+      });
+    });
+};
+
+//get SubscriptionPayment By UserId
+exports.getSubscriptionPaymentByUserId = (req, res) => {
+  console.log("get All");
+
+  var subscriptionIdArr = [];
+
+  Subscription.findAll({
+    where: {
+      userId: req.params.id,
+    },
+  })
+    .then(async (user) => {
+      await user.map((element) => {
+        subscriptionIdArr.push({ subscriptionId: element.id });
+      });
+      console.log(subscriptionIdArr);
+
+      SubscriptionPayment.findAll({
+        where: {
+          [Op.or]: subscriptionIdArr,
+        },
+        include: [
+          {
+            model: Subscription,
+            include: {
+              model: SubscriptionType,
+            },
+          },
+        ],
+        order: [["date", "DESC"]],
+      })
+        .then((payment) => {
+          res.send({
+            success: "true",
+            data: { payment: payment },
+          });
+        })
+        .catch((err) => {
+          res.status(400).send({
+            success: "false",
+            message: "Error in Getting Subscription Payment By ID",
+            description: err.message,
+          });
+        });
+    })
+    .catch((err) => {
+      res.status(400).send({
+        success: "false",
+        message: "Error in Getting Subscription By userId",
         description: err.message,
       });
     });

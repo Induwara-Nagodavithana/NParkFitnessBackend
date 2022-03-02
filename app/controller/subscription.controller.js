@@ -53,6 +53,39 @@ exports.updateSubscription = async (req, res) => {
   }
 };
 
+//Renew Subscription Details
+exports.RenewSubscription = async (req, res) => {
+  if (req.body) {
+    if (!req.params.id) return res.status(500).send("Id is missing");
+    let id = req.params.id;
+    let body = {
+      expireDate: new Date().toISOString().slice(0, 10),
+      subscriptionTypeId: req.body.subscriptionTypeId,
+    };
+    Subscription.update(body, {
+      where: {
+        id: id,
+      },
+    })
+      .then((subscription) => {
+        res.status(200).send({
+          success: subscription[0] == 1 ? "true" : "false",
+          data:
+            subscription[0] == 1
+              ? "Updated Successfully"
+              : "Update Not Successful",
+        });
+      })
+      .catch((err) => {
+        res.status(400).send({
+          success: "false",
+          message: "Error in Update Subscription",
+          description: err.message,
+        });
+      });
+  }
+};
+
 //get All Subscription
 exports.getAllSubscription = (req, res) => {
   console.log("get All");
@@ -121,6 +154,7 @@ exports.getSubscriptionByUserId = (req, res) => {
     ],
   })
     .then((subscription) => {
+      console.log(subscription);
       res.send({
         success: "true",
         data: subscription,

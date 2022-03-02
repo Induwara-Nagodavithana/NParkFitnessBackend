@@ -6,17 +6,49 @@ const User = require("../model/user.model");
 const { Op } = require("sequelize");
 const MembershipType = require("../model/membershipType.model");
 
-
 //Register a Payment | guest
 exports.createPayment = async (req, res) => {
   if (req.body) {
     console.log("Create payment");
     Payment.create(req.body)
       .then((payment) => {
-        res.send({
-          success: "true",
-          data: payment,
-        });
+        Membership.findOne({
+          where: {
+            id: req.body.membershipId,
+          },
+        })
+          .then((membership) => {
+            var dt = new Date(membership.expireDate);
+            dt.setMonth(dt.getMonth() + 1);
+            var updateBody = {
+              expireDate: dt.toISOString().slice(0, 10),
+            };
+            Membership.update(updateBody, {
+              where: {
+                id: req.body.membershipId,
+              },
+            })
+              .then((membership) => {
+                res.send({
+                  success: "true",
+                  data: payment,
+                });
+              })
+              .catch((err) => {
+                res.status(400).send({
+                  success: "false",
+                  message: "Error in Update Membership",
+                  description: err.message,
+                });
+              });
+          })
+          .catch((err) => {
+            res.status(400).send({
+              success: "false",
+              message: "Error in Getting Membership By ID",
+              description: err.message,
+            });
+          });
       })
       .catch((err) => {
         res.status(400).send({
@@ -188,7 +220,6 @@ exports.getAllPaymentByMemberId = (req, res) => {
       });
     });
 };
-
 
 //get All Payment By membershipId
 exports.getAllPaymentByMembershipId = (req, res) => {

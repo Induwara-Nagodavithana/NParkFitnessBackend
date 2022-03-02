@@ -8,5 +8,6 @@ SubscriptionRouter.get('/getSubscriptionByUserId/:id', SubscriptionController.ge
 SubscriptionRouter.get('/:id', SubscriptionController.getSubscriptionById);
 SubscriptionRouter.get('/getAllGymOwnersWithSubscription/:id', SubscriptionController.getAllGymOwnersWithSubscription);
 SubscriptionRouter.put('/:id', SubscriptionController.updateSubscription);
+SubscriptionRouter.put('/RenewSubscription/:id', SubscriptionController.RenewSubscription);
 SubscriptionRouter.delete('/:id', SubscriptionController.deleteSubscription);
 module.exports = SubscriptionRouter;
