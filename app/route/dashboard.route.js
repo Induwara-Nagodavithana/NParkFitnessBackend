@@ -14,6 +14,7 @@ DashboardRouter.get('/getManagerDashboardData/:id', DashboardController.getManag
 DashboardRouter.get('/getGymMemberCount/:id', DashboardController.getGymMemberCount);
 DashboardRouter.get('/getOwnerDashboardData/:id', DashboardController.getOwnerDashboardData);
 DashboardRouter.get('/getBranchMonthIncome/:id', DashboardController.getBranchMonthIncome);
+DashboardRouter.get('/getAdminDashboardData', DashboardController.getAdminDashboardData);
 
 // DashboardRouter.post('/', DashboardController.createDashboard);
 // DashboardRouter.post('/getDashboardByMemberIdAndDate', DashboardController.getDashboardByMemberIdAndDate);

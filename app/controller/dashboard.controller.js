@@ -553,9 +553,7 @@ function getBranchMonthIncome(branchIdArr, callback) {
       },
     ],
 
-    attributes: [
-      [Sequelize.fn("sum", Sequelize.col("amount")), "totalAmount"],
-    ],
+    attributes: [[Sequelize.fn("sum", Sequelize.col("amount")), "totalAmount"]],
     group: ["branchId"],
     order: [[Sequelize.col("date"), "ASC"]],
   })
@@ -599,6 +597,131 @@ exports.getBranchMonthIncome = async (req, res) => {
       res.status(400).send({
         success: "false",
         message: "Error in getting branch id",
+        description: err.message,
+      });
+    });
+};
+
+// get admin dashboard data
+exports.getAdminDashboardData = async (req, res) => {
+  User.count({
+    group: ["type"],
+  })
+    .then((userCount) => {
+      Membership.count({
+        group: ["isActive"],
+      })
+        .then((memberCount) => {
+          Gym.count()
+            .then((gymCount) => {
+              Branch.count({
+                group: ["isActive"],
+              })
+                .then((branchCount) => {
+                  ServiceType.count()
+                    .then((serviceCount) => {
+                      var today = new Date();
+                      var startMonth = new Date();
+                      startMonth.setMonth(startMonth.getMonth() - 1);
+                      var lastDayOfStartMonth = new Date(
+                        startMonth.getFullYear(),
+                        startMonth.getMonth() + 1,
+                        1
+                      );
+                      SubPayment.findAll({
+                        where: {
+                          date: {
+                            [Op.between]: [
+                              `${today.toISOString().slice(0, 4)}-01-01`,
+                              `${today.toISOString().slice(0, 10)}`,
+                            ],
+                          },
+                        },
+                        attributes: [
+                          "date",
+                          [
+                            Sequelize.fn("sum", Sequelize.col("amount")),
+                            "totalAmount",
+                          ],
+                        ],
+                        group: [Sequelize.fn("Month", Sequelize.col("date"))],
+                        order: [[Sequelize.col("date"), "ASC"]],
+                      })
+                        .then((payment) => {
+                          console.log(payment);
+                          SubscriptionType.findAll()
+                            .then((subscriptionType) => {
+                              res.send({
+                                success: "true",
+                                data: {
+                                  userCount: userCount,
+                                  memberCount: memberCount,
+                                  gymCount: gymCount,
+                                  branchCount: branchCount,
+                                  serviceCount: serviceCount,
+                                  payment: payment,
+                                  subscriptionType: subscriptionType,
+                                },
+                              });
+                            })
+                            .catch((err) => {
+                              res.status(400).send({
+                                success: "false",
+                                message: "Error in getting subscription type data",
+                                description: err.message,
+                              });
+                            });
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                          res.status(400).send({
+                            success: "false",
+                            message: "Error in getting subscription payment data",
+                            description: err.message,
+                          });
+                        });
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      res.status(400).send({
+                        success: "false",
+                        message: "Error in getting service type data",
+                        description: err.message,
+                      });
+                    });
+                })
+                .catch((err) => {
+                  console.log(err);
+                  res.status(400).send({
+                    success: "false",
+                    message: "Error in getting branch data",
+                    description: err.message,
+                  });
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(400).send({
+                success: "false",
+                message: "Error in getting gym data",
+                description: err.message,
+              });
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(400).send({
+            success: "false",
+            message: "Error in getting member data",
+            description: err.message,
+          });
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).send({
+        success: "false",
+        message: "Error in getting user data",
         description: err.message,
       });
     });
