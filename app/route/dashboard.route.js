@@ -16,6 +16,15 @@ DashboardRouter.get('/getOwnerDashboardData/:id', DashboardController.getOwnerDa
 DashboardRouter.get('/getBranchMonthIncome/:id', DashboardController.getBranchMonthIncome);
 DashboardRouter.get('/getAdminDashboardData', DashboardController.getAdminDashboardData);
 
+
+DashboardRouter.post('/getAssignedBranchMemberCount/:id', DashboardController.getAssignedBranchMemberCount);
+DashboardRouter.get('/getLatestMemberDetails/:id', DashboardController.getLatestMemberDetails);
+DashboardRouter.get('/getHasADietPlan/:id', DashboardController.getHasADietPlan);
+
+DashboardRouter.get('/getMemberDetails/:id', DashboardController.getMemberDetails);
+
+
+
 // DashboardRouter.post('/', DashboardController.createDashboard);
 // DashboardRouter.post('/getDashboardByMemberIdAndDate', DashboardController.getDashboardByMemberIdAndDate);
 // DashboardRouter.get('/:id', DashboardController.getDashboardById);
