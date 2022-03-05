@@ -908,104 +908,147 @@ exports.getMemberDetails = async (req, res) => {
   var memberIdArr = [];
   var userIdArr = [];
   var today = new Date();
-  Membership.findAll({
-    where: {
-      trainerId: trainerId,
-    },
-    include: [
-      {
-        model: User,
-        attributes: ["id", "firstName", "lastName"],
-      },
-    ],
-  })
-    .then(async (memberData) => {
-      console.log(memberData);
-      await memberData.map((element) => {
-        userIdArr.push({ userId: element.user.id });
-        memberIdArr.push({ membershipId: element.id });
+  var branchIdArr = [{ branchId: req.body.branchId }];
+  getAssignedBranchMemberCount(trainerId, (err, memberCount) => {
+    if (err)
+      return res.status(400).send({
+        success: "false",
+        message: "Error in getting member count",
+        description: err.message,
       });
-      DietPlan.findAll({
-        limit: 6,
-        where: {
-          [Op.or]: userIdArr,
-        },
-        group: ["userId"],
-        // order: [[Sequelize.fn("max", Sequelize.col("expireDate"))]],
-      })
-        .then(async (dietData) => {
-          console.log(dietData);
-          await memberData.forEach((element) => {
-            if (dietData.some((e) => e.userId == element.user.id)) {
-              element.dataValues.isDietAvailable = true;
-              console.log("dietData True");
-              console.log(element);
-            } else {
-              element.dataValues.isDietAvailable = false;
-              console.log("dietData False");
-              console.log(element);
-            }
-          });
-          Schedule.findAll({
-            limit: 6,
-            where: {
-              [Op.or]: memberIdArr,
-            },
-            attributes: [
-              [Sequelize.fn("max", Sequelize.col("expireDate")), "expireDate"],
-              "membershipId",
-              "trainerId",
-            ],
-            group: ["membershipId"],
-            // order: [[Sequelize.fn("max", Sequelize.col("expireDate"))]],
-          })
-            .then(async (scheduleData) => {
-              console.log(scheduleData);
-              await memberData.forEach((element) => {
-                const result = scheduleData.find(
-                  ({ membershipId }) => membershipId == element.id
-                );
+    getBranchServiceCount(branchIdArr, (err, serviceCount) => {
+      if (err)
+        return res.status(400).send({
+          success: "false",
+          message: "Error in getting service count",
+          description: err.message,
+        });
 
-                if (result != null) {
-                  element.dataValues.scheduleExpireDate = result.expireDate;
-                  console.log("Schedule Data Added");
-                  console.log(element);
-                } else {
-                  element.dataValues.scheduleExpireDate = null;
-                  console.log("Schedule Data Not Found");
-                  console.log(element);
-                }
+      getBranchExpiredMemberCount(branchIdArr, (err, exMemberCount) => {
+        if (err)
+          return res.status(400).send({
+            success: "false",
+            message: "Error in getting exMember count",
+            description: err.message,
+          });
+
+        getBranchAttendanceCount(branchIdArr, (err, attendanceCount) => {
+          if (err)
+            return res.status(400).send({
+              success: "false",
+              message: "Error in getting attendance count",
+              description: err.message,
+            });
+          Membership.findAll({
+            where: {
+              trainerId: trainerId,
+            },
+            include: [
+              {
+                model: User,
+                attributes: ["id", "firstName", "lastName", "image"],
+              },
+            ],
+          })
+            .then(async (memberData) => {
+              console.log(memberData);
+              await memberData.map((element) => {
+                userIdArr.push({ userId: element.user.id });
+                memberIdArr.push({ membershipId: element.id });
               });
-              console.log("Done");
-              res.send({
-                success: "true",
-                data: { memberData: memberData },
-              });
+              DietPlan.findAll({
+                where: {
+                  [Op.or]: userIdArr,
+                },
+                group: ["userId"],
+                // order: [[Sequelize.fn("max", Sequelize.col("expireDate"))]],
+              })
+                .then(async (dietData) => {
+                  console.log(dietData);
+                  await memberData.forEach((element) => {
+                    if (dietData.some((e) => e.userId == element.user.id)) {
+                      element.dataValues.isDietAvailable = true;
+                      console.log("dietData True");
+                      console.log(element);
+                    } else {
+                      element.dataValues.isDietAvailable = false;
+                      console.log("dietData False");
+                      console.log(element);
+                    }
+                  });
+                  Schedule.findAll({
+                    where: {
+                      [Op.or]: memberIdArr,
+                    },
+                    attributes: [
+                      [
+                        Sequelize.fn("max", Sequelize.col("expireDate")),
+                        "expireDate",
+                      ],
+                      "membershipId",
+                      "trainerId",
+                    ],
+                    group: ["membershipId"],
+                    // order: [[Sequelize.fn("max", Sequelize.col("expireDate"))]],
+                  })
+                    .then(async (scheduleData) => {
+                      console.log(scheduleData);
+                      await memberData.forEach((element) => {
+                        const result = scheduleData.find(
+                          ({ membershipId }) => membershipId == element.id
+                        );
+
+                        if (result != null) {
+                          element.dataValues.scheduleExpireDate =
+                            result.expireDate;
+                          console.log("Schedule Data Added");
+                          console.log(element);
+                        } else {
+                          element.dataValues.scheduleExpireDate = null;
+                          console.log("Schedule Data Not Found");
+                          console.log(element);
+                        }
+                      });
+                      console.log("Done");
+                      res.send({
+                        success: "true",
+                        data: {
+                          memberCount: memberCount,
+                          serviceCount: serviceCount,
+                          exMemberCount: exMemberCount,
+                          attendanceCount: attendanceCount,
+                          memberData: memberData,
+                        },
+                      });
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      res.status(400).send({
+                        success: "false",
+                        message: "Error in Getting All Schedule",
+                        description: err.message,
+                      });
+                    });
+                })
+                .catch((err) => {
+                  console.log(err);
+                  res.status(400).send({
+                    success: "false",
+                    message: "Error in Getting All DietPlan",
+                    description: err.message,
+                  });
+                });
             })
             .catch((err) => {
               console.log(err);
               res.status(400).send({
                 success: "false",
-                message: "Error in Getting All Schedule",
+                message: "Error in Getting All Membership",
                 description: err.message,
               });
             });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(400).send({
-            success: "false",
-            message: "Error in Getting All DietPlan",
-            description: err.message,
-          });
         });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(400).send({
-        success: "false",
-        message: "Error in Getting All Membership",
-        description: err.message,
       });
     });
+  });
 };

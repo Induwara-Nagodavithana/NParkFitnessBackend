@@ -21,7 +21,7 @@ DashboardRouter.post('/getAssignedBranchMemberCount/:id', DashboardController.ge
 DashboardRouter.get('/getLatestMemberDetails/:id', DashboardController.getLatestMemberDetails);
 DashboardRouter.get('/getHasADietPlan/:id', DashboardController.getHasADietPlan);
 
-DashboardRouter.get('/getMemberDetails/:id', DashboardController.getMemberDetails);
+DashboardRouter.post('/getMemberDetails/:id', DashboardController.getMemberDetails);
 
 
 

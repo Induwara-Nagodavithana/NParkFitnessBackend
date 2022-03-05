@@ -21,7 +21,7 @@ exports.createPayment = async (req, res) => {
             var dt = new Date(membership.expireDate);
             dt.setMonth(dt.getMonth() + 1);
             var updateBody = {
-              expireDate: dt.toISOString().slice(0, 10),
+              expireDate: dt.toISOString().slice(0, 10)+' 00:00:00',
             };
             Membership.update(updateBody, {
               where: {
