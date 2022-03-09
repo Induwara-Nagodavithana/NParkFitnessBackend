@@ -5,241 +5,227 @@ const saltRounds = 5;
 
 //Register a User | guest
 exports.createUser = async (req, res) => {
-    if (req.body) {
-        console.log("Create user");
-        bcrypt.genSalt(saltRounds, function (err, salt) {
-            bcrypt.hash(req.body.password, salt, function (err, hash) {
-                req.body.password = hash;
-                User.create(req.body)
-                    .then((user) => {
-                        res.send({
-                            'success': 'true',
-                            'data': user
-                        });
-                    })
-                    .catch((err) => {
-                        res.status(400).send({
-                            'success': 'false',
-                            'message': 'Error in Create User',
-                            'description': err.message
-                        });
-                    });
+  if (req.body) {
+    console.log("Create user");
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      bcrypt.hash(req.body.password, salt, function (err, hash) {
+        req.body.password = hash;
+        User.create(req.body)
+          .then((user) => {
+            res.send({
+              success: "true",
+              data: user,
             });
-        });
+          })
+          .catch((err) => {
+            res.status(400).send({
+              success: "false",
+              message: "Error in Create User",
+              description: err.message,
+            });
+          });
+      });
+    });
+  }
+};
 
-    }
-}
 
 //login Validate
 exports.validateUser = async (req, res) => {
-    User.findOne({
-        where: { email: req.body.email },
-    }).then((user) => {
-        if (!user) {
-            console.log("User Not Found");
-            return res.status(400).send({
-                'success': 'false',
-                'message': "User Not Found",
-                'description': 'Entered details does not found in database'
-            });
-        }
-        bcrypt.compare(req.body.password, user.password, function (err, result) {
-            // result == true
-            console.log(result);
-            if (result) {
-                console.log(user);
-                res.send({
-                    'success': 'true',
-                    'data': user
-                });
-            } else {
-                console.log("Credentials Does Not Matched");
-                res.status(400).send({
-                    'success': 'false',
-                    'message': "Credentials Does Not Matched",
-                    'description': "Entered credentials does not matched"
-                });
-            }
+  User.findOne({
+    where: { email: req.body.email },
+  }).then((user) => {
+    if (!user) {
+      console.log("User Not Found");
+      return res.status(400).send({
+        success: "false",
+        message: "User Not Found",
+        description: "Entered details does not found in database",
+      });
+    }
+    bcrypt.compare(req.body.password, user.password, function (err, result) {
+      // result == true
+      console.log(result);
+      if (result) {
+        console.log(user);
+        res.send({
+          success: "true",
+          data: user,
         });
-
-
+      } else {
+        console.log("Credentials Does Not Matched");
+        res.status(400).send({
+          success: "false",
+          message: "Credentials Does Not Matched",
+          description: "Entered credentials does not matched",
+        });
+      }
     });
-}
+  });
+};
 
 //login Validate by email and fireUID
 exports.validateUserByFireUIDAndEmail = async (req, res) => {
-    User.findOne({
-        where: { email: req.body.email, fireUID: req.body.fireUID },
-    }).then((user) => {
-        if (!user) {
-            console.log("User Not Found");
-            return res.status(400).send({
-                'success': 'false',
-                'message': "User Not Found",
-                'description': 'Entered details does not found in database'
-
-            });
-        }
-        console.log(user);
-        res.send({
-            'success': 'true',
-            'data': user
-        });
-
-
-
-
+  User.findOne({
+    where: { email: req.body.email, fireUID: req.body.fireUID },
+  }).then((user) => {
+    if (!user) {
+      console.log("User Not Found");
+      return res.status(400).send({
+        success: "false",
+        message: "User Not Found",
+        description: "Entered details does not found in database",
+      });
+    }
+    console.log(user);
+    res.send({
+      success: "true",
+      data: user,
     });
-}
+  });
+};
 
 //login Find by email
 exports.findUserByEmail = async (req, res) => {
-    User.findOne({
-        where: { email: req.params.email },
-    }).then((user) => {
-        if (!user) {
-            console.log("User Not Found");
-            return res.status(400).send({
-                'success': 'false',
-                'message': "User Not Found",
-                'description': 'Entered details does not found in database'
-
-            });
-        }
-        console.log(user);
-        res.send({
-            'success': 'true',
-            'data': 'User Found'
-        });
-
-
-
-
+  User.findOne({
+    where: { email: req.params.email },
+  }).then((user) => {
+    if (!user) {
+      console.log("User Not Found");
+      return res.status(400).send({
+        success: "false",
+        message: "User Not Found",
+        description: "Entered details does not found in database",
+      });
+    }
+    console.log(user);
+    res.send({
+      success: "true",
+      data: "User Found",
     });
-}
+  });
+};
 
 //update User Details
 exports.updateUser = async (req, res) => {
-    if (req.body) {
-        if (!req.params.id) return res.status(500).send("Id is missing");
-        let id = req.params.id;
-        if (req.body.password != null) {
-            bcrypt.genSalt(saltRounds, function (err, salt) {
-                bcrypt.hash(req.body.password, salt, async function (err, hash) {
-                    req.body.password = hash;
-                    updateDetails(id, req, (err, user) => {
-                        if (err) return res.status(400).send({
-                            'success': 'false',
-                            'data': err
-                        });
-                        console.log("user");
-                        console.log(user);
-                        res.status(200).send({
-                            'success': user[0] == 1 ? 'true' : 'false',
-                            'data': user[0] == 1 ? "Updated Successfully" : "Update Not Successful"
-                        });
-                    })
-
-                });
+  if (req.body) {
+    if (!req.params.id) return res.status(500).send("Id is missing");
+    let id = req.params.id;
+    if (req.body.password != null) {
+      bcrypt.genSalt(saltRounds, function (err, salt) {
+        bcrypt.hash(req.body.password, salt, async function (err, hash) {
+          req.body.password = hash;
+          updateDetails(id, req, (err, user) => {
+            if (err)
+              return res.status(400).send({
+                success: "false",
+                data: err,
+              });
+            console.log("user");
+            console.log(user);
+            res.status(200).send({
+              success: user[0] == 1 ? "true" : "false",
+              data:
+                user[0] == 1 ? "Updated Successfully" : "Update Not Successful",
             });
-        } else {
-            updateDetails(id, req, (err, user) => {
-                if (err) return res.status(400).send({
-                    'success': 'false',
-                    'data': err
-                });
-                console.log("user");
-                console.log(user);
-                res.status(200).send({
-                    'success': user[0] == 1 ? 'true' : 'false',
-                    'data': user[0] == 1 ? "Updated Successfully" : "Update Not Successful"
-                });
-            })
-        }
-        console.log(req.body);
-
-
+          });
+        });
+      });
+    } else {
+      updateDetails(id, req, (err, user) => {
+        if (err)
+          return res.status(400).send({
+            success: "false",
+            data: err,
+          });
+        console.log("user");
+        console.log(user);
+        res.status(200).send({
+          success: user[0] == 1 ? "true" : "false",
+          data: user[0] == 1 ? "Updated Successfully" : "Update Not Successful",
+        });
+      });
     }
-}
+    console.log(req.body);
+  }
+};
 
 function updateDetails(id, req, callback) {
-    User.update(req.body, {
-        where: {
-            id: id,
-        },
+  User.update(req.body, {
+    where: {
+      id: id,
+    },
+  })
+    .then((user) => {
+      callback(null, user);
     })
-        .then((user) => {
-            callback(null, user);
-        })
-        .catch((err) => {
-            callback(err);
-        });
+    .catch((err) => {
+      callback(err);
+    });
 }
 
 //get All User
 exports.getAllUser = (req, res) => {
-    console.log("get All");
-    User.findAll({
-    }).then((user) => {
-        res.send({
-            'success': 'true',
-            'data': user
-        });
+  console.log("get All");
+  User.findAll({})
+    .then((user) => {
+      res.send({
+        success: "true",
+        data: user,
+      });
     })
-        .catch((err) => {
-            console.log(err.toString())
-            res.status(400).send({
-                'success': 'false',
-                'message': 'Error in Getting All User',
-                'description': err.message
-            });
-        });
-}
+    .catch((err) => {
+      console.log(err.toString());
+      res.status(400).send({
+        success: "false",
+        message: "Error in Getting All User",
+        description: err.message,
+      });
+    });
+};
 
 exports.getUserById = (req, res) => {
-    console.log("get One User");
-    User.findOne({
-        where: {
-            id: req.params.id
-        }
-    }).then((user) => {
-        res.send({
-            'success': 'true',
-            'data': user
-        });
+  console.log("get One User");
+  User.findOne({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((user) => {
+      res.send({
+        success: "true",
+        data: user,
+      });
     })
-        .catch((err) => {
-            res.status(400).send({
-                'success': 'false',
-                'message': 'Error in Getting SubscriptionType By ID',
-                'description': err.message
-            });
-        });
-}
-
-
-
+    .catch((err) => {
+      res.status(400).send({
+        success: "false",
+        message: "Error in Getting SubscriptionType By ID",
+        description: err.message,
+      });
+    });
+};
 
 //delete User
 exports.deleteUser = async (req, res) => {
-    console.log("Delete user");
-    User.destroy({
-        where: {
-            id: req.params.id
-        }
+  console.log("Delete user");
+  User.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((user) => {
+      console.log(user);
+      res.status(200).send({
+        success: user == 1 ? "true" : "false",
+        data: user == 1 ? "Deleted Successfully" : "Delete Not Successful",
+      });
     })
-        .then((user) => {
-            console.log(user)
-            res.status(200).send({
-                'success': user == 1 ? 'true' : 'false',
-                'data': user == 1 ? "Deleted Successfully" : "Delete Not Successful"
-            });
-        })
-        .catch((err) => {
-            res.status(400).send({
-                'success': 'false',
-                'message': 'Error in Delete User',
-                'description': err.message
-            });
-        });
-}
+    .catch((err) => {
+      res.status(400).send({
+        success: "false",
+        message: "Error in Delete User",
+        description: err.message,
+      });
+    });
+};
