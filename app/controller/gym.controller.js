@@ -93,6 +93,32 @@ exports.getGymById = (req, res) => {
         });
 }
 
+//get GymAll By UserId
+exports.getAllGymByUserId = (req, res) => {
+    console.log("get All Gym By User Id");
+    Gym.findAll({
+        where: {
+            userId: req.params.id
+        },
+        include: {
+            model: User
+        }
+    }).then((gym) => {
+        res.send({
+            'success': 'true',
+            'data': gym
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting Gym By ID',
+                'description': err.message
+            });
+        });
+}
+
+
 //delete Gym
 exports.deleteGym = async (req, res) => {
     console.log("Delete gym");
