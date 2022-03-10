@@ -4,7 +4,7 @@ const User = require("../model/user.model");
 class FireAuth {
   async decodeToken(req, res, next) {
     if (!req.headers.authorization)
-      return res.status(400).send({
+      return res.status(401).send({
         success: "false",
         message: "Error in Authorization",
         description: "Token is missing",
@@ -23,7 +23,7 @@ class FireAuth {
         }).then((user) => {
           if (!user) {
             console.log("User Not Found");
-            return res.status(500).send({
+            return res.status(401).send({
               success: "false",
               message: "Error in Authorization",
               description: "Cannot find the user",
@@ -37,7 +37,7 @@ class FireAuth {
       }
     } catch (e) {
       console.log(e);
-      return res.status(500).send({
+      return res.status(402).send({
         success: "false",
         message: "Error in Authorization",
         description: e.message,
