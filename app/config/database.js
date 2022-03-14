@@ -4,6 +4,9 @@ const Sequelize = require("sequelize");
 db = new Sequelize("gymApp", "admin", "Wasd#2731", {
   host: "database-1.clwjrzzurrw6.us-east-2.rds.amazonaws.com",
   dialect: "mysql",
+  dialectOptions: {
+    connectTimeout: 60000
+  },
   pool: {
     max: 5,
     min: 0,
