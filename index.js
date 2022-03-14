@@ -29,7 +29,7 @@ app.use(cors());
 //Express Validater
 
 app.get("/", (req, res) => {
-  res.send("Hello This Is NParkFitness Server!");
+  res.status(200).send("Hello This Is NParkFitness Server!");
 });
 // app.use("/", fireAuth.decodeToken , open);
 app.use("/api", fireAuth.decodeToken, ApiRouter);
