@@ -5,8 +5,8 @@ var multerS3 = require('multer-s3')
 
 const bucketName = "npark-fitness-bucket"
 const region = "us-east-2"
-const accessKeyId = 'AKIAQDCCIQH2ET7FOHB6'
-const secretAccessKey = '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'
+const accessKeyId = 'AKIARVBTR6XSPKSSNB3J'
+const secretAccessKey = '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'
 const accountId = '006581420532'
 
 aws.config.update({
