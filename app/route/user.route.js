@@ -13,6 +13,7 @@ const UserRouter = express.Router();
 //     return router;
 // }
 
+
 UserRouter.get('/', UserController.getAllUser);
 UserRouter.get('/:id', UserController.getUserById);
 UserRouter.get('/findUserByBranchId/:id', UserController.findUserByBranchId);
