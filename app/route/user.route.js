@@ -21,6 +21,7 @@ UserRouter.get('/findUserByEmail/:email', UserController.findUserByEmail);
 UserRouter.post('/', UserController.createUser);
 UserRouter.put('/:id', UserController.updateUser);
 UserRouter.post('/validate', UserController.validateUser);
+UserRouter.post('/validateUserByJWT', UserController.validateUserByJWT);
 UserRouter.delete('/:id', UserController.deleteUser);
 UserRouter.post('/upload', upload.single('image'), function (req, res, next) {
     // console.log(req)

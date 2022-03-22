@@ -7,6 +7,7 @@ AttendanceRouter.get('/', AttendanceController.getAllAttendance);
 AttendanceRouter.post('/', AttendanceController.createAttendance);
 AttendanceRouter.post('/getAttendanceByMemberIdAndDate', AttendanceController.getAttendanceByMemberIdAndDate);
 AttendanceRouter.get('/:id', AttendanceController.getAttendanceById);
+AttendanceRouter.get('/getAllAttendanceByBranch/:id', AttendanceController.getAllAttendanceByBranch);
 AttendanceRouter.get('/getAllAttendanceByUserId/:id', AttendanceController.getAllAttendanceByUserId);
 AttendanceRouter.put('/:id', AttendanceController.updateAttendance);
 AttendanceRouter.delete('/:id', AttendanceController.deleteAttendance);

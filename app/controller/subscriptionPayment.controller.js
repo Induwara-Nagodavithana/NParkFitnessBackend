@@ -132,6 +132,7 @@ exports.getSubscriptionPaymentByUserId = (req, res) => {
             model: Subscription,
             include: {
               model: SubscriptionType,
+              model: User,
             },
           },
         ],

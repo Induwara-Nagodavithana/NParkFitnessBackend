@@ -85,6 +85,27 @@ exports.validateUserByFireUIDAndEmail = async (req, res) => {
   });
 };
 
+//validate JWT and getUserDetail
+exports.validateUserByJWT = async (req, res) => {
+  User.findOne({
+    where: { fireUID: req.user.uid },
+  }).then((user) => {
+    if (!user) {
+      console.log("User Not Found");
+      return res.status(400).send({
+        success: "false",
+        message: "User Not Found",
+        description: "Entered details does not found in database",
+      });
+    }
+    console.log(user);
+    res.send({
+      success: "true",
+      data: user,
+    });
+  });
+};
+
 //login Find by email
 exports.findUserByEmail = async (req, res) => {
   User.findOne({

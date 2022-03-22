@@ -1,6 +1,7 @@
 const Attendance = require("../model/attendance.model");
 const AttendItem = require("../model/attendItem.model");
 const Membership = require("../model/membership.model");
+const User = require("../model/user.model");
 const Schedule = require("../model/schedule.model");
 const ScheduleItem = require("../model/scheduleItem.model");
 const { Op } = require("sequelize");
@@ -123,6 +124,34 @@ exports.updateAttendance = async (req, res) => {
 exports.getAllAttendance = (req, res) => {
     console.log("get All");
     Attendance.findAll().then((attendance) => {
+        res.send({
+            'success': 'true',
+            'data': attendance
+        });
+    })
+        .catch((err) => {
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting All Attendance',
+                'description': err.message
+            });
+        });
+}
+
+//get All Attendance By Branch
+exports.getAllAttendanceByBranch = (req, res) => {
+    console.log("get All");
+    Attendance.findAll({
+        where : {
+            branchId: req.params.id
+        },
+        include: {
+            model: Membership,
+            include: {
+                model: User
+            }
+        }
+    }).then((attendance) => {
         res.send({
             'success': 'true',
             'data': attendance
