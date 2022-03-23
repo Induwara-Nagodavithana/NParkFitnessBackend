@@ -130,10 +130,14 @@ exports.getSubscriptionPaymentByUserId = (req, res) => {
         include: [
           {
             model: Subscription,
-            include: {
-              model: SubscriptionType,
-              model: User,
-            },
+            include: [
+              {
+                model: SubscriptionType,
+              },
+              {
+                model: User,
+              },
+            ],
           },
         ],
         order: [["date", "DESC"]],
