@@ -168,6 +168,39 @@ exports.getAllAttendanceByBranch = (req, res) => {
     });
 };
 
+//get All Attendance By Branch And Date Range
+exports.getAllAttendanceByBranchAndDateRange = (req, res) => {
+  console.log("get All");
+  Attendance.findAll({
+    where: {
+      branchId: req.body.branchId,
+      date: {
+        [Op.between]: [req.body.startDate, req.body.endDate],
+      }
+    },
+    include: {
+      model: Membership,
+      include: {
+        model: User,
+      },
+    },
+  })
+    .then((attendance) => {
+      res.send({
+        success: "true",
+        data: attendance,
+      });
+    })
+    .catch((err) => {
+      res.status(400).send({
+        success: "false",
+        message: "Error in Getting All Attendance",
+        description: err.message,
+      });
+    });
+};
+
+
 //get Attendance By Id
 exports.getAttendanceById = (req, res) => {
   console.log("get All");

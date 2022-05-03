@@ -122,6 +122,11 @@ exports.getAllAttendItemByAttendanceId = (req, res) => {
       },
       {
         model: ScheduleItem,
+        include: [
+          {
+            model: ServiceType,
+          },
+        ],
       },
     ],
   })
