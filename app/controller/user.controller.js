@@ -2,7 +2,7 @@ const User = require("../model/user.model");
 const bcrypt = require("bcryptjs");
 const Branch = require("../model/branch.model");
 const saltRounds = 5;
-
+const { Sequelize, Op } = require("sequelize");
 //Register a User | guest
 exports.createUser = async (req, res) => {
   if (req.body) {
@@ -28,7 +28,6 @@ exports.createUser = async (req, res) => {
     });
   }
 };
-
 
 //login Validate
 exports.validateUser = async (req, res) => {
@@ -231,6 +230,32 @@ exports.getUserById = (req, res) => {
 exports.findUserByBranchId = async (req, res) => {
   User.findAll({
     where: { branchId: req.params.id },
+  }).then((user) => {
+    if (!user) {
+      console.log("User Not Found");
+      return res.status(400).send({
+        success: "false",
+        message: "User Not Found",
+        description: "Entered details does not found in database",
+      });
+    }
+    console.log(user);
+    res.send({
+      success: "true",
+      data: user,
+    });
+  });
+};
+
+//Get All no branch staff
+exports.findNullBranchStaff = async (req, res) => {
+  User.findAll({
+    where: {
+      [Op.or]: [{ type: "Trainer" }, { type: "Manager" }],
+      branchId: {
+        [Op.or]: [{ [Op.is]: null }, { [Op.eq]: "" }],
+      },
+    },
   }).then((user) => {
     if (!user) {
       console.log("User Not Found");
