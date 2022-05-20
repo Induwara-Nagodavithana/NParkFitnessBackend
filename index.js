@@ -3,10 +3,12 @@ var bodyParser = require("body-parser");
 var cors = require("cors");
 var fireAuth = require("./app/auth/firebaseAuth");
 const db = require("./app/config/database");
+// const env = require('dotenv').config({path: './.env'});
 const PORT = process.env.PORT || 3005;
 const ApiRouter = require("./app/route/api.route");
 const AuthRouter = require("./app/route/auth.route");
 const PayHereRouter = require("./app/route/payhere.route");
+const SubPaymentController = require("./app/controller/subscriptionPayment.controller");
 
 //Database
 db.sync().then(() => {
@@ -37,6 +39,10 @@ app.use("/api", fireAuth.decodeToken, ApiRouter);
 // app.use("/api",ApiRouter);
 app.use("/auth", AuthRouter);
 app.use("/payhere", PayHereRouter);
+
+// app.post("/webhook", async (req, res) => {
+  
+// });
 
 //Set Port
 app.set("port", PORT);

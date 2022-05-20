@@ -20,7 +20,13 @@ const stripe = require("stripe")(
 
 //RCreate Stripe Payment Intent
 exports.createPaymentIntent = async (req, res) => {
-  const { paymentMethodType, currency, paymentMethodOptions, amount } = req.body;
+  const {
+    paymentMethodType,
+    currency,
+    paymentMethodOptions,
+    amount,
+    description,
+  } = req.body;
 
   // Each payment method type has support for different currencies. In order to
   // support many payment method types and several currencies, this server
@@ -31,6 +37,7 @@ exports.createPaymentIntent = async (req, res) => {
   const params = {
     payment_method_types: [paymentMethodType],
     payment_method_options: [paymentMethodOptions],
+    description: description,
     amount: amount,
     currency: currency,
   };
@@ -254,6 +261,144 @@ exports.getSubscriptionPaymentByUserId = (req, res) => {
         description: err.message,
       });
     });
+};
+
+// create stripe session
+exports.createStripeSession = async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      metadata: req.body.metadata,
+      success_url: req.body.success_url,
+      cancel_url: req.body.cancel_url,
+      line_items: [req.body.line_items],
+      mode: "payment",
+    });
+
+    res.status(200).send({
+      success: "true",
+      data: session,
+    });
+  } catch (error) {
+    res.status(400).send({
+      success: "false",
+      message: "Error in Creating Session",
+      description: error.message,
+    });
+  }
+};
+
+//listen to Stripe notification
+exports.notifyStripePayment = (req, res) => {
+  let data, eventType;
+  console.log(
+    "544444444444444444444444444444444444444444444444444444444444444"
+  );
+  console.log(req.body);
+  // console.log(req.body.data.object.metadata.userId);
+  console.log(
+    "544444444444444444444444444444444444444444444444444444444444444"
+  );
+
+  // Check if webhook signing is configured.
+  if (process.env.STRIPE_WEBHOOK_SECRET) {
+    // Retrieve the event by verifying the signature using the raw body and secret.
+    let event;
+    let signature = req.headers["stripe-signature"];
+    try {
+      event = stripe.webhooks.constructEvent(
+        req.rawBody,
+        signature,
+        process.env.STRIPE_WEBHOOK_SECRET
+      );
+    } catch (err) {
+      console.log(`⚠️  Webhook signature verification failed.`);
+      return res.sendStatus(400);
+    }
+    data = event.data;
+    eventType = event.type;
+  } else {
+    // Webhook signing is recommended, but if the secret is not configured in `config.js`,
+    // we can retrieve the event data directly from the request body.
+    data = req.body.data;
+    eventType = req.body.type;
+    // userType = req.body.data.object.description;
+  }
+
+  if (eventType === "checkout.session.completed") {
+    console.log("💰 Payment Done by Owner");
+
+    Subscription.findOne({
+      where: {
+        userId: req.body.data.object.metadata.userId,
+      },
+      order: [["createdAt", "DESC"]],
+    })
+      .then((subscription) => {
+        console.log("Create subscriptionPayment");
+        console.log(subscription);
+        var body = {
+          date: new Date().toISOString().slice(0, 10),
+          amount: req.body.data.object.amount_total / 100,
+          subscriptionId: subscription.id,
+        };
+        SubscriptionPayment.create(body)
+          .then((subscriptionPayment) => {
+            console.log(subscriptionPayment);
+            var dt = new Date();
+            dt.setMonth(dt.getMonth() + 1);
+            var updateBody = {
+              expireDate: dt.toISOString().slice(0, 10),
+            };
+            Subscription.update(updateBody, {
+              where: {
+                id: subscription.id,
+              },
+            })
+              .then((subscription) => {
+                res.status(200).send({
+                  success: subscription[0] == 1 ? "true" : "false",
+                  data:
+                    subscription[0] == 1
+                      ? "Updated Successfully"
+                      : "Update Not Successful",
+                });
+              })
+              .catch((err) => {
+                res.status(400).send({
+                  success: "false",
+                  message: "Error in Update Subscription",
+                  description: err.message,
+                });
+              });
+          })
+          .catch((err) => {
+            console.log("payment failed2");
+
+            res.status(400).send({
+              success: "false",
+              message: "Error in Create SubscriptionPayment",
+              description: err.message,
+            });
+          });
+      })
+      .catch((err) => {
+        console.log("payment failed3");
+
+        res.status(400).send({
+          success: "false",
+          message: "Error in Getting Subscription By UserID",
+          description: err.message,
+        });
+      });
+  } else if (eventType === "payment_intent.succeeded") {
+    // Funds have been captured
+    // Fulfill any orders, e-mail receipts, etc
+    // To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)
+    console.log("💰 Payment captured!");
+  } else if (eventType === "payment_intent.payment_failed") {
+    console.log("❌ Payment failed.");
+  }
+  // res.sendStatus(200);
 };
 
 //listen to payHere notification
