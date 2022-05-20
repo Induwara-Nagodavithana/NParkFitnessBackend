@@ -7,5 +7,6 @@ const PayHereRouter = express.Router();
 // AuthRouter.post('/', UserController.createUser);
 // AuthRouter.put('/:id', UserController.updateUser);
 PayHereRouter.post('/notify', SubPaymentController.notifyPayment);
+PayHereRouter.post('/create-payment-intent', SubPaymentController.createPaymentIntent);
 
 module.exports = PayHereRouter;

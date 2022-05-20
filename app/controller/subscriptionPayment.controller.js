@@ -5,6 +5,97 @@ const SubscriptionType = require("../model/subscriptionType.model");
 const User = require("../model/user.model");
 const { Op } = require("sequelize");
 var md5 = require("md5");
+const stripe = require("stripe")(
+  "sk_test_51L19WVJhj4XbjMCU0sLhTSnDxvUVn2fhHAcs39tTwRX1LN51Nv3LgEZrmFlu9eRZkBJZ2AUB8VwVCnqn3KRd3XE100OSqGqVmz",
+  {
+    apiVersion: "2020-08-27",
+    appInfo: {
+      // For sample support and debugging, not required for production:
+      name: "stripe-samples/accept-a-payment/custom-payment-flow",
+      version: "0.0.2",
+      url: "https://github.com/stripe-samples",
+    },
+  }
+);
+
+//RCreate Stripe Payment Intent
+exports.createPaymentIntent = async (req, res) => {
+  const { paymentMethodType, currency, paymentMethodOptions, amount } = req.body;
+
+  // Each payment method type has support for different currencies. In order to
+  // support many payment method types and several currencies, this server
+  // endpoint accepts both the payment method type and the currency as
+  // parameters.
+  //
+  // Some example payment method types include `card`, `ideal`, and `alipay`.
+  const params = {
+    payment_method_types: [paymentMethodType],
+    payment_method_options: [paymentMethodOptions],
+    amount: amount,
+    currency: currency,
+  };
+
+  // If this is for an ACSS payment, we add payment_method_options to create
+  // the Mandate.
+  if (paymentMethodType === "acss_debit") {
+    params.payment_method_options = {
+      acss_debit: {
+        mandate_options: {
+          payment_schedule: "sporadic",
+          transaction_type: "personal",
+        },
+      },
+    };
+  } else if (paymentMethodType === "konbini") {
+    /**
+     * Default value of the payment_method_options
+     */
+    params.payment_method_options = {
+      konbini: {
+        product_description: "Tシャツ",
+        expires_after_days: 3,
+      },
+    };
+  } else if (paymentMethodType === "customer_balance") {
+    params.payment_method_data = {
+      type: "customer_balance",
+    };
+    params.confirm = true;
+    params.customer =
+      req.body.customerId ||
+      (await stripe.customers.create().then((data) => data.id));
+  }
+
+  /**
+   * If API given this data, we can overwride it
+   */
+  if (paymentMethodOptions) {
+    params.payment_method_options = paymentMethodOptions;
+  }
+
+  // Create a PaymentIntent with the amount, currency, and a payment method type.
+  //
+  // See the documentation [0] for the full list of supported parameters.
+  //
+  // [0] https://stripe.com/docs/api/payment_intents/create
+  try {
+    const paymentIntent = await stripe.paymentIntents.create(params);
+
+    // Send publishable key and PaymentIntent details to client
+    console.log(paymentIntent);
+    res.status(200).send({
+      success: "true",
+      data: paymentIntent,
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(400).send({
+      success: "false",
+      message: "Error in Create Payment",
+      description: e.message,
+    });
+  }
+};
 
 //Register a SubscriptionPayment | guest
 exports.createSubscriptionPayment = async (req, res) => {
