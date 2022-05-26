@@ -305,7 +305,7 @@ exports.getAllAttendanceByUserId = (req, res) => {
         include: {
           model: Branch,
         },
-        order: [["date", "DESC"]],
+        order: [["UpdatedAt", "DESC"]],
       })
         .then((attendance) => {
           res.send({
