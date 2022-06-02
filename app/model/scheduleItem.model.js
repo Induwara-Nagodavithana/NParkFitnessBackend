@@ -16,6 +16,10 @@ var ScheduleItem = db.define(
         timeBySeconds: {
             type: Sequelize.INTEGER,
             allowNull: false,
+        },
+        calAmount: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
         }
     },
     {
