@@ -437,88 +437,158 @@ exports.getOwnerDashboardData = async (req, res) => {
   if (!req.params.id) return res.status(500).send("Id is missing");
   let id = req.params.id;
   var branchIdArr = [];
-  Branch.findAll({
-    where: { gymId: id },
+  var gymIdArr = [];
+  Gym.findAll({
+    where: { userId: id },
   })
-    .then(async (user) => {
-      await user.map((element) => {
-        branchIdArr.push({ branchId: element.id });
+    .then(async (gym) => {
+      await gym.map((element) => {
+        gymIdArr.push({ gymId: element.id });
       });
-      getBranchMemberCount(branchIdArr, (err, memberCount) => {
-        if (err)
-          return res.status(400).send({
-            success: "false",
-            message: "Error in getting member count",
-            description: err.message,
+      Branch.findAll({
+        where: { [Op.or]: gymIdArr },
+      })
+        .then(async (user) => {
+          await user.map((element) => {
+            branchIdArr.push({ branchId: element.id });
           });
-        getBranchServiceCount(branchIdArr, (err, serviceCount) => {
-          if (err)
-            return res.status(400).send({
-              success: "false",
-              message: "Error in getting service count",
-              description: err.message,
-            });
-
-          getBranchStaffCount(branchIdArr, (err, staffCount) => {
+          getBranchMemberCount(branchIdArr, (err, memberCount) => {
             if (err)
               return res.status(400).send({
                 success: "false",
-                message: "Error in getting staff count",
+                message: "Error in getting member count",
                 description: err.message,
               });
-
-            getBranchExpiredMemberCount(branchIdArr, (err, exMemberCount) => {
+            getBranchServiceCount(branchIdArr, (err, serviceCount) => {
               if (err)
                 return res.status(400).send({
                   success: "false",
-                  message: "Error in getting exMember count",
+                  message: "Error in getting service count",
                   description: err.message,
                 });
 
-              getBranchAttendanceCount(branchIdArr, (err, attendanceCount) => {
+              getBranchStaffCount(branchIdArr, (err, staffCount) => {
                 if (err)
                   return res.status(400).send({
                     success: "false",
-                    message: "Error in getting attendance count",
+                    message: "Error in getting staff count",
                     description: err.message,
                   });
 
-                getBranchTotalIncome(branchIdArr, (err, incomeCount) => {
-                  if (err)
-                    return res.status(400).send({
-                      success: "false",
-                      message: "Error in getting income count",
-                      description: err.message,
-                    });
+                getBranchExpiredMemberCount(
+                  branchIdArr,
+                  (err, exMemberCount) => {
+                    if (err)
+                      return res.status(400).send({
+                        success: "false",
+                        message: "Error in getting exMember count",
+                        description: err.message,
+                      });
 
-                  res.send({
-                    success: "true",
-                    data: {
-                      memberCount: memberCount,
-                      branchCount: branchIdArr.length,
-                      serviceCount: serviceCount,
-                      staffCount: staffCount,
-                      exMemberCount: exMemberCount,
-                      attendanceCount: attendanceCount,
-                      incomeCount: incomeCount,
-                    },
-                  });
-                });
+                    getBranchAttendanceCount(
+                      branchIdArr,
+                      (err, attendanceCount) => {
+                        if (err)
+                          return res.status(400).send({
+                            success: "false",
+                            message: "Error in getting attendance count",
+                            description: err.message,
+                          });
+
+                        getBranchTotalIncome(
+                          branchIdArr,
+                          (err, incomeCount) => {
+                            if (err)
+                              return res.status(400).send({
+                                success: "false",
+                                message: "Error in getting income count",
+                                description: err.message,
+                              });
+
+                            res.send({
+                              success: "true",
+                              data: {
+                                memberCount: memberCount,
+                                branchCount: branchIdArr.length,
+                                serviceCount: serviceCount,
+                                staffCount: staffCount,
+                                exMemberCount: exMemberCount,
+                                attendanceCount: attendanceCount,
+                                incomeCount: incomeCount,
+                              },
+                            });
+                          }
+                        );
+                      }
+                    );
+                  }
+                );
               });
             });
           });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(400).send({
+            success: "false",
+            message: "Error in getting branch id",
+            description: err.message,
+          });
         });
-      });
     })
     .catch((err) => {
       console.log(err);
       res.status(400).send({
         success: "false",
-        message: "Error in getting branch id",
+        message: "Error in getting gym id",
         description: err.message,
       });
     });
 };
+
+// get one Month Income
+function getOneBranchMonthIncome(branchId, callback) {
+  var today = new Date();
+  var startMonth = new Date();
+  startMonth.setMonth(startMonth.getMonth() - 1);
+  var lastDayOfStartMonth = new Date(
+    startMonth.getFullYear(),
+    startMonth.getMonth() + 1,
+    1
+  );
+  Payment.findAll({
+    where: {
+      date: {
+        [Op.between]: [
+          `${today.toISOString().slice(0, 7)}-01`,
+          `${today.toISOString().slice(0, 10)}`,
+        ],
+      },
+    },
+    include: [
+      {
+        model: Membership,
+        where: {
+          branchId: branchId,
+        },
+        include: [
+          {
+            model: Branch,
+          },
+        ],
+      },
+    ],
+    order: [[Sequelize.col("date"), "ASC"]],
+  })
+    .then((payment) => {
+      console.log(payment);
+      callback(null, payment);
+    })
+    .catch((err) => {
+      console.log(err);
+      callback(err);
+    });
+}
 
 //get Month Income in Branch
 function getBranchMonthIncome(branchIdArr, callback) {
@@ -567,30 +637,65 @@ function getBranchMonthIncome(branchIdArr, callback) {
     });
 }
 
+exports.getOneBranchMonthIncome = async (req, res) => {
+  if (!req.params.id) return res.status(500).send("Id is missing");
+  let branchId = req.params.id;
+  getOneBranchMonthIncome(branchId, (err, data) => {
+    if (err)
+      return res.status(400).send({
+        success: "false",
+        message: "Error in getting membership count",
+        description: err.message,
+      });
+
+    res.send({
+      success: "true",
+      data: data,
+    });
+  });
+};
+
 exports.getBranchMonthIncome = async (req, res) => {
   if (!req.params.id) return res.status(500).send("Id is missing");
   let id = req.params.id;
   var branchIdArr = [];
-  Branch.findAll({
-    where: { gymId: id },
+  var gymIdArr = [];
+  Gym.findAll({
+    where: { userId: id },
   })
-    .then(async (user) => {
-      await user.map((element) => {
-        branchIdArr.push({ branchId: element.id });
+    .then(async (gym) => {
+      await gym.map((element) => {
+        gymIdArr.push({ gymId: element.id });
       });
-      getBranchMonthIncome(branchIdArr, (err, data) => {
-        if (err)
-          return res.status(400).send({
+      Branch.findAll({
+        where: { [Op.or]: gymIdArr },
+      })
+        .then(async (user) => {
+          await user.map((element) => {
+            branchIdArr.push({ branchId: element.id });
+          });
+          getBranchMonthIncome(branchIdArr, (err, data) => {
+            if (err)
+              return res.status(400).send({
+                success: "false",
+                message: "Error in getting membership count",
+                description: err.message,
+              });
+
+            res.send({
+              success: "true",
+              data: data,
+            });
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(400).send({
             success: "false",
-            message: "Error in getting membership count",
+            message: "Error in getting branch id",
             description: err.message,
           });
-
-        res.send({
-          success: "true",
-          data: data,
         });
-      });
     })
     .catch((err) => {
       console.log(err);
