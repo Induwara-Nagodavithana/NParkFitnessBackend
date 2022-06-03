@@ -290,7 +290,26 @@ function getBranchTotalIncome(branchIdArr, callback) {
       })
         .then((payment) => {
           console.log(payment);
-          callback(null, payment);
+          Payment.findAll({
+            where: {
+              [Op.or]: memberIdArr,
+              date: {
+                [Op.between]: [
+                  `${today.toISOString().slice(0, 4)}-01-01`,
+                  `${today.toISOString().slice(0, 10)}`,
+                ],
+              },
+            },
+            order: [[Sequelize.col("CreatedAt"), "ASC"]],
+          })
+            .then((rawPayment) => {
+              console.log(rawPayment);
+              callback(null, { payment, rawPayment });
+            })
+            .catch((err) => {
+              console.log(err);
+              callback(err);
+            });
         })
         .catch((err) => {
           console.log(err);
@@ -382,7 +401,8 @@ exports.getManagerDashboardData = async (req, res) => {
                   staffCount: staffCount,
                   exMemberCount: exMemberCount,
                   attendanceCount: attendanceCount,
-                  incomeCount: incomeCount,
+                  incomeCount: incomeCount.payment,
+                  rawPaymentData: incomeCount.rawPayment,
                 },
               });
             });
@@ -514,7 +534,8 @@ exports.getOwnerDashboardData = async (req, res) => {
                                 staffCount: staffCount,
                                 exMemberCount: exMemberCount,
                                 attendanceCount: attendanceCount,
-                                incomeCount: incomeCount,
+                                incomeCount: incomeCount.payment,
+                                rawPaymentData: incomeCount.rawPayment,
                               },
                             });
                           }
@@ -754,26 +775,52 @@ exports.getAdminDashboardData = async (req, res) => {
                       })
                         .then((payment) => {
                           console.log(payment);
-                          SubscriptionType.findAll()
-                            .then((subscriptionType) => {
-                              res.send({
-                                success: "true",
-                                data: {
-                                  userCount: userCount,
-                                  memberCount: memberCount,
-                                  gymCount: gymCount,
-                                  branchCount: branchCount,
-                                  serviceCount: serviceCount,
-                                  payment: payment,
-                                  subscriptionType: subscriptionType,
-                                },
-                              });
+
+                          SubPayment.findAll({
+                            where: {
+                              date: {
+                                [Op.between]: [
+                                  `${today.toISOString().slice(0, 4)}-01-01`,
+                                  `${today.toISOString().slice(0, 10)}`,
+                                ],
+                              },
+                            },
+                            order: [[Sequelize.col("CreatedAt"), "ASC"]],
+                          })
+                            .then((rawPayment) => {
+                              console.log(rawPayment);
+
+                              SubscriptionType.findAll()
+                                .then((subscriptionType) => {
+                                  res.send({
+                                    success: "true",
+                                    data: {
+                                      userCount: userCount,
+                                      memberCount: memberCount,
+                                      gymCount: gymCount,
+                                      branchCount: branchCount,
+                                      serviceCount: serviceCount,
+                                      payment: payment,
+                                      rawPaymentData: rawPayment,
+                                      subscriptionType: subscriptionType,
+                                    },
+                                  });
+                                })
+                                .catch((err) => {
+                                  res.status(400).send({
+                                    success: "false",
+                                    message:
+                                      "Error in getting subscription type data",
+                                    description: err.message,
+                                  });
+                                });
                             })
                             .catch((err) => {
+                              console.log(err);
                               res.status(400).send({
                                 success: "false",
                                 message:
-                                  "Error in getting subscription type data",
+                                  "Error in getting subscription payment data",
                                 description: err.message,
                               });
                             });
