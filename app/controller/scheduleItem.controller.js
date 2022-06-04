@@ -104,6 +104,37 @@ exports.getScheduleItemById = (req, res) => {
     });
 };
 
+//get ScheduleItem By ScheduleId
+exports.getScheduleItemById = (req, res) => {
+  console.log("get All");
+  ScheduleItem.findAll({
+    where: {
+      scheduleId: req.params.id,
+    },
+    include: [
+      {
+        model: Schedule,
+      },
+      {
+        model: ServiceType,
+      },
+    ],
+  })
+    .then((scheduleItem) => {
+      res.send({
+        success: "true",
+        data: scheduleItem,
+      });
+    })
+    .catch((err) => {
+      res.status(400).send({
+        success: "false",
+        message: "Error in Getting ScheduleItem By ID",
+        description: err.message,
+      });
+    });
+};
+
 //get ScheduleItem By MemberId
 exports.getScheduleItemByMemberId = (req, res) => {
   console.log("get All");
