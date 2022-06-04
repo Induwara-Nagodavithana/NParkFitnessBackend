@@ -322,6 +322,139 @@ function getBranchTotalIncome(branchIdArr, callback) {
     });
 }
 
+// get one gym total Income
+exports.getGymTotalIncome = async (req, res) => {
+  if (!req.params.id) return res.status(500).send("Id is missing");
+  let id = req.params.id;
+  var branchIdArr = [];
+  Branch.findAll({
+    where: { gymId: id },
+  }).then(async (branches) => {
+    await branches.map((element) => {
+      branchIdArr.push({ branchId: element.id });
+    });
+    getBranchTotalIncome(branchIdArr, (err, data) => {
+      if (err)
+        return res.status(400).send({
+          success: "false",
+          message: "Error in getting total income",
+          description: err.message,
+        });
+
+      res.send({
+        success: "true",
+        data: data,
+      });
+    });
+  });
+};
+
+// get one gym monthly total Income
+exports.getGymRawMonthlyTotalIncome = async (req, res) => {
+  if (!req.params.id) return res.status(500).send("Id is missing");
+  let id = req.params.id;
+  var today = new Date();
+  var memberIdArr = [];
+
+  var branchIdArr = [];
+  Branch.findAll({
+    where: { gymId: id },
+  })
+    .then(async (branches) => {
+      await branches.map((element) => {
+        branchIdArr.push({ branchId: element.id });
+      });
+      Membership.findAll({
+        where: { [Op.or]: branchIdArr },
+      }).then(async (member) => {
+        await member.map((element) => {
+          memberIdArr.push({ membershipId: element.id });
+        });
+        console.log(memberIdArr);
+        Payment.findAll({
+          where: {
+            [Op.or]: memberIdArr,
+            date: {
+              [Op.between]: [
+                `${today.toISOString().slice(0, 8)}-01`,
+                `${today.toISOString().slice(0, 10)}`,
+              ],
+            },
+          },
+          order: [[Sequelize.col("CreatedAt"), "ASC"]],
+        })
+          .then((rawPayment) => {
+            console.log(rawPayment);
+            res.send({
+              success: "true",
+              data: rawPayment,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(400).send({
+              success: "false",
+              message: "Error in getting total income",
+              description: err.message,
+            });
+          });
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).send({
+        success: "false",
+        message: "Error in getting total income",
+        description: err.message,
+      });
+    });
+};
+
+// get one gym monthly total Income
+exports.getBranchRawMonthlyTotalIncome = async (req, res) => {
+  if (!req.params.id) return res.status(500).send("Id is missing");
+  let id = req.params.id;
+  var memberIdArr = [];
+  var branchIdArr = [{ branchId: id }];
+  var today = new Date();
+
+  Membership.findAll({
+    where: { [Op.or]: branchIdArr },
+  }).then(async (member) => {
+    await member.map((element) => {
+      memberIdArr.push({ membershipId: element.id });
+    });
+    console.log(memberIdArr);
+    Payment.findAll({
+      where: {
+        [Op.or]: memberIdArr,
+        date: {
+          [Op.between]: [
+            `${today.toISOString().slice(0, 8)}-01`,
+            `${today.toISOString().slice(0, 10)}`,
+          ],
+        },
+      },
+      order: [[Sequelize.col("CreatedAt"), "ASC"]],
+    })
+      .then((rawPayment) => {
+        console.log(rawPayment);
+        res.send({
+          success: "true",
+          data: rawPayment,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(400).send({
+          success: "false",
+          message: "Error in getting total income",
+          description: err.message,
+        });
+      });
+  });
+};
+
 exports.getBranchTotalIncome = async (req, res) => {
   if (!req.params.id) return res.status(500).send("Id is missing");
   let id = req.params.id;

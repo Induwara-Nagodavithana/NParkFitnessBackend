@@ -9,6 +9,9 @@ DashboardRouter.get('/getBranchStaffCount/:id', DashboardController.getBranchSta
 DashboardRouter.get('/getBranchExpiredMemberCount/:id', DashboardController.getBranchExpiredMemberCount);
 DashboardRouter.get('/getBranchAttendanceCount/:id', DashboardController.getBranchAttendanceCount);
 DashboardRouter.get('/getBranchTotalIncome/:id', DashboardController.getBranchTotalIncome);
+DashboardRouter.get('/getGymTotalIncome/:id', DashboardController.getGymTotalIncome);
+DashboardRouter.get('/getGymRawMonthlyTotalIncome/:id', DashboardController.getGymRawMonthlyTotalIncome);
+DashboardRouter.get('/getBranchRawMonthlyTotalIncome/:id', DashboardController.getBranchRawMonthlyTotalIncome);
 DashboardRouter.get('/getManagerDashboardData/:id', DashboardController.getManagerDashboardData);
 
 DashboardRouter.get('/getGymMemberCount/:id', DashboardController.getGymMemberCount);
