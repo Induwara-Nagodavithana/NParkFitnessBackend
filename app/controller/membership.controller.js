@@ -293,6 +293,48 @@ exports.getAllMembershipByUserId = (req, res) => {
 }
 
 
+//get All Membership By BranchId
+exports.getAllMembershipByBranchId = (req, res) => {
+    console.log("get All By BranchId");
+    Membership.findAll(
+        {
+            where: {
+                branchId: req.params.id
+            },
+            include: [{
+                model: User
+            },
+            {
+                model: User,
+                as: 'trainId'
+            },
+            {
+                model: MembershipType
+            },
+            {
+                model: Branch,
+                include: {
+                    model: Gym
+                }
+            }]
+        }
+    ).then((membership) => {
+        res.send({
+            'success': 'true',
+            'data': { 'memberData': membership }
+        });
+    })
+        .catch((err) => {
+            console.log(err);
+            res.status(400).send({
+                'success': 'false',
+                'message': 'Error in Getting All Membership',
+                'description': err.message
+            });
+        });
+}
+
+
 //get Membership By Id
 exports.getMembershipById = (req, res) => {
     console.log("get All");
