@@ -2,6 +2,9 @@ const DietPlan = require("../model/dietPlan.model");
 const MealItem = require("../model/mealItem.model");
 const Membership = require("../model/membership.model");
 const User = require("../model/user.model");
+const { Sequelize, Op } = require("sequelize");
+const Schedule = require("../model/schedule.model");
+const ScheduleItem = require("../model/scheduleItem.model");
 
 //Register a DietPlan | guest
 exports.createDietPlan = async (req, res) => {
@@ -332,6 +335,214 @@ exports.createDietAndMealItem = (req, res) => {
       res.status(400).send({
         success: "false",
         message: "Error in Getting All Membership",
+        description: err.message,
+      });
+    });
+};
+
+async function getCalorieConsume(dietPlan, callback) {
+  var dietIdArr = [];
+  if (dietPlan !== null) {
+    await dietPlan.map((element) => {
+      dietIdArr.push({ dietPlanId: element.id });
+    });
+    MealItem.findAll({
+      where: {
+        [Op.or]: dietIdArr,
+      },
+    })
+      .then(async (mealItem) => {
+        console.log(mealItem);
+        var concumedCalAmount = 0;
+        const promises = mealItem.map(async (element) => {
+          concumedCalAmount += element.calAmount;
+        });
+        await Promise.all(promises);
+        console.log(concumedCalAmount);
+        callback(null, concumedCalAmount);
+      })
+      .catch((err) => {
+        console.log(err);
+        callback(err);
+      });
+  } else {
+    console.log("DietPlan is null");
+
+    callback(null, 0);
+  }
+}
+
+function getCalorieBurn(memberId, callback) {
+  Schedule.findAll({
+    where: {
+      membershipId: memberId,
+    },
+    order: [["CreatedAt", "DESC"]],
+  })
+    .then((schedule) => {
+      console.log("schedule");
+      console.log(schedule);
+      if (schedule.length > 0) {
+        ScheduleItem.findAll({
+          where: {
+            scheduleId: schedule[0].id,
+          },
+        })
+          .then(async (scheduleItem) => {
+            var burnedCalAmount = 0;
+            const promises = scheduleItem.map(async (element) => {
+              burnedCalAmount += element.calAmount;
+            });
+            await Promise.all(promises);
+            console.log(burnedCalAmount);
+            callback(null, burnedCalAmount);
+          })
+          .catch((err) => {
+            console.log(err);
+            callback(err);
+          });
+      } else {
+        console.log("Schedule is null");
+        callback(null, 0);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      callback(err);
+    });
+}
+//get Calorie Consumed and Burned
+exports.getCalorieConsumeAndBurnByMemberId = async (req, res) => {
+  console.log("Delete dietPlan");
+  var body = {
+    consumedCal: 0,
+    burnedCal: 0,
+  };
+
+  Membership.findOne({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((membership) => {
+      if (membership == null)
+        return res.status(500).send({
+          success: "false",
+          message: "Membership not found",
+        });
+
+      console.log(membership);
+      DietPlan.findAll({
+        where: {
+          userId: membership.userId,
+        },
+      })
+        .then(async (dietPlan) => {
+          var promises = new Promise(function (myResolve, myReject) {
+            getCalorieConsume(dietPlan, (err, data) => {
+              if (err) {
+                myReject(err); // when error
+              } else {
+                body.consumedCal = data;
+                myResolve(); // when successful
+              }
+            });
+          });
+
+          promises.then(
+            function (value) {
+              var promises1 = new Promise(function (myResolve, myReject) {
+                getCalorieBurn(membership.id, (err, data) => {
+                  if (err) {
+                    myReject(err); // when error
+                  } else {
+                    body.burnedCal = data;
+                    myResolve(); // when successful
+                  }
+                });
+              });
+
+              promises1.then(
+                function (value) {
+                  res.send({
+                    success: "true",
+                    data: body,
+                  });
+                },
+                function (error) {
+                  console.log(error);
+                  res.status(400).send({
+                    success: "false",
+                    message: "Error in Getting DietPlan",
+                    description: error.message,
+                  });
+                }
+              );
+            },
+            function (error) {
+              console.log(error);
+              var promises1 = new Promise(function (myResolve, myReject) {
+                getCalorieBurn(membership.id, (err, data) => {
+                  if (err) {
+                    myReject(err); // when error
+                  } else {
+                    body.burnedCal = data;
+                    myResolve(); // when successful
+                  }
+                });
+              });
+
+              promises1.then(
+                function (value) {
+                  res.send({
+                    success: "true",
+                    data: body,
+                  });
+                },
+                function (error) {
+                  console.log(error);
+                  res.status(400).send({
+                    success: "false",
+                    message: "Error in Getting DietPlan",
+                    description: error.message,
+                  });
+                }
+              );
+            }
+          );
+
+          // await Promise.all(promises);
+          // const promises1 = getCalorieBurn(membership.id, (err, data) => {
+          //   if (err)
+          //     return res.status(400).send({
+          //       success: "false",
+          //       message: "Error in getting burned calorie",
+          //       description: err.message,
+          //     });
+          //   body.burnedCal = data;
+          // });
+          // await Promise.all(promises1);
+
+          // res.send({
+          //   success: "true",
+          //   data: body,
+          // });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(400).send({
+            success: "false",
+            message: "Error in Getting DietPlan",
+            description: err.message,
+          });
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+
+      res.status(400).send({
+        success: "false",
+        message: "Error in Getting Membership",
         description: err.message,
       });
     });
