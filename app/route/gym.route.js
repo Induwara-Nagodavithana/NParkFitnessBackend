@@ -8,5 +8,6 @@ GymRouter.post('/', GymController.createGym);
 GymRouter.get('/:id', GymController.getGymById);
 GymRouter.get('/getAllGymByUserId/:id', GymController.getAllGymByUserId);
 GymRouter.put('/:id', GymController.updateGym);
+GymRouter.get('/getGymCountByUserId/:id',GymController.getGymCountByUserId);
 GymRouter.delete('/:id', GymController.deleteGym);
 module.exports = GymRouter;

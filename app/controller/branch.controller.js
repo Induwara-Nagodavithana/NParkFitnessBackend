@@ -118,6 +118,29 @@ exports.getBranchByGymId = (req, res) => {
         });
 }
 
+//get branch count from gymId
+exports.getBranchCountByGymId = (req,res) => {
+    Branch.count({
+        where: {
+            gymId:req.params.id
+        }
+    })
+    .then((branch) => {
+        res.send({
+            'success':'true',
+            'data':branch,
+        });
+    })
+    .catch((err) => {
+        res.status(400).send({
+          success: "false",
+          message: "Error in Getting gym By ID",
+          description: err.message,
+        });
+      });
+}
+
+
 //delete Branch
 exports.deleteBranch = async (req, res) => {
     console.log("Delete branch");

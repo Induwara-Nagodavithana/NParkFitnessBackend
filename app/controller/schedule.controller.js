@@ -134,6 +134,41 @@ exports.getScheduleByMemberId = (req, res) => {
     });
 };
 
+
+//get All Schedule By MemberId
+exports.getAllScheduleByMemberId = (req, res) => {
+  console.log("get All");
+  Schedule.findAll({
+    where: {
+      membershipId: req.params.id,
+    },
+    include: [
+      {
+        model: User,
+        as: "trainer",
+      },
+      {
+        model: Membership,
+      },
+    ],
+    order: [["createdAt", "DESC"]],
+  })
+    .then((schedule) => {
+      res.send({
+        success: "true",
+        data: schedule,
+      });
+    })
+    .catch((err) => {
+      res.status(400).send({
+        success: "false",
+        message: "Error in Getting Schedule By ID",
+        description: err.message,
+      });
+    });
+};
+
+
 //get Schedule Count By TrainerId And Month
 exports.getScheduleCountByTrainerIdAndMonth = (req, res) => {
   console.log("get All");

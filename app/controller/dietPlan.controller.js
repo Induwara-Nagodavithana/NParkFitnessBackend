@@ -108,6 +108,11 @@ exports.getDietPlanAndMealByMemberId = (req, res) => {
     },
   })
     .then((membership) => {
+      if (membership == null)
+        return res.status(500).send({
+          success: "false",
+          message: "Membership not found",
+        });
       DietPlan.findAll({
         where: {
           userId: membership.userId,

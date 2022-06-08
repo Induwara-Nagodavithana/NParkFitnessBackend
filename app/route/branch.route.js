@@ -7,6 +7,7 @@ BranchRouter.get('/', BranchController.getAllBranch);
 BranchRouter.post('/', BranchController.createBranch);
 BranchRouter.get('/:id', BranchController.getBranchById);
 BranchRouter.get('/getBranchByGymId/:id', BranchController.getBranchByGymId);
+BranchRouter.get('/getBranchCountByGymId/:id',BranchController.getBranchCountByGymId);
 BranchRouter.put('/:id', BranchController.updateBranch);
 BranchRouter.delete('/:id', BranchController.deleteBranch);
 module.exports = BranchRouter;
