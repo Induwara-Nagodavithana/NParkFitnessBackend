@@ -3,24 +3,25 @@ const bcrypt = require("bcryptjs");
 const Branch = require("../model/branch.model");
 const saltRounds = 5;
 const { Sequelize, Op } = require("sequelize");
+const Membership = require("../model/membership.model");
 //Register a User | guest
 exports.createUser = async (req, res) => {
   if (req.body) {
     console.log("Create user");
-        User.create(req.body)
-          .then((user) => {
-            res.send({
-              success: "true",
-              data: user,
-            });
-          })
-          .catch((err) => {
-            res.status(400).send({
-              success: "false",
-              message: "Error in Create User",
-              description: err.message,
-            });
-          });
+    User.create(req.body)
+      .then((user) => {
+        res.send({
+          success: "true",
+          data: user,
+        });
+      })
+      .catch((err) => {
+        res.status(400).send({
+          success: "false",
+          message: "Error in Create User",
+          description: err.message,
+        });
+      });
   }
 };
 
@@ -97,13 +98,88 @@ exports.validateUserByFireUIDAndEmail = async (req, res) => {
         description: "Entered details does not found in database",
       });
     }
-    console.log(user);
-    res.send({
-      success: "true",
-      data: user,
-    });
+    console.log("dfgsfsdfsdfsdf0");
+
+    if (user.type == "Customer") {
+      console.log("dfgsfsdfsdfsdf0.1");
+
+      checkMemberStatus(user.id, (err, member) => {
+        if (err)
+          return res.status(400).send({
+            success: "false",
+            data: err,
+          });
+        console.log("user");
+        console.log(member);
+        console.log(user);
+        res.send({
+          success: "true",
+          data: user,
+        });
+      });
+    } else {
+      console.log(user);
+      res.send({
+        success: "true",
+        data: user,
+      });
+    }
   });
 };
+
+function checkMemberStatus(userId, callback) {
+  console.log("dfgsfsdfsdfsdf1");
+  Membership.findAll({
+    where: { userId: userId },
+  })
+    .then(async (member) => {
+      const tody = new Date();
+      const date = new Date(tody.setDate(tody.getDate() - 7));
+      try {
+        const promises = member.map((element) => {
+          const expireDate = new Date(element.expireDate);
+          console.log("dfgsfsdfsdfsdf1.1");
+          console.log(date.toISOString());
+          console.log(date.getTime());
+          console.log(expireDate.toISOString());
+          console.log(expireDate.getTime());
+          console.log('expireDate.getTime() > date.getDate()');
+          console.log(expireDate.getTime() > date.getTime());
+          console.log('expireDate.getTime() < date.getDate()');
+          console.log(expireDate.getTime() < date.getTime());
+
+          if (expireDate.getTime() < date.getTime()) {
+            console.log("dfgsfsdfsdfsdf2");
+
+            Membership.update(
+              { isActive: 0 },
+              {
+                where: {
+                  id: element.id,
+                },
+              }
+            )
+              .then((membership) => {
+                const newMember = membership;
+                newMember.isActive = null;
+                console.log(newMember);
+              })
+              .catch((err) => {
+                callback(err);
+              });
+          }
+        });
+        await Promise.all(promises);
+
+        callback(null, member);
+      } catch (error) {
+        callback(err);
+      }
+    })
+    .catch((err) => {
+      callback(err);
+    });
+}
 
 //validate JWT and getUserDetail
 exports.validateUserByJWT = async (req, res) => {
@@ -147,24 +223,60 @@ exports.findUserByEmail = async (req, res) => {
   });
 };
 
+// remove all staff by branch
+exports.removeAllStaffByBranchId = async (req, res) => {
+  const userIdArr = [];
+  User.findAll({
+    where: { branchId: req.params.id },
+  }).then(async (user) => {
+    if (!user) {
+      console.log("User Not Found");
+      return res.status(400).send({
+        success: "false",
+        message: "User Not Found",
+        description: "Entered details does not found in database",
+      });
+    }
+    await user.map((element) => {
+      userIdArr.push({ id: element.id, branchId: null });
+    });
+
+    User.bulkCreate(userIdArr, { updateOnDuplicate: ["branchId"] })
+      .then((attendItem) => {
+        res.send({
+          success: "true",
+          data: attendItem,
+          message: "Succesfully Remove Branch Staff",
+        });
+      })
+      .catch((err) => {
+        res.status(400).send({
+          success: "false",
+          message: "Error in Remove Branch Staff",
+          description: err.message,
+        });
+      });
+  });
+};
+
 //update User Details
 exports.updateUser = async (req, res) => {
   if (req.body) {
     if (!req.params.id) return res.status(500).send("Id is missing");
     let id = req.params.id;
-      updateDetails(id, req, (err, user) => {
-        if (err)
-          return res.status(400).send({
-            success: "false",
-            data: err,
-          });
-        console.log("user");
-        console.log(user);
-        res.status(200).send({
-          success: user[0] == 1 ? "true" : "false",
-          data: user[0] == 1 ? "Updated Successfully" : "Update Not Successful",
+    updateDetails(id, req, (err, user) => {
+      if (err)
+        return res.status(400).send({
+          success: "false",
+          data: err,
         });
+      console.log("user");
+      console.log(user);
+      res.status(200).send({
+        success: user[0] == 1 ? "true" : "false",
+        data: user[0] == 1 ? "Updated Successfully" : "Update Not Successful",
       });
+    });
     console.log(req.body);
   }
 };
