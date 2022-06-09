@@ -31,10 +31,6 @@ var User = db.define(
             type: Sequelize.STRING,
             allowNull: false,
         },
-        password: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        },
         birthDay: {
             type: Sequelize.STRING,
             allowNull: false,
@@ -116,9 +112,11 @@ Branch.belongsTo(Gym)
 Branch.hasMany(Membership)
 Membership.belongsTo(Branch)
 
-Branch.hasMany(MembershipType)
-MembershipType.belongsTo(Branch)
+// Branch.hasMany(MembershipType)
+// MembershipType.belongsTo(Branch)
 
+Gym.hasMany(MembershipType)
+MembershipType.belongsTo(Gym)
 
 User.hasOne(Subscription)
 Subscription.belongsTo(User)
