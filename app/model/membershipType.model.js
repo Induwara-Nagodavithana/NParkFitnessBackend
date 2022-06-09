@@ -5,6 +5,10 @@ const db = require("../config/database");
 var MembershipType = db.define(
     "membershipType",
     {
+        type: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
         description: {
             type: Sequelize.STRING,
             allowNull: false,
