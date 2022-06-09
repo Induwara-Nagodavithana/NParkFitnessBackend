@@ -7,9 +7,6 @@ const { Sequelize, Op } = require("sequelize");
 exports.createUser = async (req, res) => {
   if (req.body) {
     console.log("Create user");
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-      bcrypt.hash(req.body.password, salt, function (err, hash) {
-        req.body.password = hash;
         User.create(req.body)
           .then((user) => {
             res.send({
@@ -24,10 +21,34 @@ exports.createUser = async (req, res) => {
               description: err.message,
             });
           });
-      });
-    });
   }
 };
+
+// //Register a User | guest
+// exports.createUser = async (req, res) => {
+//   if (req.body) {
+//     console.log("Create user");
+//     bcrypt.genSalt(saltRounds, function (err, salt) {
+//       bcrypt.hash(req.body.password, salt, function (err, hash) {
+//         req.body.password = hash;
+//         User.create(req.body)
+//           .then((user) => {
+//             res.send({
+//               success: "true",
+//               data: user,
+//             });
+//           })
+//           .catch((err) => {
+//             res.status(400).send({
+//               success: "false",
+//               message: "Error in Create User",
+//               description: err.message,
+//             });
+//           });
+//       });
+//     });
+//   }
+// };
 
 //login Validate
 exports.validateUser = async (req, res) => {
@@ -131,27 +152,6 @@ exports.updateUser = async (req, res) => {
   if (req.body) {
     if (!req.params.id) return res.status(500).send("Id is missing");
     let id = req.params.id;
-    if (req.body.password != null) {
-      bcrypt.genSalt(saltRounds, function (err, salt) {
-        bcrypt.hash(req.body.password, salt, async function (err, hash) {
-          req.body.password = hash;
-          updateDetails(id, req, (err, user) => {
-            if (err)
-              return res.status(400).send({
-                success: "false",
-                data: err,
-              });
-            console.log("user");
-            console.log(user);
-            res.status(200).send({
-              success: user[0] == 1 ? "true" : "false",
-              data:
-                user[0] == 1 ? "Updated Successfully" : "Update Not Successful",
-            });
-          });
-        });
-      });
-    } else {
       updateDetails(id, req, (err, user) => {
         if (err)
           return res.status(400).send({
@@ -165,10 +165,52 @@ exports.updateUser = async (req, res) => {
           data: user[0] == 1 ? "Updated Successfully" : "Update Not Successful",
         });
       });
-    }
     console.log(req.body);
   }
 };
+
+// exports.updateUser = async (req, res) => {
+//   if (req.body) {
+//     if (!req.params.id) return res.status(500).send("Id is missing");
+//     let id = req.params.id;
+//     if (req.body.password != null) {
+//       bcrypt.genSalt(saltRounds, function (err, salt) {
+//         bcrypt.hash(req.body.password, salt, async function (err, hash) {
+//           req.body.password = hash;
+//           updateDetails(id, req, (err, user) => {
+//             if (err)
+//               return res.status(400).send({
+//                 success: "false",
+//                 data: err,
+//               });
+//             console.log("user");
+//             console.log(user);
+//             res.status(200).send({
+//               success: user[0] == 1 ? "true" : "false",
+//               data:
+//                 user[0] == 1 ? "Updated Successfully" : "Update Not Successful",
+//             });
+//           });
+//         });
+//       });
+//     } else {
+//       updateDetails(id, req, (err, user) => {
+//         if (err)
+//           return res.status(400).send({
+//             success: "false",
+//             data: err,
+//           });
+//         console.log("user");
+//         console.log(user);
+//         res.status(200).send({
+//           success: user[0] == 1 ? "true" : "false",
+//           data: user[0] == 1 ? "Updated Successfully" : "Update Not Successful",
+//         });
+//       });
+//     }
+//     console.log(req.body);
+//   }
+// };
 
 function updateDetails(id, req, callback) {
   User.update(req.body, {
