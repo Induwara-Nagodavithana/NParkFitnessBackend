@@ -254,6 +254,7 @@ function checkSubscriptionStatus(branchId, userId, callback) {
           .then((subscription) => {
             console.log("456345345hg");
             console.log(subscription);
+            if (!subscription) return callback(null, { isActive: false });
 
             try {
               const expireDate = new Date(subscription.expireDate);
@@ -313,6 +314,7 @@ function checkSubscriptionStatus(branchId, userId, callback) {
       .then((subscription) => {
         console.log("456345345");
         console.log(subscription);
+        if (!subscription) return callback(null, { isActive: false });
         try {
           const expireDate = new Date(subscription.expireDate);
           console.log("dfgsfsdfsdfsdf1.1");
@@ -374,7 +376,6 @@ exports.validateUserByJWT = async (req, res) => {
     }
     console.log(user);
     checkUsers(user, res);
-
   });
 };
 
