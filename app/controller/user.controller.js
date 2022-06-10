@@ -4,6 +4,9 @@ const Branch = require("../model/branch.model");
 const saltRounds = 5;
 const { Sequelize, Op } = require("sequelize");
 const Membership = require("../model/membership.model");
+const Gym = require("../model/gym.model");
+const Subscription = require("../model/subscription.model");
+const SubscriptionType = require("../model/subscriptionType.model");
 //Register a User | guest
 exports.createUser = async (req, res) => {
   if (req.body) {
@@ -117,6 +120,47 @@ exports.validateUserByFireUIDAndEmail = async (req, res) => {
           data: user,
         });
       });
+    } else if (user.type == "Owner") {
+      console.log("dfgsfsdfsdfsdf0.1");
+
+      checkSubscriptionStatus(null, user.id, (err, subscription) => {
+        if (err)
+          return res.status(400).send({
+            success: "false",
+            data: err,
+          });
+        console.log("user");
+        console.log(subscription);
+        user.subscriptionStatus = subscription.isActive;
+        const newUser = user.dataValues;
+        newUser.subscriptionStatus = subscription.isActive;
+        console.log("user23");
+        console.log(newUser);
+
+        res.send({
+          success: "true",
+          data: newUser,
+        });
+      });
+    } else if (user.type == "Manager" || user.type == "Trainer") {
+      checkSubscriptionStatus(user.branchId, null, (err, subscription) => {
+        if (err)
+          return res.status(400).send({
+            success: "false",
+            data: err,
+          });
+        console.log("subscription");
+        console.log(subscription);
+        const newUser = user.dataValues;
+        newUser.subscriptionStatus = subscription.isActive;
+        console.log("user23");
+        console.log(newUser);
+
+        res.send({
+          success: "true",
+          data: newUser,
+        });
+      });
     } else {
       console.log(user);
       res.send({
@@ -143,9 +187,9 @@ function checkMemberStatus(userId, callback) {
           console.log(date.getTime());
           console.log(expireDate.toISOString());
           console.log(expireDate.getTime());
-          console.log('expireDate.getTime() > date.getDate()');
+          console.log("expireDate.getTime() > date.getDate()");
           console.log(expireDate.getTime() > date.getTime());
-          console.log('expireDate.getTime() < date.getDate()');
+          console.log("expireDate.getTime() < date.getDate()");
           console.log(expireDate.getTime() < date.getTime());
 
           if (expireDate.getTime() < date.getTime()) {
@@ -179,6 +223,137 @@ function checkMemberStatus(userId, callback) {
     .catch((err) => {
       callback(err);
     });
+}
+
+// check Subscription in gym
+function checkSubscriptionStatus(branchId, userId, callback) {
+  const tody = new Date();
+  const date = new Date(tody.setDate(tody.getDate() - 7));
+  if (branchId) {
+    Branch.findOne({
+      where: {
+        id: branchId,
+      },
+      include: [
+        {
+          model: Gym,
+        },
+      ],
+    })
+      .then((branch) => {
+        console.log("sdrfdgdfgdfgdfgdffdgdfgdfg345345");
+        console.log(branch);
+        Subscription.findOne({
+          where: {
+            userId: branch.gym.userId,
+          },
+        })
+          .then((subscription) => {
+            console.log("456345345hg");
+            console.log(subscription);
+
+            try {
+              const expireDate = new Date(subscription.expireDate);
+              console.log("dfgsfsdfsdfsdf1.1");
+              console.log(date.toISOString());
+              console.log(date.getTime());
+              console.log(expireDate.toISOString());
+              console.log(expireDate.getTime());
+              console.log("expireDate.getTime() > date.getDate()");
+              console.log(expireDate.getTime() > date.getTime());
+              console.log("expireDate.getTime() < date.getDate()");
+              console.log(expireDate.getTime() < date.getTime());
+
+              if (
+                subscription.isActive &&
+                expireDate.getTime() < date.getTime()
+              ) {
+                console.log("dfgsfsdfsdfsdf2");
+
+                Subscription.update(
+                  { isActive: 0 },
+                  {
+                    where: {
+                      id: subscription.id,
+                    },
+                  }
+                )
+                  .then((newSubscription) => {
+                    const newMember = subscription.dataValues;
+                    newMember.isActive = false;
+                    console.log(newMember);
+                    callback(null, newMember);
+                  })
+                  .catch((err) => {
+                    callback(err);
+                  });
+              } else {
+                callback(null, subscription);
+              }
+            } catch (error) {
+              callback(err);
+            }
+          })
+          .catch((err) => {
+            callback(err);
+          });
+      })
+      .catch((err) => {
+        callback(err);
+      });
+  } else if (userId) {
+    Subscription.findOne({
+      where: {
+        userId: userId,
+      },
+    })
+      .then((subscription) => {
+        console.log("456345345");
+        console.log(subscription);
+        try {
+          const expireDate = new Date(subscription.expireDate);
+          console.log("dfgsfsdfsdfsdf1.1");
+          console.log(date.toISOString());
+          console.log(date.getTime());
+          console.log(expireDate.toISOString());
+          console.log(expireDate.getTime());
+          console.log("expireDate.getTime() > date.getDate()");
+          console.log(expireDate.getTime() > date.getTime());
+          console.log("expireDate.getTime() < date.getDate()");
+          console.log(expireDate.getTime() < date.getTime());
+
+          if (subscription.isActive && expireDate.getTime() < date.getTime()) {
+            console.log("dfgsfsdfsdfsdf2");
+
+            Subscription.update(
+              { isActive: 0 },
+              {
+                where: {
+                  id: subscription.id,
+                },
+              }
+            )
+              .then((newSubscription) => {
+                const newMember = subscription.dataValues;
+                newMember.isActive = false;
+                console.log(newMember);
+                callback(null, newMember);
+              })
+              .catch((err) => {
+                callback(err);
+              });
+          } else {
+            callback(null, subscription);
+          }
+        } catch (error) {
+          callback(err);
+        }
+      })
+      .catch((err) => {
+        callback(err);
+      });
+  } else {
+  }
 }
 
 //validate JWT and getUserDetail
