@@ -102,74 +102,77 @@ exports.validateUserByFireUIDAndEmail = async (req, res) => {
       });
     }
     console.log("dfgsfsdfsdfsdf0");
+    checkUsers(user, res);
+  });
+};
 
-    if (user.type == "Customer") {
-      console.log("dfgsfsdfsdfsdf0.1");
+function checkUsers(user, res) {
+  if (user.type == "Customer") {
+    console.log("dfgsfsdfsdfsdf0.1");
 
-      checkMemberStatus(user.id, (err, member) => {
-        if (err)
-          return res.status(400).send({
-            success: "false",
-            data: err,
-          });
-        console.log("user");
-        console.log(member);
-        console.log(user);
-        res.send({
-          success: "true",
-          data: user,
+    checkMemberStatus(user.id, (err, member) => {
+      if (err)
+        return res.status(400).send({
+          success: "false",
+          data: err,
         });
-      });
-    } else if (user.type == "Owner") {
-      console.log("dfgsfsdfsdfsdf0.1");
-
-      checkSubscriptionStatus(null, user.id, (err, subscription) => {
-        if (err)
-          return res.status(400).send({
-            success: "false",
-            data: err,
-          });
-        console.log("user");
-        console.log(subscription);
-        user.subscriptionStatus = subscription.isActive;
-        const newUser = user.dataValues;
-        newUser.subscriptionStatus = subscription.isActive;
-        console.log("user23");
-        console.log(newUser);
-
-        res.send({
-          success: "true",
-          data: newUser,
-        });
-      });
-    } else if (user.type == "Manager" || user.type == "Trainer") {
-      checkSubscriptionStatus(user.branchId, null, (err, subscription) => {
-        if (err)
-          return res.status(400).send({
-            success: "false",
-            data: err,
-          });
-        console.log("subscription");
-        console.log(subscription);
-        const newUser = user.dataValues;
-        newUser.subscriptionStatus = subscription.isActive;
-        console.log("user23");
-        console.log(newUser);
-
-        res.send({
-          success: "true",
-          data: newUser,
-        });
-      });
-    } else {
+      console.log("user");
+      console.log(member);
       console.log(user);
       res.send({
         success: "true",
         data: user,
       });
-    }
-  });
-};
+    });
+  } else if (user.type == "Owner") {
+    console.log("dfgsfsdfsdfsdf0.1");
+
+    checkSubscriptionStatus(null, user.id, (err, subscription) => {
+      if (err)
+        return res.status(400).send({
+          success: "false",
+          data: err,
+        });
+      console.log("user");
+      console.log(subscription);
+      user.subscriptionStatus = subscription.isActive;
+      const newUser = user.dataValues;
+      newUser.subscriptionStatus = subscription.isActive;
+      console.log("user23");
+      console.log(newUser);
+
+      res.send({
+        success: "true",
+        data: newUser,
+      });
+    });
+  } else if (user.type == "Manager" || user.type == "Trainer") {
+    checkSubscriptionStatus(user.branchId, null, (err, subscription) => {
+      if (err)
+        return res.status(400).send({
+          success: "false",
+          data: err,
+        });
+      console.log("subscription");
+      console.log(subscription);
+      const newUser = user.dataValues;
+      newUser.subscriptionStatus = subscription.isActive;
+      console.log("user23");
+      console.log(newUser);
+
+      res.send({
+        success: "true",
+        data: newUser,
+      });
+    });
+  } else {
+    console.log(user);
+    res.send({
+      success: "true",
+      data: user,
+    });
+  }
+}
 
 function checkMemberStatus(userId, callback) {
   console.log("dfgsfsdfsdfsdf1");
@@ -370,10 +373,8 @@ exports.validateUserByJWT = async (req, res) => {
       });
     }
     console.log(user);
-    res.send({
-      success: "true",
-      data: user,
-    });
+    checkUsers(user, res);
+
   });
 };
 
