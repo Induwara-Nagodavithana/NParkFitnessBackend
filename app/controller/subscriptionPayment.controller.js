@@ -348,6 +348,7 @@ exports.notifyStripePayment = (req, res) => {
             dt.setMonth(dt.getMonth() + 1);
             var updateBody = {
               expireDate: dt.toISOString().slice(0, 10),
+              isActive: true,
             };
             Subscription.update(updateBody, {
               where: {

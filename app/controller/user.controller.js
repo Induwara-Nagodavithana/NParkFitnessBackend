@@ -231,7 +231,7 @@ function checkMemberStatus(userId, callback) {
 // check Subscription in gym
 function checkSubscriptionStatus(branchId, userId, callback) {
   const tody = new Date();
-  const date = new Date(tody.setDate(tody.getDate() - 7));
+  const date = new Date(tody.setDate(tody.getDate()));
   if (branchId) {
     Branch.findOne({
       where: {
