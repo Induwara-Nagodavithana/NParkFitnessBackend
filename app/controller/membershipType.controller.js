@@ -96,12 +96,12 @@ exports.getMembershipTypeById = (req, res) => {
 }
 
 
-//get MembershipType By BranchId
-exports.getMembershipTypeByBranchId = (req, res) => {
-    console.log("get All MembershipType By BranchId");
+//get MembershipType By GymId
+exports.getMembershipTypeByGymId = (req, res) => {
+    console.log("get All MembershipType By GymId");
     MembershipType.findAll({
         where: {
-            id: req.params.id
+            gymId: req.params.id
         }
     }).then((membershipType) => {
         res.send({
