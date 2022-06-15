@@ -5,140 +5,190 @@ const User = require("../model/user.model");
 
 //Register a MembershipType | guest
 exports.createMembershipType = async (req, res) => {
-    if (req.body) {
-        console.log("Create membershipType");
-        MembershipType.create(req.body)
-            .then((membershipType) => {
-                res.send({
-                    'success': 'true',
-                    'data': membershipType
-                });
-            })
-            .catch((err) => {
-                res.status(400).send({
-                    'success': 'false',
-                    'message': 'Error in Create MembershipType',
-                    'description': err.message
-                });
-            });
-    }
-}
-
+  if (req.body) {
+    console.log("Create membershipType");
+    MembershipType.create(req.body)
+      .then((membershipType) => {
+        res.send({
+          success: "true",
+          data: membershipType,
+        });
+      })
+      .catch((err) => {
+        res.status(400).send({
+          success: "false",
+          message: "Error in Create MembershipType",
+          description: err.message,
+        });
+      });
+  }
+};
 
 //update MembershipType Details
 exports.updateMembershipType = async (req, res) => {
-    if (req.body) {
-        if (!req.params.id) return res.status(500).send("Id is missing");
-        let id = req.params.id;
-        MembershipType.update(req.body, {
-            where: {
-                id: id,
-            },
-        })
-            .then((membershipType) => {
-                res.status(200).send({
-                    'success': membershipType[0] == 1 ? 'true' : 'false',
-                    'data': membershipType[0] == 1 ? "Updated Successfully" : "Update Not Successful"
-                });
-            })
-            .catch((err) => {
-                res.status(400).send({
-                    'success': 'false',
-                    'message': 'Error in Update MembershipType',
-                    'description': err.message
-                });
-            });
-    }
-}
-
+  if (req.body) {
+    if (!req.params.id) return res.status(500).send("Id is missing");
+    let id = req.params.id;
+    MembershipType.update(req.body, {
+      where: {
+        id: id,
+      },
+    })
+      .then((membershipType) => {
+        res.status(200).send({
+          success: membershipType[0] == 1 ? "true" : "false",
+          data:
+            membershipType[0] == 1
+              ? "Updated Successfully"
+              : "Update Not Successful",
+        });
+      })
+      .catch((err) => {
+        res.status(400).send({
+          success: "false",
+          message: "Error in Update MembershipType",
+          description: err.message,
+        });
+      });
+  }
+};
 
 //get All MembershipType
 exports.getAllMembershipType = (req, res) => {
-    console.log("get All");
-    MembershipType.findAll().then((membershipType) => {
-        res.send({
-            'success': 'true',
-            'data': membershipType
-        });
+  console.log("get All");
+  MembershipType.findAll()
+    .then((membershipType) => {
+      res.send({
+        success: "true",
+        data: membershipType,
+      });
     })
-        .catch((err) => {
-            res.status(400).send({
-                'success': 'false',
-                'message': 'Error in Getting All MembershipType',
-                'description': err.message
-            });
-        });
-}
+    .catch((err) => {
+      res.status(400).send({
+        success: "false",
+        message: "Error in Getting All MembershipType",
+        description: err.message,
+      });
+    });
+};
 
 //get MembershipType By Id
 exports.getMembershipTypeById = (req, res) => {
-    console.log("get All");
-    MembershipType.findOne({
-        where: {
-            id: req.params.id
-        },
-        include: {
-            model: User
-        }
-    }).then((membershipType) => {
-        res.send({
-            'success': 'true',
-            'data': membershipType
-        });
+  console.log("get All");
+  MembershipType.findOne({
+    where: {
+      id: req.params.id,
+    },
+    include: {
+      model: User,
+    },
+  })
+    .then((membershipType) => {
+      res.send({
+        success: "true",
+        data: membershipType,
+      });
     })
-        .catch((err) => {
-            res.status(400).send({
-                'success': 'false',
-                'message': 'Error in Getting MembershipType By ID',
-                'description': err.message
-            });
-        });
-}
-
+    .catch((err) => {
+      res.status(400).send({
+        success: "false",
+        message: "Error in Getting MembershipType By ID",
+        description: err.message,
+      });
+    });
+};
 
 //get MembershipType By GymId
 exports.getMembershipTypeByGymId = (req, res) => {
-    console.log("get All MembershipType By GymId");
-    MembershipType.findAll({
+  console.log("get All MembershipType By GymId");
+  MembershipType.findAll({
+    where: {
+      gymId: req.params.id,
+    },
+  })
+    .then((membershipType) => {
+      res.send({
+        success: "true",
+        data: { membershipType: membershipType },
+      });
+    })
+    .catch((err) => {
+      res.status(400).send({
+        success: "false",
+        message: "Error in Getting MembershipType By ID",
+        description: err.message,
+      });
+    });
+};
+
+//get MembershipType By BranchId
+exports.getMembershipTypeByBranchId = (req, res) => {
+  console.log("get All MembershipType By GymId");
+  Branch.findOne({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((branch) => {
+      if (!branch) {
+        console.log("branch Not Found");
+        return res.status(400).send({
+          success: "false",
+          message: "Branch Not Found",
+          description: "Entered details does not found in database",
+        });
+      }
+      MembershipType.findAll({
         where: {
-            gymId: req.params.id
-        }
-    }).then((membershipType) => {
-        res.send({
-            'success': 'true',
-            'data': { 'membershipType': membershipType }
+          gymId: branch.gymId,
+        },
+      })
+        .then((membershipType) => {
+          res.send({
+            success: "true",
+            data: { membershipType: membershipType },
+          });
+        })
+        .catch((err) => {
+          res.status(400).send({
+            success: "false",
+            message: "Error in Getting MembershipType By ID",
+            description: err.message,
+          });
         });
     })
-        .catch((err) => {
-            res.status(400).send({
-                'success': 'false',
-                'message': 'Error in Getting MembershipType By ID',
-                'description': err.message
-            });
-        });
-}
-
+    .catch((err) => {
+      res.status(400).send({
+        success: "false",
+        message: "Error in Getting MembershipType By ID",
+        description: err.message,
+      });
+    });
+};
 
 //delete MembershipType
 exports.deleteMembershipType = async (req, res) => {
-    console.log("Delete membershipType");
-    MembershipType.destroy({
-        where: {
-            id: req.params.id
-        }
+  console.log("Delete membershipType");
+  MembershipType.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((membershipType) => {
+      console.log(membershipType);
+      res.status(200).send({
+        success: membershipType == 1 ? "true" : "false",
+        data:
+          membershipType == 1
+            ? "Deleted Successfully"
+            : "Delete Not Successful",
+      });
     })
-        .then((membershipType) => {
-            console.log(membershipType)
-            res.status(200).send({
-                'success': membershipType == 1 ? 'true' : 'false',
-                'data': membershipType == 1 ? "Deleted Successfully" : "Delete Not Successful"
-            });
-        })
-        .catch((err) => {
-            res.status(400).send({
-                'success': 'false',
-                'message': 'Error in Delete MembershipType',
-                'description': err.message
-            });
-        });
-}
+    .catch((err) => {
+      res.status(400).send({
+        success: "false",
+        message: "Error in Delete MembershipType",
+        description: err.message,
+      });
+    });
+};
