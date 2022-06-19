@@ -5,6 +5,7 @@ const User = require("../model/user.model");
 const { Sequelize, Op } = require("sequelize");
 const Schedule = require("../model/schedule.model");
 const ScheduleItem = require("../model/scheduleItem.model");
+const sendAndSaveNotification = require("../config/firebaseNotification");
 
 //Register a DietPlan | guest
 exports.createDietPlan = async (req, res) => {
@@ -281,6 +282,12 @@ exports.createDietAndMealItem = (req, res) => {
                 });
                 await Promise.all(promises);
                 await MealItem.bulkCreate(mealArr);
+                sendAndSaveNotification(membership.userId, {
+                  notification: {
+                    title: "New diet plan created for you",
+                    body: "Checkout your account for diet plan details.",
+                  },
+                });
                 res.send({
                   success: "true",
                   data: mealArr,

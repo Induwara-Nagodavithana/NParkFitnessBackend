@@ -31,6 +31,7 @@ exports.sendNotifications = (req, res) => {
     });
 };
 
+
 // Send a message to devices subscribed to the provided usertopic and save it to realtimeDB.
 exports.sendSingleUserNotifications = (req, res) => {
   console.log("sendSingleUserNotifications");

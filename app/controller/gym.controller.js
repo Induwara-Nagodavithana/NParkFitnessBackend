@@ -1,12 +1,19 @@
 const Gym = require("../model/gym.model");
 const User = require("../model/user.model");
+const sendAndSaveNotification = require("../config/firebaseNotification");
 
 //Register a Gym | guest
 exports.createGym = async (req, res) => {
   if (req.body) {
     console.log("Create gym");
     Gym.create(req.body)
-      .then((gym) => {
+      .then(async (gym) => {
+        sendAndSaveNotification(req.body.userId, {
+          notification: {
+            title: "New gym created in your account.",
+            body: "Checkout your gym and add some branches to it.",
+          },
+        });
         res.send({
           success: "true",
           data: gym,

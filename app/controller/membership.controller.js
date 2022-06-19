@@ -4,6 +4,7 @@ const Membership = require("../model/membership.model");
 const MembershipType = require("../model/membershipType.model");
 const User = require("../model/user.model");
 const { Sequelize, Op } = require("sequelize");
+const sendAndSaveNotification = require("../config/firebaseNotification");
 
 
 function getFreeTrainerFromBranch(branch, callback) {
@@ -151,6 +152,12 @@ exports.createMembership = async (req, res) => {
                         }
                         Membership.create(body)
                             .then((membership) => {
+                                sendAndSaveNotification(body.trainerId, {
+                                    notification: {
+                                      title: "New member Assign to you.",
+                                      body: "Checkout your newly assigned member details.",
+                                    },
+                                  });
                                 res.send({
                                     'success': 'true',
                                     'data': membership

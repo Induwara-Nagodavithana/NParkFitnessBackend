@@ -2,6 +2,7 @@ const Schedule = require("../model/schedule.model");
 const User = require("../model/user.model");
 const Membership = require("../model/membership.model");
 const { Sequelize, Op } = require("sequelize");
+const sendAndSaveNotification = require("../config/firebaseNotification");
 
 //Register a Schedule | guest
 exports.createSchedule = async (req, res) => {
@@ -9,6 +10,21 @@ exports.createSchedule = async (req, res) => {
     console.log("Create schedule");
     Schedule.create(req.body)
       .then((schedule) => {
+        Membership.findOne({
+          where: {
+            id: req.body.membershipId,
+          },
+          include: {
+            model: User,
+          },
+        }).then((membershipDetails) => {
+          sendAndSaveNotification(membershipDetails.userId, {
+            notification: {
+              title: "New Schedule added for you.",
+              body: "Checkout your account for schedule details.",
+            },
+          });
+        });
         res.send({
           success: "true",
           data: schedule,
@@ -134,7 +150,6 @@ exports.getScheduleByMemberId = (req, res) => {
     });
 };
 
-
 //get All Schedule By MemberId
 exports.getAllScheduleByMemberId = (req, res) => {
   console.log("get All");
@@ -167,7 +182,6 @@ exports.getAllScheduleByMemberId = (req, res) => {
       });
     });
 };
-
 
 //get Schedule Count By TrainerId And Month
 exports.getScheduleCountByTrainerIdAndMonth = (req, res) => {

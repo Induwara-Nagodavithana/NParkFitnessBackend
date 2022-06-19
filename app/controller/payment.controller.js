@@ -5,6 +5,7 @@ const Gym = require("../model/gym.model");
 const User = require("../model/user.model");
 const { Op } = require("sequelize");
 const MembershipType = require("../model/membershipType.model");
+const sendAndSaveNotification = require("../config/firebaseNotification");
 
 //Register a Payment | guest
 exports.createPayment = async (req, res) => {
@@ -16,19 +17,29 @@ exports.createPayment = async (req, res) => {
           where: {
             id: req.body.membershipId,
           },
+          include: {
+            model: User,
+          },
         })
           .then((membership) => {
             var dt = new Date(membership.expireDate);
             dt.setMonth(dt.getMonth() + 1);
             var updateBody = {
-              expireDate: dt.toISOString().slice(0, 10)+' 00:00:00',
+              expireDate: dt.toISOString().slice(0, 10) + " 00:00:00",
             };
             Membership.update(updateBody, {
               where: {
                 id: req.body.membershipId,
               },
             })
-              .then((membership) => {
+              .then((membership2) => {
+                console.log(membership);
+                sendAndSaveNotification(membership.userId, {
+                  notification: {
+                    title: "Payment completed successfully.",
+                    body: "Checkout your account for payment details.",
+                  },
+                });
                 res.send({
                   success: "true",
                   data: payment,
