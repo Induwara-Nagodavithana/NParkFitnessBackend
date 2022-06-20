@@ -6,6 +6,8 @@ const { Sequelize, Op } = require("sequelize");
 const Schedule = require("../model/schedule.model");
 const ScheduleItem = require("../model/scheduleItem.model");
 const sendAndSaveNotification = require("../config/firebaseNotification");
+const Branch = require("../model/branch.model");
+const Gym = require("../model/gym.model");
 
 //Register a DietPlan | guest
 exports.createDietPlan = async (req, res) => {
@@ -103,65 +105,97 @@ exports.getDietPlanById = (req, res) => {
 //get DietPlans and MealItems By MemberId
 exports.getDietPlanAndMealByMemberId = (req, res) => {
   console.log("get DietPlans and MealItems By MemberId");
-  Membership.findOne({
+  Branch.findOne({
     where: {
-      id: req.params.id,
+      id: req.user.branchId,
     },
   })
-    .then((membership) => {
-      if (membership == null)
-        return res.status(500).send({
-          success: "false",
-          message: "Membership not found",
-        });
-      DietPlan.findAll({
+    .then((branch) => {
+      Membership.findOne({
         where: {
-          userId: membership.userId,
+          id: req.params.id,
         },
+
+        include: [
+          {
+            model: Branch,
+            include: {
+              model: Gym,
+            },
+          },
+        ],
       })
-        .then(async (dietPlan) => {
-          var dietData = [];
-          const promises = dietPlan.map(async (element) => {
-            await MealItem.findAll({
+        .then((membership) => {
+          if (membership == null)
+            return res.status(500).send({
+              success: "false",
+              message: "Membership not found",
+            });
+
+          if (branch !== null && branch.gymId !== membership.branch.gymId) {
+            res.status(400).send({
+              success: "false",
+              message: "This membership is not registered to your gym.",
+            });
+          } else {
+            DietPlan.findAll({
               where: {
-                dietPlanId: element.id,
-              },
-              include: {
-                model: DietPlan,
+                userId: membership.userId,
               },
             })
-              .then(async (mealItem) => {
-                var totCalAmount = 0;
-                await mealItem.map((element) => {
-                  totCalAmount += element.calAmount;
-                });
-                var data = {
-                  totalCalorie: totCalAmount,
-                  dietPlanData: element,
-                  mealItemData: mealItem,
-                };
-                console.log(data);
+              .then(async (dietPlan) => {
+                var dietData = [];
+                const promises = dietPlan.map(async (element) => {
+                  await MealItem.findAll({
+                    where: {
+                      dietPlanId: element.id,
+                    },
+                    include: {
+                      model: DietPlan,
+                    },
+                  })
+                    .then(async (mealItem) => {
+                      var totCalAmount = 0;
+                      await mealItem.map((element) => {
+                        totCalAmount += element.calAmount;
+                      });
+                      var data = {
+                        totalCalorie: totCalAmount,
+                        dietPlanData: element,
+                        mealItemData: mealItem,
+                      };
+                      console.log(data);
 
-                dietData.push(data);
+                      dietData.push(data);
+                    })
+                    .catch((err) => {
+                      res.status(400).send({
+                        success: "false",
+                        message: "Error in Getting MealItem By ID",
+                        description: err.message,
+                      });
+                    });
+                });
+                await Promise.all(promises);
+                // var allData = {
+                //     'data': dietData
+                // }
+                console.log("Done");
+
+                res.send({
+                  success: "true",
+                  data: dietData,
+                });
               })
               .catch((err) => {
+                console.log(err);
                 res.status(400).send({
                   success: "false",
-                  message: "Error in Getting MealItem By ID",
+                  message: "Error in Getting DietPlan By ID",
                   description: err.message,
                 });
               });
-          });
-          await Promise.all(promises);
-          // var allData = {
-          //     'data': dietData
-          // }
-          console.log("Done");
-
-          res.send({
-            success: "true",
-            data: dietData,
-          });
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -173,10 +207,9 @@ exports.getDietPlanAndMealByMemberId = (req, res) => {
         });
     })
     .catch((err) => {
-      console.log(err);
       res.status(400).send({
         success: "false",
-        message: "Error in Getting DietPlan By ID",
+        message: "Error in Getting Staff Branch Details",
         description: err.message,
       });
     });

@@ -19,7 +19,7 @@ class FireAuth {
         console.log("decodeValue");
         User.findOne({
           where: { fireUID: req.user.uid },
-          attributes: ["type"],
+          attributes: ["type","branchId","id"],
         }).then((user) => {
           if (!user) {
             console.log("User Not Found");
@@ -31,6 +31,8 @@ class FireAuth {
           }
           console.log(user);
           req.user.type = user.type;
+          req.user.branchId = user.branchId;
+          req.user.id = user.id;
           console.log(decodeValue);
           return next();
         });

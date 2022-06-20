@@ -174,51 +174,72 @@ exports.getAllPaymentByUserId = (req, res) => {
 //get All Payment By memberId
 exports.getAllPaymentByMemberId = (req, res) => {
   console.log("get All Payment By MemberId");
+  console.log(req.user);
   var memberId = [];
 
-  Membership.findOne({
+  Branch.findOne({
     where: {
-      id: req.params.id,
+      id: req.user.branchId,
     },
-
-    include: [
-      {
-        model: User,
-      },
-      {
-        model: User,
-        as: "trainId",
-      },
-      {
-        model: MembershipType,
-      },
-      {
-        model: Branch,
-        include: {
-          model: Gym,
-        },
-      },
-    ],
   })
-    .then(async (membership) => {
-      console.log(membership);
-
-      Payment.findAll({
+    .then((branch) => {
+      Membership.findOne({
         where: {
-          membershipId: req.params.id,
+          id: req.params.id,
         },
-        order: [["date", "DESC"]],
+
+        include: [
+          {
+            model: User,
+          },
+          {
+            model: User,
+            as: "trainId",
+          },
+          {
+            model: MembershipType,
+          },
+          {
+            model: Branch,
+            include: {
+              model: Gym,
+            },
+          },
+        ],
       })
-        .then((payment) => {
-          res.send({
-            success: "true",
-            data: { member: membership, payment: payment },
-          });
+        .then(async (membership) => {
+          console.log(membership);
+          if (branch !== null && branch.gymId !== membership.branch.gymId) {
+            res.status(400).send({
+              success: "false",
+              message: "This membership is not registered to your gym."
+            });
+          } else {
+            Payment.findAll({
+              where: {
+                membershipId: req.params.id,
+              },
+              order: [["date", "DESC"]],
+            })
+              .then((payment) => {
+                res.send({
+                  success: "true",
+                  data: { member: membership, payment: payment },
+                });
+              })
+              .catch((err) => {
+                res.status(400).send({
+                  success: "false",
+                  message: "Error in Getting All Payment",
+                  description: err.message,
+                });
+              });
+          }
         })
         .catch((err) => {
           res.status(400).send({
             success: "false",
-            message: "Error in Getting All Payment",
+            message: "Error in Getting Membership By userId",
             description: err.message,
           });
         });
@@ -226,7 +247,7 @@ exports.getAllPaymentByMemberId = (req, res) => {
     .catch((err) => {
       res.status(400).send({
         success: "false",
-        message: "Error in Getting Membership By userId",
+        message: "Error in Getting Staff Branch Details",
         description: err.message,
       });
     });

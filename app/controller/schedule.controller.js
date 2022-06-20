@@ -3,6 +3,8 @@ const User = require("../model/user.model");
 const Membership = require("../model/membership.model");
 const { Sequelize, Op } = require("sequelize");
 const sendAndSaveNotification = require("../config/firebaseNotification");
+const Branch = require("../model/branch.model");
+const Gym = require("../model/gym.model");
 
 //Register a Schedule | guest
 exports.createSchedule = async (req, res) => {
@@ -153,31 +155,63 @@ exports.getScheduleByMemberId = (req, res) => {
 //get All Schedule By MemberId
 exports.getAllScheduleByMemberId = (req, res) => {
   console.log("get All");
-  Schedule.findAll({
+  Branch.findOne({
     where: {
-      membershipId: req.params.id,
+      id: req.user.branchId,
     },
-    include: [
-      {
-        model: User,
-        as: "trainer",
-      },
-      {
-        model: Membership,
-      },
-    ],
-    order: [["createdAt", "DESC"]],
   })
-    .then((schedule) => {
-      res.send({
-        success: "true",
-        data: schedule,
-      });
+    .then((branch) => {
+      Schedule.findAll({
+        where: {
+          membershipId: req.params.id,
+        },
+        include: [
+          {
+            model: User,
+            as: "trainer",
+          },
+          {
+            model: Membership,
+            include: {
+              model: Branch,
+              include: {
+                model: Gym,
+              },
+            },
+          },
+        ],
+        order: [["createdAt", "DESC"]],
+      })
+        .then((schedule) => {
+          console.log(schedule);
+          if (
+            schedule !== null &&
+            schedule.length > 0 &&
+            branch.gymId !== schedule[0].membership.branch.gymId
+          ) {
+            res.status(400).send({
+              success: "false",
+              message: "This membership is not registered to your gym.",
+            });
+          } else {
+            res.send({
+              success: "true",
+              data: schedule,
+            });
+          }
+        })
+        .catch((err) => {
+          res.status(400).send({
+            success: "false",
+            message: "Error in Getting Schedule By ID",
+            description: err.message,
+          });
+        });
     })
     .catch((err) => {
       res.status(400).send({
         success: "false",
-        message: "Error in Getting Schedule By ID",
+        message: "Error in Getting Staff Branch Details",
         description: err.message,
       });
     });
