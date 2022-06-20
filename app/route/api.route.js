@@ -21,6 +21,7 @@ const DietPlan = require('./dietPlan.route');
 const MealItem = require('./mealItem.route');
 const Notification = require('./notification.route');
 const Dashboard = require('./dashboard.route');
+const Review = require('./review.route');
 
 
 // module.exports = function (){
@@ -61,6 +62,7 @@ ApiRouter.use("/mealItem", MealItem);
 ApiRouter.use("/subscriptionPayment", SubscriptionPayment);
 ApiRouter.use("/notification", Notification);
 ApiRouter.use("/dashboard", Dashboard);
+ApiRouter.use("/review", Review);
 
 
 
