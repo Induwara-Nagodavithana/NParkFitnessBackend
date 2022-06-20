@@ -138,7 +138,7 @@ exports.deleteSubscriptionType = async (req, res) => {
       } else {
         res.status(400).send({
           success: "false",
-          message: "This subscription already in use. Cannot delete this type.",
+          message: "This subscription type already in use. Cannot delete this type.",
         });
       }
     })

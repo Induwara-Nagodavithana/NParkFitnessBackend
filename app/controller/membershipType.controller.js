@@ -1,7 +1,10 @@
 const Branch = require("../model/branch.model");
 const Gym = require("../model/gym.model");
+const Membership = require("../model/membership.model");
 const MembershipType = require("../model/membershipType.model");
 const User = require("../model/user.model");
+const { Op } = require("sequelize");
+
 
 //Register a MembershipType | guest
 exports.createMembershipType = async (req, res) => {
@@ -169,6 +172,18 @@ exports.getMembershipTypeByBranchId = (req, res) => {
 //delete MembershipType
 exports.deleteMembershipType = async (req, res) => {
   console.log("Delete membershipType");
+  var today = new Date();
+  today.setDate(today.getDate() - 30);
+  Membership.count({
+    where: {
+      membershipTypeId: req.params.id,
+      expireDate: {
+        [Op.gt]: `${today.toISOString().slice(0, 10)}`,
+      },
+    },
+  })
+    .then((member) => {
+if (member < 1) {
   MembershipType.destroy({
     where: {
       id: req.params.id,
@@ -191,4 +206,20 @@ exports.deleteMembershipType = async (req, res) => {
         description: err.message,
       });
     });
+} else {
+  res.status(400).send({
+    success: "false",
+    message: "This membership type already in use. Cannot delete this type.",
+  });
+}
+ 
+  })
+  .catch((err) => {
+      console.log(err);
+    res.status(400).send({
+      success: "false",
+      message: "Error in Getting Member By ID",
+      description: err.message,
+    });
+  });
 };
