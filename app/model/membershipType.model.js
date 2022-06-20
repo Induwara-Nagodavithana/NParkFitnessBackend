@@ -13,6 +13,10 @@ var MembershipType = db.define(
             type: Sequelize.STRING,
             allowNull: false,
         },
+        isActive: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+          },
         amount: {
             type: Sequelize.DECIMAL(10, 2),
             allowNull: false,
