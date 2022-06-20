@@ -67,6 +67,7 @@ exports.getAllMembershipType = (req, res) => {
       });
     })
     .catch((err) => {
+      console.log(err);
       res.status(400).send({
         success: "false",
         message: "Error in Getting All MembershipType",
