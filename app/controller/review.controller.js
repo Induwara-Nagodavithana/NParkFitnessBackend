@@ -54,7 +54,7 @@ exports.getAllReview = (req, res) => {
   console.log("get All");
   Review.findAll({
     order: [["CreatedAt", "DESC"]],
-    limit: 3
+    limit: 10
   })
     .then((review) => {
       res.send({
@@ -101,6 +101,7 @@ exports.getReviewByUserId = (req, res) => {
       where: {
         userId: req.params.id,
       },
+      order: [["CreatedAt", "DESC"]],
     })
       .then((review) => {
         res.send({
