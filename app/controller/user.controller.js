@@ -604,6 +604,39 @@ exports.findNullBranchStaff = async (req, res) => {
   });
 };
 
+//Get All no branch staff
+exports.getPlatformCounts = async (req, res) => {
+  User.count({
+    group: ["type"],
+
+  }).then((user) => {
+    if (!user) {
+      console.log("User Not Found");
+      return res.status(400).send({
+        success: "false",
+        message: "User Not Found",
+        description: "Entered details does not found in database",
+      });
+    }
+    Branch.count({
+    }).then((branch) => {
+      if (!branch) {
+        console.log("Branch Not Found");
+        return res.status(400).send({
+          success: "false",
+          message: "Branch Not Found",
+          description: "Entered details does not found in database",
+        });
+      }
+      console.log(branch);
+      res.send({
+        success: "true",
+        data: {user, branch},
+      });
+    });
+  });
+};
+
 //delete User
 exports.deleteUser = async (req, res) => {
   console.log("Delete user");

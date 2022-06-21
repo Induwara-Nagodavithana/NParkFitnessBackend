@@ -19,6 +19,7 @@ UserRouter.get('/:id', UserController.getUserById);
 UserRouter.get('/findUserByBranchId/:id', UserController.findUserByBranchId);
 UserRouter.get('/findUserByEmail/:email', UserController.findUserByEmail);
 UserRouter.post('/findNullBranchStaff/', UserController.findNullBranchStaff);
+UserRouter.post('/getPlatformCounts/', UserController.getPlatformCounts);
 UserRouter.get('/removeAllStaffByBranchId/:id', UserController.removeAllStaffByBranchId);
 UserRouter.post('/', UserController.createUser);
 UserRouter.put('/:id', UserController.updateUser);

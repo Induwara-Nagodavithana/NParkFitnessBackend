@@ -54,6 +54,7 @@ exports.getAllReview = (req, res) => {
   console.log("get All");
   Review.findAll({
     order: [["CreatedAt", "DESC"]],
+    limit: 3
   })
     .then((review) => {
       res.send({
