@@ -16,6 +16,10 @@ var Review = db.define(
         rating: {
             type: Sequelize.INTEGER,
             allowNull: false,
+        },
+        userId: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
         }
     },
     {

@@ -93,6 +93,29 @@ exports.getReviewById = (req, res) => {
     });
 };
 
+//get Review By userId
+exports.getReviewByUserId = (req, res) => {
+    console.log("get All");
+    Review.findAll({
+      where: {
+        userId: req.params.id,
+      },
+    })
+      .then((review) => {
+        res.send({
+          success: "true",
+          data: review,
+        });
+      })
+      .catch((err) => {
+        res.status(400).send({
+          success: "false",
+          message: "Error in Getting Review By ID",
+          description: err.message,
+        });
+      });
+  };
+
 //delete Review
 exports.deleteReview = async (req, res) => {
   console.log("Delete review");
