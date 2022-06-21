@@ -3,9 +3,9 @@ const Membership = require("../model/membership.model");
 const Branch = require("../model/branch.model");
 const Gym = require("../model/gym.model");
 const User = require("../model/user.model");
-const { Op } = require("sequelize");
 const MembershipType = require("../model/membershipType.model");
 const sendAndSaveNotification = require("../config/firebaseNotification");
+const { Sequelize, Op } = require("sequelize");
 
 //Register a Payment | guest
 exports.createPayment = async (req, res) => {
@@ -212,7 +212,7 @@ exports.getAllPaymentByMemberId = (req, res) => {
           if (branch !== null && branch.gymId !== membership.branch.gymId) {
             res.status(400).send({
               success: "false",
-              message: "This membership is not registered to your gym."
+              message: "This membership is not registered to your gym.",
             });
           } else {
             Payment.findAll({
@@ -300,6 +300,84 @@ exports.getPaymentById = (req, res) => {
       res.send({
         success: "true",
         data: payment,
+      });
+    })
+    .catch((err) => {
+      res.status(400).send({
+        success: "false",
+        message: "Error in Getting Payment By ID",
+        description: err.message,
+      });
+    });
+};
+
+//get All Payment Group By Owner
+exports.getAllPaymentGroupByOwner = (req, res) => {
+  console.log("get All");
+  var today = new Date();
+  var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+  console.log(lastDayOfMonth);
+
+  Payment.findAll({
+    where: {
+      method: "card",
+      date: {
+        [Op.between]: [
+          `${lastDayOfMonth.toISOString().slice(0, 7)}-01`,
+          `${lastDayOfMonth.toISOString().slice(0, 10)}`,
+        ],
+      },
+    },
+    include: {
+      model: Membership,
+      include: {
+        model: Branch,
+        include: {
+          model: Gym,
+          include: {
+            model: User,
+          },
+        },
+      },
+    },
+    // group: [["date"]],
+    // attributes: [
+    //   [Sequelize.fn("sum", Sequelize.col("amount")), "totalAmount"],
+    // ],
+  })
+    .then(async (payment) => {
+      console.log("sdfsdfdsf======================");
+      console.log(payment.find((e) => e.membership.branch.gym.userId === 2));
+      const paymentArr = [];
+
+      const promises = payment.map((element) => {
+        const temp = paymentArr.findIndex(
+          (e) => e.userId === element.membership.branch.gym.userId
+        );
+        console.log(temp);
+
+        if (temp !== null && temp !== -1 && paymentArr[temp].totAmount >= 0) {
+          const value = element.amount
+          console.log(parseFloat(value));
+          paymentArr[temp].totAmount += parseFloat(value);
+        } else if (temp !== null && temp !== -1) {
+          paymentArr[temp].totAmount = parseFloat(element.amount);
+        } else if (temp == null || temp === -1) {
+          paymentArr.push({
+            userId: element.membership.branch.gym.userId,
+            firstName: element.membership.branch.gym.user.firstName,
+            lastName: element.membership.branch.gym.user.lastName,
+            totAmount: parseFloat(element.amount),
+          });
+        }
+        console.log(paymentArr);
+      });
+      await Promise.all(promises);
+      console.log(paymentArr);
+
+      res.send({
+        success: "true",
+        data: paymentArr,
       });
     })
     .catch((err) => {

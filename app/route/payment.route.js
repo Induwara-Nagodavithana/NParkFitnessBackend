@@ -18,6 +18,10 @@ PaymentRouter.get(
   "/getAllPaymentByMemberId/:id",
   PaymentController.getAllPaymentByMemberId
 );
+PaymentRouter.get(
+  "/getAllPaymentGroupByOwner/:id",
+  PaymentController.getAllPaymentGroupByOwner
+);
 PaymentRouter.put("/:id", PaymentController.updatePayment);
 PaymentRouter.delete("/:id", PaymentController.deletePayment);
 module.exports = PaymentRouter;
