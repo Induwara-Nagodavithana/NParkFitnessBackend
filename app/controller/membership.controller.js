@@ -355,10 +355,10 @@ exports.checkMembershipValidity = (req, res) => {
               data: { isValid: true },
             });
 
-          let valid = "true";
+          let valid = true;
           const promises = member.map((element) => {
             if (element.branch.gymId === branch.gymId) {
-              valid = "false";
+              valid = false;
             }
           });
 
