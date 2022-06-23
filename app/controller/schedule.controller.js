@@ -193,11 +193,6 @@ exports.getAllScheduleByMemberId = (req, res) => {
               success: "false",
               message: "This membership is not registered to your gym.",
             });
-          } else if (schedule !== null && schedule.length < 1) {
-            res.send({
-              success: "true",
-              data: schedule,
-            });
           } else {
             res.send({
               success: "true",

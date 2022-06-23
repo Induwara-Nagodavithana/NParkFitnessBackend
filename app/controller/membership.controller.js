@@ -145,91 +145,125 @@ exports.getFreeTrainerFromBranch = (req, res) => {
 exports.createMembership = async (req, res) => {
   if (req.body) {
     console.log("Create membership");
-    Membership.findOne({
+    Branch.findOne({
       where: {
-        branchId: req.body.branchId,
-        userId: req.body.userId,
+        id: req.body.branchId,
       },
     })
-      .then((temp_membership) => {
-        console.log(temp_membership);
-        if (temp_membership == null) {
-          var trainerId;
-          console.log("req.body.trainerNeeded");
-          console.log(req.body.trainerNeeded);
-          console.log(req.body.trainerNeeded == "true");
+      .then((branch) => {
+        console.log(branch);
+        if (!branch)
+          return res.status(400).send({
+            success: "false",
+            message: "Error in Getting Membership By ID",
+            description: "Scanned branch is not found",
+          });
 
-          if (req.body.trainerNeeded == "true" || req.body.trainerNeeded) {
-            getFreeTrainerFromBranch(req.body.branchId, (err, user) => {
-              if (err)
-                return res.status(400).send({
-                  success: "false",
-                  message: "Error in Create Membership",
-                  description: err.message,
-                });
-              console.log("user");
-              console.log(user);
-              trainerId = user;
-              var body = {
-                expireDate: req.body.expireDate,
-                membershipTypeId: req.body.membershipTypeId,
-                trainerNeeded: req.body.trainerNeeded,
-                isActive: true,
-                userId: req.body.userId,
-                branchId: req.body.branchId,
-                trainerId: trainerId,
-              };
-              Membership.create(body)
-                .then((membership) => {
-                  sendAndSaveNotification(body.trainerId, {
-                    notification: {
-                      title: "New member Assign to you.",
-                      body: "Checkout your newly assigned member details.",
-                    },
+        if (branch.isActive) {
+          Membership.findOne({
+            where: {
+              branchId: req.body.branchId,
+              userId: req.body.userId,
+            },
+          })
+            .then((temp_membership) => {
+              console.log(temp_membership);
+              if (temp_membership == null) {
+                var trainerId;
+                console.log("req.body.trainerNeeded");
+                console.log(req.body.trainerNeeded);
+                console.log(req.body.trainerNeeded == "true");
+
+                if (
+                  req.body.trainerNeeded == "true" ||
+                  req.body.trainerNeeded
+                ) {
+                  getFreeTrainerFromBranch(req.body.branchId, (err, user) => {
+                    if (err)
+                      return res.status(400).send({
+                        success: "false",
+                        message: "Error in Create Membership",
+                        description: err.message,
+                      });
+                    console.log("user");
+                    console.log(user);
+                    trainerId = user;
+                    var body = {
+                      expireDate: req.body.expireDate,
+                      membershipTypeId: req.body.membershipTypeId,
+                      trainerNeeded: req.body.trainerNeeded,
+                      isActive: true,
+                      userId: req.body.userId,
+                      branchId: req.body.branchId,
+                      trainerId: trainerId,
+                    };
+                    Membership.create(body)
+                      .then((membership) => {
+                        sendAndSaveNotification(body.trainerId, {
+                          notification: {
+                            title: "New member Assign to you.",
+                            body: "Checkout your newly assigned member details.",
+                          },
+                        });
+                        res.send({
+                          success: "true",
+                          data: membership,
+                        });
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                        res.status(400).send({
+                          success: "false",
+                          message: "Error in Create Membership",
+                          description: err.message,
+                        });
+                      });
                   });
-                  res.send({
-                    success: "true",
-                    data: membership,
-                  });
-                })
-                .catch((err) => {
-                  console.log(err);
-                  res.status(400).send({
-                    success: "false",
-                    message: "Error in Create Membership",
-                    description: err.message,
-                  });
-                });
-            });
-          } else {
-            Membership.create(req.body)
-              .then((membership) => {
-                res.send({
-                  success: "true",
-                  data: membership,
-                });
-              })
-              .catch((err) => {
-                console.log(err);
+                } else {
+                  Membership.create(req.body)
+                    .then((membership) => {
+                      res.send({
+                        success: "true",
+                        data: membership,
+                      });
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      res.status(400).send({
+                        success: "false",
+                        message: "Error in Create Membership",
+                        description: err.message,
+                      });
+                    });
+                }
+              } else {
                 res.status(400).send({
                   success: "false",
-                  message: "Error in Create Membership",
-                  description: err.message,
+                  message: "Error in Getting Membership By ID",
+                  description: "This Member Already Exist",
                 });
+              }
+            })
+            .catch((err) => {
+              res.status(400).send({
+                success: "false",
+                message: "Error in Getting Membership By ID",
+                description: err.message,
               });
-          }
+            });
         } else {
           res.status(400).send({
             success: "false",
-            message: "Error in Getting Membership By ID",
-            description: "This Member Already Exist",
+            message: "Error Creating Membership",
+            description:
+              "This branch is currently inactive. You cannot register to this branch",
           });
         }
       })
       .catch((err) => {
         res.status(400).send({
           success: "false",
-          message: "Error in Getting Membership By ID",
+          message: "Error in Getting Branch By ID",
           description: err.message,
         });
       });
