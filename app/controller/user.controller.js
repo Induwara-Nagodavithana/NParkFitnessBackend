@@ -147,24 +147,32 @@ function checkUsers(user, res) {
       });
     });
   } else if (user.type == "Manager" || user.type == "Trainer") {
-    checkSubscriptionStatus(user.branchId, null, (err, subscription) => {
-      if (err)
-        return res.status(400).send({
-          success: "false",
-          data: err,
-        });
-      console.log("subscription");
-      console.log(subscription);
-      const newUser = user.dataValues;
-      newUser.subscriptionStatus = subscription.isActive;
-      console.log("user23");
-      console.log(newUser);
-
-      res.send({
-        success: "true",
-        data: newUser,
+    if (user.branchId === null || user.branchId === undefined) {
+      res.status(400).send({
+        success: "false",
+        data: `This ${user.type} type client does not assign to a branch. `,
       });
-    });
+    } else {
+      checkSubscriptionStatus(user.branchId, null, (err, subscription) => {
+        if (err)
+          return res.status(400).send({
+            success: "false",
+            data: err,
+          });
+        console.log("subscription");
+        console.log(subscription);
+        const newUser = user.dataValues;
+        newUser.subscriptionStatus = subscription.isActive;
+        console.log("user23");
+        console.log(newUser);
+  
+        res.send({
+          success: "true",
+          data: newUser,
+        });
+      });
+    }
+    
   } else {
     console.log(user);
     res.send({
