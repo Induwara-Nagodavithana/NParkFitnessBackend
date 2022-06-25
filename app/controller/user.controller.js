@@ -148,7 +148,7 @@ function checkUsers(user, res) {
     });
   } else if (user.type == "Manager" || user.type == "Trainer") {
     console.log(user);
-    if (user.branchId === null || user.branchId === undefined) {
+    if (user.branchId === null || user.branchId === '' || user.branchId === ' ' || user.branchId === undefined) {
       res.status(400).send({
         success: "false",
         data: `This ${user.type} type client does not assign to a branch. `,
