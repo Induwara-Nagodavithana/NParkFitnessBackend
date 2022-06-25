@@ -147,6 +147,7 @@ function checkUsers(user, res) {
       });
     });
   } else if (user.type == "Manager" || user.type == "Trainer") {
+    console.log(user);
     if (user.branchId === null || user.branchId === undefined) {
       res.status(400).send({
         success: "false",
