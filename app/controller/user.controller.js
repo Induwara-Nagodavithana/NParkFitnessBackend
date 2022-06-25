@@ -151,7 +151,7 @@ function checkUsers(user, res) {
     if (user.branchId === null || user.branchId === '' || user.branchId === ' ' || user.branchId === undefined) {
       res.status(400).send({
         success: "false",
-        data: `This ${user.type} type client does not assign to a branch. `,
+        message: `This ${user.type} type client does not assign to a branch. `
       });
     } else {
       checkSubscriptionStatus(user.branchId, null, (err, subscription) => {
