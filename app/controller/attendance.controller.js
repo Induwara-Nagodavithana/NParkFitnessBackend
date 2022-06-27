@@ -258,7 +258,7 @@ exports.getAttendanceByMemberIdAndDate = (req, res) => {
 //get Attendance By MemberId And Month
 exports.getAttendanceByMemberIdAndMonth = (req, res) => {
   console.log("get Attendance By MemberId And Date");
-  Attendance.findAll({
+  Attendance.findOne({
     where: {
       membershipId: req.body.membershipId,
       date: { [Op.startsWith]: req.body.date },
@@ -266,7 +266,7 @@ exports.getAttendanceByMemberIdAndMonth = (req, res) => {
     include: {
       model: Branch,
     },
-    order: [["date", "DESC"]],
+    order: [["CreatedAt", "DESC"]],
   })
     .then((attendance) => {
       res.send({
