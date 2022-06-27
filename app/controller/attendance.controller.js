@@ -259,7 +259,7 @@ exports.getAttendanceByMemberIdAndDate = (req, res) => {
 //get Attendance By MemberId And Month
 exports.getAttendanceByMemberIdAndMonth = (req, res) => {
   console.log("get Attendance By MemberId And Date");
-  Attendance.findOne({
+  Attendance.findAll({
     where: {
       membershipId: req.body.membershipId,
       date: { [Op.startsWith]: req.body.date },
