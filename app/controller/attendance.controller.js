@@ -239,6 +239,7 @@ exports.getAttendanceByMemberIdAndDate = (req, res) => {
     include: {
       model: Branch,
     },
+    order: [["CreatedAt", "DESC"]],
   })
     .then((attendance) => {
       res.send({
