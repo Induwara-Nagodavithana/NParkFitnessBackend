@@ -18,6 +18,7 @@ exports.createAttendance = async (req, res) => {
           where: {
             membershipId: attendance.membershipId,
           },
+          order: [["CreatedAt", "DESC"]],
         })
           .then((schedule) => {
             if (schedule != null) {
